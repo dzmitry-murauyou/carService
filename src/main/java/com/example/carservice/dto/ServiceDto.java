@@ -13,19 +13,18 @@ public class ServiceDto {
     public ServiceDto() {
     }
 
-    public ServiceDto(String name, String description, Double price,
-                      String duration, String category, String status,
-                      String masterName, String note) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.duration = duration;
-        this.category = category;
-        this.status = status;
-        this.masterName = masterName;
-        this.note = note;
+    private ServiceDto(Builder builder) {
+        this.name = builder.name;
+        this.description = builder.description;
+        this.price = builder.price;
+        this.duration = builder.duration;
+        this.category = builder.category;
+        this.status = builder.status;
+        this.masterName = builder.masterName;
+        this.note = builder.note;
     }
 
+    // Геттеры и сеттеры
     public String getName() {
         return name;
     }
@@ -88,5 +87,61 @@ public class ServiceDto {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    // Внутренний класс Builder
+    public static class Builder {
+        private String name;
+        private String description;
+        private Double price;
+        private String duration;
+        private String category;
+        private String status;
+        private String masterName;
+        private String note;
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder price(Double price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder duration(String duration) {
+            this.duration = duration;
+            return this;
+        }
+
+        public Builder category(String category) {
+            this.category = category;
+            return this;
+        }
+
+        public Builder status(String status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder masterName(String masterName) {
+            this.masterName = masterName;
+            return this;
+        }
+
+        public Builder note(String note) {
+            this.note = note;
+            return this;
+        }
+
+        public ServiceDto build() {
+            return new ServiceDto(this);
+        }
     }
 }
