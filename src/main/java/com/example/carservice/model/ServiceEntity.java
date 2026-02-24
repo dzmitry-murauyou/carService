@@ -26,7 +26,6 @@ public class ServiceEntity {
         this.note = builder.note;
     }
 
-    // Геттеры и сеттеры
     public Long getId() {
         return id;
     }
@@ -99,7 +98,6 @@ public class ServiceEntity {
         this.note = note;
     }
 
-    // Внутренний класс Builder
     public static class Builder {
         private Long id;
         private String name;
