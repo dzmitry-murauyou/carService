@@ -1,7 +1,7 @@
 package com.example.carservice.controller;
 
 import com.example.carservice.dto.ServiceDto;
-import com.example.carservice.dtomapper.ServiceMapper;
+import com.example.carservice.dto.mapper.ServiceMapper;
 import com.example.carservice.model.ServiceEntity;
 import com.example.carservice.service.ServiceInterface;
 import java.util.List;
