@@ -4,7 +4,7 @@ import com.example.carservice.model.ServiceEntity;
 import java.util.List;
 
 public interface ServiceInterface {
-    List<ServiceEntity> getAllServices();
+  List<ServiceEntity> getAllServices();
 
-    ServiceEntity getServiceById(Long id);
+  ServiceEntity getServiceById(Long id);
 }

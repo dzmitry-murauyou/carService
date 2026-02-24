@@ -14,27 +14,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/services")
 public class ServiceController {
 
-    private final ServiceInterface service;
-    private final ServiceMapper mapper;
+  private final ServiceInterface service;
+  private final ServiceMapper mapper;
 
-    public ServiceController(ServiceInterface service, ServiceMapper mapper) {
-        this.service = service;
-        this.mapper = mapper;
-    }
+  public ServiceController(ServiceInterface service, ServiceMapper mapper) {
+    this.service = service;
+    this.mapper = mapper;
+  }
 
-    @GetMapping("/all")
-    public List<ServiceDto> getAllServices() {
-        return service.getAllServices().stream()
-                .map(mapper::toDto)
-                .toList();
-    }
+  @GetMapping("/all")
+  public List<ServiceDto> getAllServices() {
+    return service.getAllServices().stream()
+        .map(mapper::toDto)
+        .toList();
+  }
 
-    @GetMapping("/{id}")
-    public ServiceDto getServiceById(@PathVariable Long id) {
-        ServiceEntity entity = service.getServiceById(id);
-        if (entity == null) {
-            return null;
-        }
-        return mapper.toDto(entity);
+  @GetMapping("/{id}")
+  public ServiceDto getServiceById(@PathVariable Long id) {
+    ServiceEntity entity = service.getServiceById(id);
+    if (entity == null) {
+      return null;
     }
+    return mapper.toDto(entity);
+  }
 }

@@ -7,43 +7,35 @@ import org.springframework.stereotype.Component;
 @Component
 public class ServiceMapper {
 
-    public ServiceDto toDto(ServiceEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-
-        ServiceDto dto = new ServiceDto();
-        dto.setName(entity.getName());
-        dto.setDescription(entity.getDescription());
-        dto.setPrice(entity.getPrice());
-        dto.setDuration(formatDuration(entity.getDurationMinutes()));
-        dto.setCategory(entity.getCategory());
-        dto.setStatus(getStatusText(entity.getAvailable()));
-        dto.setMasterName(entity.getMasterName());
-        dto.setNote(entity.getNote());
-
-        return dto;
+  public ServiceDto toDto(ServiceEntity entity) {
+    if (entity == null) {
+      return null;
     }
 
-    private String formatDuration(Integer minutes) {
-        if (minutes == null) {
-            return "Не указано";
-        }
-        if (minutes < 60) {
-            return minutes + " мин";
-        }
-        int hours = minutes / 60;
-        int remainingMinutes = minutes % 60;
-        if (remainingMinutes == 0) {
-            return hours + " ч";
-        }
-        return hours + " ч " + remainingMinutes + " мин";
-    }
+    return ServiceDto.builder()
+        .name(entity.getName())
+        .description(entity.getDescription())
+        .price(entity.getPrice())
+        .duration(formatDuration(entity.getDurationMinutes()))
+        .category(entity.getCategory())
+        .status(entity.getAvailable() ? "Доступно" : "Недоступно")
+        .masterName(entity.getMasterName())
+        .note(entity.getNote())
+        .build();
+  }
 
-    private String getStatusText(boolean available) {
-        if (available) {
-            return "Доступно";
-        }
-        return "Недоступно";
+  private String formatDuration(Integer minutes) {
+    if (minutes == null) {
+      return "Не указано";
     }
+    if (minutes < 60) {
+      return minutes + " мин";
+    }
+    int hours = minutes / 60;
+    int remainingMinutes = minutes % 60;
+    if (remainingMinutes == 0) {
+      return hours + " ч";
+    }
+    return hours + " ч " + remainingMinutes + " мин";
+  }
 }
