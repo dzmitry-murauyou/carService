@@ -27,7 +27,7 @@ public class ServiceController {
     public List<ServiceDto> getAllServices() {
         return service.getAllServices().stream()
                 .map(mapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @GetMapping("/{id}")

@@ -14,20 +14,19 @@ public class ServiceEntity {
     public ServiceEntity() {
     }
 
-    public ServiceEntity(Long id, String name, String description, Double price,
-                         Integer durationMinutes, String category,
-                         Boolean available, String masterName, String note) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.durationMinutes = durationMinutes;
-        this.category = category;
-        this.available = available;
-        this.masterName = masterName;
-        this.note = note;
+    private ServiceEntity(Builder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+        this.description = builder.description;
+        this.price = builder.price;
+        this.durationMinutes = builder.durationMinutes;
+        this.category = builder.category;
+        this.available = builder.available;
+        this.masterName = builder.masterName;
+        this.note = builder.note;
     }
 
+    // Геттеры и сеттеры
     public Long getId() {
         return id;
     }
@@ -98,5 +97,67 @@ public class ServiceEntity {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    // Внутренний класс Builder
+    public static class Builder {
+        private Long id;
+        private String name;
+        private String description;
+        private Double price;
+        private Integer durationMinutes;
+        private String category;
+        private Boolean available;
+        private String masterName;
+        private String note;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder price(Double price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder durationMinutes(Integer durationMinutes) {
+            this.durationMinutes = durationMinutes;
+            return this;
+        }
+
+        public Builder category(String category) {
+            this.category = category;
+            return this;
+        }
+
+        public Builder available(Boolean available) {
+            this.available = available;
+            return this;
+        }
+
+        public Builder masterName(String masterName) {
+            this.masterName = masterName;
+            return this;
+        }
+
+        public Builder note(String note) {
+            this.note = note;
+            return this;
+        }
+
+        public ServiceEntity build() {
+            return new ServiceEntity(this);
+        }
     }
 }

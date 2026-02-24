@@ -17,17 +17,41 @@ public class ServiceRepository {
 
     @PostConstruct
     public void init() {
-        save(new ServiceEntity(null, "Замена масла",
-                "Замена моторного масла и масляного фильтра",
-                2500.0, 60, "ТО", true, "Иван Петров", "Скидка 10%"));
+        save(new ServiceEntity.Builder()
+                .name("Замена масла")
+                .description("Замена моторного масла и масляного фильтра")
+                .price(2500.0)
+                .durationMinutes(60)
+                .category("ТО")
+                .available(true)
+                .masterName("Иван Петров")
+                .note("Скидка 10%")
+                .build()
+        );
 
-        save(new ServiceEntity(null, "Диагностика двигателя",
-                "Компьютерная диагностика двигателя",
-                1500.0, 30, "Диагностика", true, "Петр Сидоров", "Запись за 2 дня"));
+        save(new ServiceEntity.Builder()
+                .name("Диагностика двигателя")
+                .description("Компьютерная диагностика двигателя")
+                .price(1500.0)
+                .durationMinutes(30)
+                .category("Диагностика")
+                .available(true)
+                .masterName("Петр Сидоров")
+                .note("Запись за 2 дня")
+                .build()
+        );
 
-        save(new ServiceEntity(null, "Ремонт подвески",
-                "Замена амортизаторов",
-                5000.0, 120, "Ремонт", true, "Алексей Иванов", "Оригинальные запчасти"));
+        save(new ServiceEntity.Builder()
+                .name("Ремонт подвески")
+                .description("Замена амортизаторов")
+                .price(5000.0)
+                .durationMinutes(120)
+                .category("Ремонт")
+                .available(true)
+                .masterName("Алексей Иванов")
+                .note("Оригинальные запчасти")
+                .build()
+        );
     }
 
     public List<ServiceEntity> findAll() {
@@ -38,11 +62,10 @@ public class ServiceRepository {
         return services.get(id);
     }
 
-    public ServiceEntity save(ServiceEntity service) {
+    public void save(ServiceEntity service) {
         if (service.getId() == null) {
             service.setId(idGenerator.getAndIncrement());
         }
         services.put(service.getId(), service);
-        return service;
     }
 }
