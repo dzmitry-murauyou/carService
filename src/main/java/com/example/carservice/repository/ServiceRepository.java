@@ -62,11 +62,10 @@ public class ServiceRepository {
     return services.get(id);
   }
 
-  public ServiceEntity save(ServiceEntity service) {
+  public void save(ServiceEntity service) {
     if (service.getId() == null) {
       service.setId(idGenerator.getAndIncrement());
     }
     services.put(service.getId(), service);
-    return service;
   }
 }
