@@ -26,6 +26,7 @@ REST API для автосервиса. Учебный проект по Spring 
   [![SonarCloud](https://img.shields.io/badge/SonarCloud-Анализ%20кода-FD3A5C?style=for-the-badge&logo=sonarcloud&logoColor=white)](https://sonarcloud.io/project/overview?id=dzmitry-murauyou_carService)
 
 ## Структура проекта
+```
 src/main/java/com/example/carservice/
 ├── CarServiceApplication.java
 ├── controller/
@@ -41,6 +42,7 @@ src/main/java/com/example/carservice/
 ├── dto/
 │   └── ServiceDto.java
 └── dtomapper/
-    └── ServiceMapper.java  
+    └── ServiceMapper.java  ```
+
 
 
