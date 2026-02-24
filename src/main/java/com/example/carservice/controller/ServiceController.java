@@ -20,13 +20,6 @@ public class ServiceController {
   private final ServiceInterface service;
   private final ServiceMapper mapper;
 
-  @GetMapping("/all")
-  public List<ServiceDto> getAllServices() {
-    return service.getAllServices().stream()
-        .map(mapper::toDto)
-        .toList();
-  }
-
   @GetMapping("/{id}")
   public ServiceDto getServiceById(@PathVariable Long id) {
     ServiceEntity entity = service.getServiceById(id);
