@@ -1,4 +1,7 @@
-﻿# Car Service API
+![Java](https://img.shields.io/badge/Java-21-orange)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.3-brightgreen)
+![Checkstyle](https://img.shields.io/badge/Checkstyle-Google%20Style-blue)
+ # Car Service API
 
 REST API для автосервиса. Учебный проект по Spring Boot.
 
@@ -27,3 +30,4 @@ src/main/java/com/example/carservice/
 └── dtomapper/       # Mapper для преобразования
 
 ```mapper для преобразования Entity -> DTO
+
