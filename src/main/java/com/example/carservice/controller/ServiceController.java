@@ -6,6 +6,7 @@ import com.example.carservice.model.ServiceEntity;
 import com.example.carservice.service.ServiceInterface;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,13 +21,20 @@ public class ServiceController {
   private final ServiceInterface service;
   private final ServiceMapper mapper;
 
+  @GetMapping("/all")
+  public List<ServiceDto> getAllServices() {
+    return service.getAllServices().stream()
+        .map(mapper::toDto)
+        .toList();
+  }
+
   @GetMapping("/{id}")
-  public ServiceDto getServiceById(@PathVariable Long id) {
+  public ResponseEntity<ServiceDto> getServiceById(@PathVariable Long id) {
     ServiceEntity entity = service.getServiceById(id);
     if (entity == null) {
-      return null;
+      return ResponseEntity.notFound().build(); // 404 Not Found
     }
-    return mapper.toDto(entity);
+    return ResponseEntity.ok(mapper.toDto(entity)); // 200 OK
   }
 
   @GetMapping
