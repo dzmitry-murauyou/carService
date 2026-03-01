@@ -19,13 +19,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+
 @Component
 @RequiredArgsConstructor
+
 public class DataInitializer implements CommandLineRunner {
 
+  private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
   private final ClientRepository clientRepository;
   private final CarRepository carRepository;
   private final MechanicRepository mechanicRepository;
@@ -37,7 +42,7 @@ public class DataInitializer implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
 
-    System.out.println("=== Очистка старых данных ===");
+    log.info("=== Очистка старых данных ===");
     orderRepository.deleteAll();
     spareRepository.deleteAll();
     serviceRepository.deleteAll();
@@ -319,13 +324,13 @@ public class DataInitializer implements CommandLineRunner {
 
     orderRepository.saveAll(List.of(order1, order2, order3, order4));
 
-    System.out.println("=== Инициализация данных завершена ===");
-    System.out.println("Клиентов: " + clientRepository.count());
-    System.out.println("Машин: " + carRepository.count());
-    System.out.println("Механиков: " + mechanicRepository.count());
-    System.out.println("Услуг: " + serviceRepository.count());
-    System.out.println("Запчастей: " + spareRepository.count());
-    System.out.println("Заказов: " + orderRepository.count());
+    log.info("=== Инициализация данных завершена ===");
+    log.info("Клиентов: " + clientRepository.count());
+    log.info("Машин: " + carRepository.count());
+    log.info("Механиков: " + mechanicRepository.count());
+    log.info("Услуг: " + serviceRepository.count());
+    log.info("Запчастей: " + spareRepository.count());
+    log.info("Заказов: " + orderRepository.count());
 
     orderService.demonstrateNplus1Problem();
 
@@ -334,7 +339,7 @@ public class DataInitializer implements CommandLineRunner {
         .map(Car::getId)
         .orElseThrow(() -> new RuntimeException("Нет ни одной машины в базе!"));
 
-    System.out.println("=== Используем машину с ID: " + firstCarId + " ===");
+    log.info("=== Используем машину с ID: " + firstCarId + " ===");
     try {
       OrderDto dto = new OrderDto();
       dto.setCarId(firstCarId);
@@ -342,10 +347,10 @@ public class DataInitializer implements CommandLineRunner {
       dto.setOrderDate(LocalDateTime.now());  // ← добавить
       dto.setStatus("NEW");                   // ← добавить
 
-      System.out.println("\n=== ТЕСТ 1: Без @Transactional ===");
+      log.info("\n=== ТЕСТ 1: Без @Transactional ===");
       orderService.createOrderWithoutTransaction(dto);
     } catch (Exception e) {
-      System.out.println("Ошибка: " + e.getMessage());
+      log.info("Ошибка: " + e.getMessage());
     }
 
     try {
@@ -355,10 +360,10 @@ public class DataInitializer implements CommandLineRunner {
       dto.setOrderDate(LocalDateTime.now());  // ← добавить
       dto.setStatus("NEW");                   // ← добавить
 
-      System.out.println("\n=== ТЕСТ 2: С @Transactional ===");
+      log.info("\n=== ТЕСТ 2: С @Transactional ===");
       orderService.createOrderWithTransaction(dto);
     } catch (Exception e) {
-      System.out.println("Ошибка: " + e.getMessage());
+      log.info("Ошибка: " + e.getMessage());
     }
   }
 }

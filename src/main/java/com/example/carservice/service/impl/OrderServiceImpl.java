@@ -17,13 +17,17 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
+  private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
   private final OrderRepository orderRepository;
   private final CarRepository carRepository;
   private final MechanicRepository mechanicRepository;
@@ -199,7 +203,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   public void demonstrateNplus1Problem() {
-    System.out.println("=== Без оптимизации (N+1) ===");
+    log.info("=== Без оптимизации (N+1) ===");
     List<Order> orders1 = orderRepository.findAll();
     for (Order order : orders1) {
       if (order.getCar() != null && order.getCar().getClient() != null) {
@@ -207,7 +211,7 @@ public class OrderServiceImpl implements OrderService {
       }
     }
 
-    System.out.println("=== С оптимизацией (один запрос) ===");
+    log.info("=== С оптимизацией (один запрос) ===");
     List<Order> orders2 = orderRepository.findAll();
     for (Order order : orders2) {
       if (order.getCar() != null && order.getCar().getClient() != null) {
@@ -217,7 +221,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   public void createOrderWithoutTransaction(OrderDto orderDto) {
-    System.out.println("=== СОХРАНЕНИЕ БЕЗ @Transactional ===");
+    log.info("=== СОХРАНЕНИЕ БЕЗ @Transactional ===");
 
     Car car = carRepository.findById(orderDto.getCarId())
         .orElseThrow(() -> new RuntimeException("Car not found"));
@@ -226,22 +230,22 @@ public class OrderServiceImpl implements OrderService {
     order.setCar(car);
 
     Order savedOrder = orderRepository.save(order);
-    System.out.println("1. Заказ сохранён, ID: " + savedOrder.getId());
+    log.info("1. Заказ сохранён, ID: " + savedOrder.getId());
 
     if (orderDto.getServiceIds() != null && !orderDto.getServiceIds().isEmpty()) {
       List<ServiceEntity> services = serviceRepository.findAllById(orderDto.getServiceIds());
       savedOrder.setServices(new HashSet<>(services));
       orderRepository.save(savedOrder);
-      System.out.println("2. Услуги добавлены");
+      log.info("2. Услуги добавлены");
     }
 
-    System.out.println("3. Имитируем ошибку...");
+    log.info("3. Имитируем ошибку...");
     throw new RuntimeException("Ошибка после частичного сохранения! Заказ остался в БД.");
   }
 
   @Transactional
   public void createOrderWithTransaction(OrderDto orderDto) {
-    System.out.println("=== СОХРАНЕНИЕ С @Transactional ===");
+    log.info("=== СОХРАНЕНИЕ С @Transactional ===");
 
     Car car = carRepository.findById(orderDto.getCarId())
         .orElseThrow(() -> new RuntimeException("Car not found"));
@@ -250,16 +254,16 @@ public class OrderServiceImpl implements OrderService {
     order.setCar(car);
 
     Order savedOrder = orderRepository.save(order);
-    System.out.println("1. Заказ сохранён, ID: " + savedOrder.getId());
+    log.info("1. Заказ сохранён, ID: " + savedOrder.getId());
 
     if (orderDto.getServiceIds() != null && !orderDto.getServiceIds().isEmpty()) {
       List<ServiceEntity> services = serviceRepository.findAllById(orderDto.getServiceIds());
       savedOrder.setServices(new HashSet<>(services));
       orderRepository.save(savedOrder);
-      System.out.println("2. Услуги добавлены");
+      log.info("2. Услуги добавлены");
     }
 
-    System.out.println("3. Имитируем ошибку...");
+    log.info("3. Имитируем ошибку...");
     throw new RuntimeException("Ошибка! Всё должно откатиться.");
   }
 }

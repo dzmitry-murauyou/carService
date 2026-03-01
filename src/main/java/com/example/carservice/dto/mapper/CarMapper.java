@@ -31,7 +31,7 @@ public class CarMapper {
       return null;
     }
 
-    Car car = Car.builder()
+    return Car.builder()
         .id(dto.getId())
         .brand(dto.getBrand())
         .model(dto.getModel())
@@ -39,7 +39,5 @@ public class CarMapper {
         .licensePlate(dto.getLicensePlate())
         .vin(dto.getVin())
         .build();
-
-    return car;
   }
 }
