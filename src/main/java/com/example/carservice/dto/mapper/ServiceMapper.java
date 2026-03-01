@@ -18,9 +18,6 @@ public class ServiceMapper {
         .price(entity.getPrice())
         .duration(formatDuration(entity.getDurationMinutes()))
         .category(entity.getCategory())
-        .status(entity.getAvailable() ? "Доступно" : "Недоступно")
-        .masterName(entity.getMasterName())
-        .note(entity.getNote())
         .build();
   }
 

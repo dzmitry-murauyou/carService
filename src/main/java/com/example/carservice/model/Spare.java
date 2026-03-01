@@ -14,12 +14,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "services")
+@Table(name = "spares")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServiceEntity {
+public class Spare {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,19 +28,17 @@ public class ServiceEntity {
   @Column(nullable = false)
   private String name;
 
-  @Column(length = 500)
-  private String description;
+  @Column(name = "part_number", unique = true, nullable = false)
+  private String partNumber;
 
   @Column(nullable = false)
   private Double price;
 
-  @Column(name = "duration_minutes")
-  private Integer durationMinutes;
+  @Column(name = "quantity_in_stock")
+  private Integer quantityInStock;
 
-  private Boolean available;
+  private String manufacturer;
 
-  private String category;
-
-  @ManyToMany(mappedBy = "services")
+  @ManyToMany(mappedBy = "spares")
   private List<Order> orders;
 }

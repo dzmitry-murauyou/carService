@@ -1,12 +1,9 @@
 package com.example.carservice.controller;
 
 import com.example.carservice.dto.ServiceDto;
-import com.example.carservice.dto.mapper.ServiceMapper;
-import com.example.carservice.model.ServiceEntity;
 import com.example.carservice.service.ServiceInterface;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,57 +15,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ServiceController {
 
-  private final ServiceInterface service;
-  private final ServiceMapper mapper;
+  private final ServiceInterface service;  // ← интерфейс, а не реализация
 
   @GetMapping("/all")
   public List<ServiceDto> getAllServices() {
-    return service.getAllServices().stream()
-        .map(mapper::toDto)
-        .toList();
+    return service.getAllServices();     // ← уже DTO
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<ServiceDto> getServiceById(@PathVariable Long id) {
-    ServiceEntity entity = service.getServiceById(id);
-    if (entity == null) {
-      return ResponseEntity.notFound().build(); // 404 Not Found
-    }
-    return ResponseEntity.ok(mapper.toDto(entity)); // 200 OK
+  public ServiceDto getServiceById(@PathVariable Long id) {
+    return service.getServiceById(id);   // ← уже DTO
   }
 
   @GetMapping
   public List<ServiceDto> getServicesByParams(
-      @RequestParam(required = false) String category,
-      @RequestParam(required = false) Boolean available) {
+      @RequestParam(required = false) String category) {
 
-    List<ServiceEntity> services = service.getAllServices();
-
-    services = filterByCategory(services, category);
-    services = filterByAvailability(services, available);
-
-    return services.stream()
-        .map(mapper::toDto)
-        .toList();
-  }
-
-  private List<ServiceEntity> filterByCategory(List<ServiceEntity> services,
-                                               String category) {
-    if (category == null || category.isEmpty()) {
-      return services;
+    if (category != null) {
+      return service.getServicesByCategory(category);
     }
-    return services.stream()
-        .filter(s -> category.equalsIgnoreCase(s.getCategory()))
-        .toList();
-  }
-
-  private List<ServiceEntity> filterByAvailability(List<ServiceEntity> services,
-                                                   Boolean available) {
-    if (available == null) {
-      return services;
-    }
-    return services.stream()
-        .filter(s -> available.equals(s.getAvailable()))
-        .toList();
+    return service.getAllServices();
   }
 }

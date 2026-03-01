@@ -1,12 +1,14 @@
 package com.example.carservice.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,33 +16,34 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "services")
+@Table(name = "clients")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServiceEntity {
+public class Client {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(nullable = false)
-  private String name;
-
-  @Column(length = 500)
-  private String description;
+  private String firstName;
 
   @Column(nullable = false)
-  private Double price;
+  private String lastName;
 
-  @Column(name = "duration_minutes")
-  private Integer durationMinutes;
+  @Column(unique = true, nullable = false)
+  private String phone;
 
-  private Boolean available;
+  @Column(unique = true)
+  private String email;
 
-  private String category;
+  private String address;
 
-  @ManyToMany(mappedBy = "services")
-  private List<Order> orders;
+  @Column(name = "registration_date")
+  private LocalDate registrationDate;
+
+  @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+  private List<Car> cars;
 }

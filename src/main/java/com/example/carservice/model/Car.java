@@ -5,7 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -14,33 +16,35 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "services")
+@Table(name = "cars")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServiceEntity {
+public class Car {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(nullable = false)
-  private String name;
-
-  @Column(length = 500)
-  private String description;
+  private String brand;
 
   @Column(nullable = false)
-  private Double price;
+  private String model;
 
-  @Column(name = "duration_minutes")
-  private Integer durationMinutes;
+  private Integer year;
 
-  private Boolean available;
+  @Column(name = "license_plate", unique = true, nullable = false)
+  private String licensePlate;
 
-  private String category;
+  @Column(unique = true)
+  private String vin;
 
-  @ManyToMany(mappedBy = "services")
+  @ManyToOne
+  @JoinColumn(name = "client_id", nullable = false)
+  private Client client;
+
+  @OneToMany(mappedBy = "car")
   private List<Order> orders;
 }

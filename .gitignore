@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Local configuration ###
+application-local.properties
+application-dev.properties
+application-secret.properties
+*.key
+*.p12
