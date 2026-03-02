@@ -143,7 +143,7 @@ public class OrderServiceImpl implements OrderService {
   @Transactional
   public void deleteOrder(Long id) {
     if (!orderRepository.existsById(id)) {
-      throw new ResourceNotFoundException("Order not found with id: " + id);
+      throw new ResourceNotFoundException(ORDER_NOT_FOUND + id);
     }
     orderRepository.deleteById(id);
   }
