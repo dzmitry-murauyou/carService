@@ -244,7 +244,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     log.info("3. Имитируем ошибку...");
-    throw new RuntimeException("Ошибка после частичного сохранения! Заказ остался в БД.");
+    throw new OrderNotFoundException("Ошибка после частичного сохранения! Заказ остался в БД.");
   }
 
   @Override
@@ -269,6 +269,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     log.info("3. Имитируем ошибку...");
-    throw new RuntimeException("Ошибка! Всё должно откатиться.");
+    throw new OrderNotFoundException("Ошибка! Всё должно откатиться.");
   }
 }
