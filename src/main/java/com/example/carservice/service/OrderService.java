@@ -31,4 +31,6 @@ public interface OrderService {
   void createOrderWithoutTransaction(OrderDto orderDto);
 
   void createOrderWithTransaction(OrderDto orderDto);
+
+  void deleteOrder(Long id);
 }

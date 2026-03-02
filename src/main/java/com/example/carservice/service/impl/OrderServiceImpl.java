@@ -3,6 +3,7 @@ package com.example.carservice.service.impl;
 import com.example.carservice.dto.OrderDto;
 import com.example.carservice.dto.mapper.OrderMapper;
 import com.example.carservice.exception.OrderNotFoundException;
+import com.example.carservice.exception.ResourceNotFoundException;
 import com.example.carservice.model.Car;
 import com.example.carservice.model.Mechanic;
 import com.example.carservice.model.Order;
@@ -22,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -88,13 +90,15 @@ public class OrderServiceImpl implements OrderService {
 
     if (orderDto.getCarId() != null) {
       Car car = carRepository.findById(orderDto.getCarId())
-          .orElseThrow(() -> new OrderNotFoundException(CAR_NOT_FOUND + orderDto.getCarId()));
+          .orElseThrow(() -> new OrderNotFoundException(CAR_NOT_FOUND
+              + orderDto.getCarId()));
       order.setCar(car);
     }
 
     if (orderDto.getMechanicId() != null) {
       Mechanic mechanic = mechanicRepository.findById(orderDto.getMechanicId())
-          .orElseThrow(() -> new OrderNotFoundException(MECHANIC_NOT_FOUND + orderDto.getMechanicId()));
+          .orElseThrow(() -> new OrderNotFoundException(MECHANIC_NOT_FOUND
+              + orderDto.getMechanicId()));
       order.setMechanic(mechanic);
     }
 
@@ -137,6 +141,15 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   @Transactional
+  public void deleteOrder(Long id) {
+    if (!orderRepository.existsById(id)) {
+      throw new ResourceNotFoundException("Order not found with id: " + id);
+    }
+    orderRepository.deleteById(id);
+  }
+
+  @Override
+  @Transactional
   public OrderDto updateOrder(Long id, OrderDto orderDto) {
     Order existing = orderRepository.findById(id)
         .orElseThrow(() -> new OrderNotFoundException(ORDER_NOT_FOUND + id));
@@ -153,7 +166,8 @@ public class OrderServiceImpl implements OrderService {
 
     if (orderDto.getMechanicId() != null) {
       Mechanic mechanic = mechanicRepository.findById(orderDto.getMechanicId())
-          .orElseThrow(() -> new OrderNotFoundException(MECHANIC_NOT_FOUND + orderDto.getMechanicId()));
+          .orElseThrow(() -> new OrderNotFoundException(MECHANIC_NOT_FOUND
+              + orderDto.getMechanicId()));
       existing.setMechanic(mechanic);
     }
 
