@@ -50,7 +50,7 @@ public class DataInitializer implements CommandLineRunner {
     carRepository.deleteAll();
     clientRepository.deleteAll();
 
-    System.out.println("=== Создание клиентов ===");
+    log.info("=== Создание клиентов ===");
 
     Client client1 = Client.builder()
         .firstName("Иван")
@@ -90,7 +90,7 @@ public class DataInitializer implements CommandLineRunner {
 
     clientRepository.saveAll(List.of(client1, client2, client3, client4));
 
-    System.out.println("=== Создание машин ===");
+    log.info("=== Создание машин ===");
 
     Car car1 = Car.builder()
         .brand("Volkswagen")
@@ -139,7 +139,7 @@ public class DataInitializer implements CommandLineRunner {
 
     carRepository.saveAll(List.of(car1, car2, car3, car4, car5));
 
-    System.out.println("=== Создание механиков ===");
+    log.info("=== Создание механиков ===");
 
     Mechanic mech1 = Mechanic.builder()
         .firstName("Сергей")
@@ -179,7 +179,7 @@ public class DataInitializer implements CommandLineRunner {
 
     mechanicRepository.saveAll(List.of(mech1, mech2, mech3, mech4));
 
-    System.out.println("=== Создание услуг ===");
+    log.info("=== Создание услуг ===");
 
     ServiceEntity serv1 = ServiceEntity.builder()
         .name("Замена масла")
@@ -228,7 +228,7 @@ public class DataInitializer implements CommandLineRunner {
 
     serviceRepository.saveAll(List.of(serv1, serv2, serv3, serv4, serv5));
 
-    System.out.println("=== Создание запчастей ===");
+    log.info("=== Создание запчастей ===");
 
     Spare spare1 = Spare.builder()
         .name("Масляный фильтр")
@@ -272,7 +272,7 @@ public class DataInitializer implements CommandLineRunner {
 
     spareRepository.saveAll(List.of(spare1, spare2, spare3, spare4, spare5));
 
-    System.out.println("=== Создание заказов ===");
+    log.info("=== Создание заказов ===");
 
     Order order1 = Order.builder()
         .orderDate(LocalDateTime.now().minusDays(5))
@@ -324,13 +324,12 @@ public class DataInitializer implements CommandLineRunner {
 
     orderRepository.saveAll(List.of(order1, order2, order3, order4));
 
-    log.info("=== Инициализация данных завершена ===");
-    log.info("Клиентов: " + clientRepository.count());
-    log.info("Машин: " + carRepository.count());
-    log.info("Механиков: " + mechanicRepository.count());
-    log.info("Услуг: " + serviceRepository.count());
-    log.info("Запчастей: " + spareRepository.count());
-    log.info("Заказов: " + orderRepository.count());
+    log.info("Клиентов: {}", clientRepository.count());
+    log.info("Машин: {}", carRepository.count());
+    log.info("Механиков: {}", mechanicRepository.count());
+    log.info("Услуг: {}", serviceRepository.count());
+    log.info("Запчастей: {}", spareRepository.count());
+    log.info("Заказов: {}", orderRepository.count());
 
     orderService.demonstrateNplus1Problem();
 
@@ -339,7 +338,7 @@ public class DataInitializer implements CommandLineRunner {
         .map(Car::getId)
         .orElseThrow(() -> new RuntimeException("Нет ни одной машины в базе!"));
 
-    log.info("=== Используем машину с ID: " + firstCarId + " ===");
+    log.info("=== Используем машину с ID: {} ===", firstCarId);
     try {
       OrderDto dto = new OrderDto();
       dto.setCarId(firstCarId);
@@ -350,7 +349,7 @@ public class DataInitializer implements CommandLineRunner {
       log.info("\n=== ТЕСТ 1: Без @Transactional ===");
       orderService.createOrderWithoutTransaction(dto);
     } catch (Exception e) {
-      log.info("Ошибка: " + e.getMessage());
+      log.error("Ошибка: {}", e.getMessage());
     }
 
     try {
@@ -363,7 +362,7 @@ public class DataInitializer implements CommandLineRunner {
       log.info("\n=== ТЕСТ 2: С @Transactional ===");
       orderService.createOrderWithTransaction(dto);
     } catch (Exception e) {
-      log.info("Ошибка: " + e.getMessage());
+      log.error("Ошибка: {}", e.getMessage());
     }
   }
 }

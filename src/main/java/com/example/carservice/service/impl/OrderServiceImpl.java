@@ -2,6 +2,7 @@ package com.example.carservice.service.impl;
 
 import com.example.carservice.dto.OrderDto;
 import com.example.carservice.dto.mapper.OrderMapper;
+import com.example.carservice.exception.OrderNotFoundException;
 import com.example.carservice.model.Car;
 import com.example.carservice.model.Mechanic;
 import com.example.carservice.model.Order;
@@ -22,12 +23,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
   private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
+  private static final String ORDER_NOT_FOUND = "Order not found with id: ";
+  private static final String CAR_NOT_FOUND = "Car not found with id: ";
+  private static final String MECHANIC_NOT_FOUND = "Mechanic not found with id: ";
+
   private final OrderRepository orderRepository;
   private final CarRepository carRepository;
   private final MechanicRepository mechanicRepository;
@@ -46,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
   public OrderDto getOrderById(Long id) {
     return orderRepository.findById(id)
         .map(mapper::toDto)
-        .orElse(null);
+        .orElseThrow(() -> new OrderNotFoundException(ORDER_NOT_FOUND + id));
   }
 
   @Override
@@ -84,14 +88,13 @@ public class OrderServiceImpl implements OrderService {
 
     if (orderDto.getCarId() != null) {
       Car car = carRepository.findById(orderDto.getCarId())
-          .orElseThrow(() -> new RuntimeException("Car not found with id: " + orderDto.getCarId()));
+          .orElseThrow(() -> new OrderNotFoundException(CAR_NOT_FOUND + orderDto.getCarId()));
       order.setCar(car);
     }
 
     if (orderDto.getMechanicId() != null) {
       Mechanic mechanic = mechanicRepository.findById(orderDto.getMechanicId())
-          .orElseThrow(() -> new RuntimeException("Mechanic not found with id: "
-              + orderDto.getMechanicId()));
+          .orElseThrow(() -> new OrderNotFoundException(MECHANIC_NOT_FOUND + orderDto.getMechanicId()));
       order.setMechanic(mechanic);
     }
 
@@ -136,7 +139,7 @@ public class OrderServiceImpl implements OrderService {
   @Transactional
   public OrderDto updateOrder(Long id, OrderDto orderDto) {
     Order existing = orderRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
+        .orElseThrow(() -> new OrderNotFoundException(ORDER_NOT_FOUND + id));
 
     existing.setDescription(orderDto.getDescription());
     existing.setTotalPrice(orderDto.getTotalPrice());
@@ -144,14 +147,13 @@ public class OrderServiceImpl implements OrderService {
 
     if (orderDto.getCarId() != null) {
       Car car = carRepository.findById(orderDto.getCarId())
-          .orElseThrow(() -> new RuntimeException("Car not found with id: " + orderDto.getCarId()));
+          .orElseThrow(() -> new OrderNotFoundException(CAR_NOT_FOUND + orderDto.getCarId()));
       existing.setCar(car);
     }
 
     if (orderDto.getMechanicId() != null) {
       Mechanic mechanic = mechanicRepository.findById(orderDto.getMechanicId())
-          .orElseThrow(() -> new RuntimeException("Mechanic not found with id: "
-              + orderDto.getMechanicId()));
+          .orElseThrow(() -> new OrderNotFoundException(MECHANIC_NOT_FOUND + orderDto.getMechanicId()));
       existing.setMechanic(mechanic);
     }
 
@@ -183,7 +185,7 @@ public class OrderServiceImpl implements OrderService {
   @Transactional
   public OrderDto cancelOrder(Long id) {
     Order order = orderRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
+        .orElseThrow(() -> new OrderNotFoundException(ORDER_NOT_FOUND + id));
 
     order.setStatus("CANCELLED");
     Order cancelled = orderRepository.save(order);
@@ -194,7 +196,7 @@ public class OrderServiceImpl implements OrderService {
   @Transactional
   public OrderDto completeOrder(Long id) {
     Order order = orderRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
+        .orElseThrow(() -> new OrderNotFoundException(ORDER_NOT_FOUND + id));
 
     order.setStatus("COMPLETED");
     order.setCompletionDate(LocalDateTime.now());
@@ -202,6 +204,7 @@ public class OrderServiceImpl implements OrderService {
     return mapper.toDto(completed);
   }
 
+  @Override
   public void demonstrateNplus1Problem() {
     log.info("=== Без оптимизации (N+1) ===");
     List<Order> orders1 = orderRepository.findAll();
@@ -220,17 +223,18 @@ public class OrderServiceImpl implements OrderService {
     }
   }
 
+  @Override
   public void createOrderWithoutTransaction(OrderDto orderDto) {
     log.info("=== СОХРАНЕНИЕ БЕЗ @Transactional ===");
 
     Car car = carRepository.findById(orderDto.getCarId())
-        .orElseThrow(() -> new RuntimeException("Car not found"));
+        .orElseThrow(() -> new OrderNotFoundException(CAR_NOT_FOUND + orderDto.getCarId()));
 
     Order order = mapper.toEntity(orderDto);
     order.setCar(car);
 
     Order savedOrder = orderRepository.save(order);
-    log.info("1. Заказ сохранён, ID: " + savedOrder.getId());
+    log.info("1. Заказ сохранён, ID: {}", savedOrder.getId());
 
     if (orderDto.getServiceIds() != null && !orderDto.getServiceIds().isEmpty()) {
       List<ServiceEntity> services = serviceRepository.findAllById(orderDto.getServiceIds());
@@ -243,18 +247,19 @@ public class OrderServiceImpl implements OrderService {
     throw new RuntimeException("Ошибка после частичного сохранения! Заказ остался в БД.");
   }
 
+  @Override
   @Transactional
   public void createOrderWithTransaction(OrderDto orderDto) {
     log.info("=== СОХРАНЕНИЕ С @Transactional ===");
 
     Car car = carRepository.findById(orderDto.getCarId())
-        .orElseThrow(() -> new RuntimeException("Car not found"));
+        .orElseThrow(() -> new OrderNotFoundException(CAR_NOT_FOUND + orderDto.getCarId()));
 
     Order order = mapper.toEntity(orderDto);
     order.setCar(car);
 
     Order savedOrder = orderRepository.save(order);
-    log.info("1. Заказ сохранён, ID: " + savedOrder.getId());
+    log.info("1. Заказ сохранён, ID: {}", savedOrder.getId());
 
     if (orderDto.getServiceIds() != null && !orderDto.getServiceIds().isEmpty()) {
       List<ServiceEntity> services = serviceRepository.findAllById(orderDto.getServiceIds());
