@@ -3,14 +3,13 @@ package com.example.carservice.service.impl;
 import com.example.carservice.dto.OrderDto;
 import com.example.carservice.dto.mapper.OrderMapper;
 import com.example.carservice.exception.OrderNotFoundException;
+import com.example.carservice.exception.OrderOperationException;
 import com.example.carservice.exception.ResourceNotFoundException;
 import com.example.carservice.model.Car;
-import com.example.carservice.model.Mechanic;
 import com.example.carservice.model.Order;
 import com.example.carservice.model.ServiceEntity;
 import com.example.carservice.model.Spare;
 import com.example.carservice.repository.CarRepository;
-import com.example.carservice.repository.MechanicRepository;
 import com.example.carservice.repository.OrderRepository;
 import com.example.carservice.repository.ServiceRepository;
 import com.example.carservice.repository.SpareRepository;
@@ -236,7 +235,7 @@ public class OrderServiceImpl implements OrderService {
     log.info("1. Заказ сохранён, ID: {}", savedOrder.getId());
 
     log.info("3. Имитируем ошибку...");
-    throw new RuntimeException("Ошибка после частичного сохранения! Заказ остался в БД.");
+    throw new OrderOperationException("Ошибка после частичного сохранения! Заказ остался в БД.");
   }
 
   @Override
@@ -261,6 +260,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     log.info("3. Имитируем ошибку...");
-    throw new RuntimeException("Ошибка! Всё должно откатиться.");
+    throw new OrderOperationException("Ошибка! Всё должно откатиться.");
   }
 }
