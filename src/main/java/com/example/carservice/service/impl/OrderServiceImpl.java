@@ -101,7 +101,6 @@ public class OrderServiceImpl implements OrderService {
     return orderRepository.save(order);
   }
 
-  @Transactional(readOnly = true)
   private void processOrders(List<Order> orders) {
     for (Order order : orders) {
       if (order.getCar() != null && order.getCar().getClient() != null) {
