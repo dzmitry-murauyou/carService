@@ -38,7 +38,6 @@ public class OrderServiceImpl implements OrderService {
   private final SpareRepository spareRepository;
   private final OrderMapper mapper;
 
-  // ========== ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ==========
 
   private Car findCarById(Long carId) {
     return carRepository.findById(carId)
@@ -102,17 +101,19 @@ public class OrderServiceImpl implements OrderService {
     return orderRepository.save(order);
   }
 
+  @Transactional(readOnly = true)
   private void processOrders(List<Order> orders) {
     for (Order order : orders) {
       if (order.getCar() != null && order.getCar().getClient() != null) {
-        order.getCar().getClient().getLastName();
+        String clientLastName = order.getCar().getClient().getLastName();
+        log.debug("Order {}: client {}", order.getId(), clientLastName);
       }
     }
   }
 
-  // ========== ОСНОВНЫЕ МЕТОДЫ ==========
 
   @Override
+  @Transactional(readOnly = true)
   public List<OrderDto> getAllOrders() {
     return orderRepository.findAll().stream()
         .map(mapper::toDto)
@@ -120,6 +121,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public OrderDto getOrderById(Long id) {
     return orderRepository.findById(id)
         .map(mapper::toDto)
@@ -127,6 +129,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<OrderDto> getOrdersByCar(Long carId) {
     return orderRepository.findByCarId(carId).stream()
         .map(mapper::toDto)
@@ -134,6 +137,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<OrderDto> getOrdersByClient(Long clientId) {
     return orderRepository.findByClientId(clientId).stream()
         .map(mapper::toDto)
@@ -141,6 +145,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<OrderDto> getOrdersByStatus(String status) {
     return orderRepository.findByStatus(status).stream()
         .map(mapper::toDto)
@@ -148,6 +153,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<OrderDto> getOrdersByDateRange(LocalDateTime start, LocalDateTime end) {
     return orderRepository.findByOrderDateBetween(start, end).stream()
         .map(mapper::toDto)
@@ -211,13 +217,21 @@ public class OrderServiceImpl implements OrderService {
     return mapper.toDto(updateOrderStatus(id, "COMPLETED", true));
   }
 
+
   @Override
+  @Transactional(readOnly = true)
   public void demonstrateNplus1Problem() {
     log.info("=== Без оптимизации (N+1) ===");
-    processOrders(orderRepository.findAll());
+    List<Order> ordersWithoutOptimization = orderRepository.findAll();
+    log.info("Загружено {} заказов без оптимизации", ordersWithoutOptimization.size());
+    processOrders(ordersWithoutOptimization);
+    log.info("=== Конец N+1 ===");
 
     log.info("=== С оптимизацией (один запрос) ===");
-    processOrders(orderRepository.findAll());
+    List<Order> ordersWithOptimization = orderRepository.findAllWithDetails();
+    log.info("Загружено {} заказов с оптимизацией", ordersWithOptimization.size());
+    processOrders(ordersWithOptimization);
+    log.info("=== Конец оптимизации ===");
   }
 
   @Override
@@ -229,12 +243,11 @@ public class OrderServiceImpl implements OrderService {
 
     Order order = mapper.toEntity(orderDto);
     order.setCar(car);
-    order.setServices(new HashSet<>()); // пустой Set, чтобы не было проблем
+    order.setServices(new HashSet<>());
 
     Order savedOrder = orderRepository.save(order);
     log.info("1. Заказ сохранён, ID: {}", savedOrder.getId());
-
-    log.info("3. Имитируем ошибку...");
+    log.info("2. Имитируем ошибку...");
     throw new OrderOperationException("Ошибка после частичного сохранения! Заказ остался в БД.");
   }
 

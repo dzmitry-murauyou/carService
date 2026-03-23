@@ -3,7 +3,9 @@ package com.example.carservice.service.impl;
 import com.example.carservice.dto.ClientDto;
 import com.example.carservice.dto.mapper.ClientMapper;
 import com.example.carservice.exception.ResourceNotFoundException;
+import com.example.carservice.model.Car;
 import com.example.carservice.model.Client;
+import com.example.carservice.repository.CarRepository;
 import com.example.carservice.repository.ClientRepository;
 import com.example.carservice.service.ClientService;
 import java.util.List;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClientServiceImpl implements ClientService {
 
   private final ClientRepository clientRepository;
+  private final CarRepository carRepository;  // ← ДОЛЖНО БЫТЬ final
   private final ClientMapper mapper;
 
   @Override
@@ -75,9 +78,14 @@ public class ClientServiceImpl implements ClientService {
   @Override
   @Transactional
   public void deleteClient(Long id) {
-    if (!clientRepository.existsById(id)) {
-      throw new ResourceNotFoundException("Client not found with id: " + id);
+    Client client = clientRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Client not found"));
+
+    for (Car car : client.getCars()) {
+      car.setClient(null);
+      carRepository.save(car);
     }
-    clientRepository.deleteById(id);
+
+    clientRepository.delete(client);
   }
 }

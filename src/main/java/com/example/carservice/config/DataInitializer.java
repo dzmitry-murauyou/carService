@@ -348,8 +348,8 @@ public class DataInitializer implements CommandLineRunner {
       OrderDto dto = new OrderDto();
       dto.setCarId(firstCarId);
       dto.setServiceIds(List.of(1L));
-      dto.setOrderDate(LocalDateTime.now());  // ← добавить
-      dto.setStatus("NEW");                   // ← добавить
+      dto.setOrderDate(LocalDateTime.now());
+      dto.setStatus("NEW");
 
       log.info("\n=== ТЕСТ 1: Без @Transactional ===");
       orderService.createOrderWithoutTransaction(dto);
@@ -361,8 +361,8 @@ public class DataInitializer implements CommandLineRunner {
       OrderDto dto = new OrderDto();
       dto.setCarId(firstCarId);
       dto.setServiceIds(List.of(1L));
-      dto.setOrderDate(LocalDateTime.now());  // ← добавить
-      dto.setStatus("NEW");                   // ← добавить
+      dto.setOrderDate(LocalDateTime.now());
+      dto.setStatus("NEW");
 
       log.info("\n=== ТЕСТ 2: С @Transactional ===");
       orderService.createOrderWithTransaction(dto);

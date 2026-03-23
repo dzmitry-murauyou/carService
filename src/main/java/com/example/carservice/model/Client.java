@@ -48,6 +48,6 @@ public class Client {
   @Column(name = "registration_date")
   private LocalDate registrationDate;
 
-  @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "client", cascade = CascadeType.PERSIST)
   private List<Car> cars = new ArrayList<>();
 }

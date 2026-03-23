@@ -42,7 +42,7 @@ public class Car {
   private Integer year;
 
   @ManyToOne
-  @JoinColumn(name = "client_id", nullable = false)
+  @JoinColumn(name = "client_id")
   private Client client;
 
   @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)

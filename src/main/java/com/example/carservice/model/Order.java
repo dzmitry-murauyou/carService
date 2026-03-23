@@ -43,6 +43,8 @@ public class Order {
   @Column(name = "completion_date")
   private LocalDateTime completionDate;
 
+
+
   @ManyToOne
   @JoinColumn(name = "car_id")
   private Car car;
