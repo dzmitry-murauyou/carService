@@ -1,6 +1,7 @@
 package com.example.carservice.dto;
 
 import java.time.LocalDate;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +15,8 @@ public class MechanicDto {
   private Long id;
   private String firstName;
   private String lastName;
-  private String specialization;
-  private LocalDate hireDate;
   private String phone;
-  private Double salary;
+  private LocalDate hireDate;
+  private Set<Long> serviceIds;
+  private Set<String> serviceNames;
 }

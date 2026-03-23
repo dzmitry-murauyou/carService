@@ -47,9 +47,6 @@ public class Order {
   @JoinColumn(name = "car_id")
   private Car car;
 
-  @ManyToOne
-  @JoinColumn(name = "mechanic_id")
-  private Mechanic mechanic;
 
   @ManyToMany
   @JoinTable(
@@ -57,7 +54,7 @@ public class Order {
       joinColumns = @JoinColumn(name = "order_id"),
       inverseJoinColumns = @JoinColumn(name = "service_id")
   )
-  private Set<ServiceEntity> services = new HashSet<>();  // List → Set
+  private Set<ServiceEntity> services = new HashSet<>();
 
   @ManyToMany
   @JoinTable(
@@ -65,5 +62,5 @@ public class Order {
       joinColumns = @JoinColumn(name = "order_id"),
       inverseJoinColumns = @JoinColumn(name = "spare_id")
   )
-  private Set<Spare> spares = new HashSet<>();  // List → Set
+  private Set<Spare> spares = new HashSet<>();
 }

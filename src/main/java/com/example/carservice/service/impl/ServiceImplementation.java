@@ -18,14 +18,14 @@ public class ServiceImplementation implements ServiceInterface {
   @Override
   public List<ServiceDto> getAllServices() {
     return repository.findAll().stream()
-        .map(mapper::toDto)        // ← Entity → DTO
+        .map(mapper::toDto)
         .toList();
   }
 
   @Override
   public ServiceDto getServiceById(Long id) {
     return repository.findById(id)
-        .map(mapper::toDto)        // ← Entity → DTO
+        .map(mapper::toDto)
         .orElse(null);
   }
 
@@ -35,5 +35,4 @@ public class ServiceImplementation implements ServiceInterface {
         .map(mapper::toDto)
         .toList();
   }
-
 }

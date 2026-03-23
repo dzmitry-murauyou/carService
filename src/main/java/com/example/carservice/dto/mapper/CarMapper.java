@@ -2,10 +2,18 @@ package com.example.carservice.dto.mapper;
 
 import com.example.carservice.dto.CarDto;
 import com.example.carservice.model.Car;
+import com.example.carservice.model.CarBrandModel;
+import com.example.carservice.repository.CarBrandModelRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CarMapper {
+
+  private final CarBrandModelRepository brandModelRepository;
+
+  public CarMapper(CarBrandModelRepository brandModelRepository) {
+    this.brandModelRepository = brandModelRepository;
+  }
 
   public CarDto toDto(Car entity) {
     if (entity == null) {
@@ -14,11 +22,12 @@ public class CarMapper {
 
     return CarDto.builder()
         .id(entity.getId())
+        .brandModelId(entity.getBrandModel() != null ? entity.getBrandModel().getId() : null)
         .brand(entity.getBrand())
         .model(entity.getModel())
-        .year(entity.getYear())
         .licensePlate(entity.getLicensePlate())
         .vin(entity.getVin())
+        .year(entity.getYear())
         .clientId(entity.getClient() != null ? entity.getClient().getId() : null)
         .clientName(entity.getClient() != null
             ? entity.getClient().getFirstName() + " " + entity.getClient().getLastName()
@@ -31,13 +40,18 @@ public class CarMapper {
       return null;
     }
 
-    return Car.builder()
+    Car.CarBuilder builder = Car.builder()
         .id(dto.getId())
-        .brand(dto.getBrand())
-        .model(dto.getModel())
-        .year(dto.getYear())
         .licensePlate(dto.getLicensePlate())
         .vin(dto.getVin())
-        .build();
+        .year(dto.getYear());
+
+    if (dto.getBrandModelId() != null) {
+      CarBrandModel brandModel = brandModelRepository.findById(dto.getBrandModelId())
+          .orElseThrow(() -> new RuntimeException("BrandModel not found"));
+      builder.brandModel(brandModel);
+    }
+
+    return builder.build();
   }
 }

@@ -9,8 +9,6 @@ public interface MechanicService {
 
   MechanicDto getMechanicById(Long id);
 
-  List<MechanicDto> getMechanicsBySpecialization(String specialization);
-
   MechanicDto createMechanic(MechanicDto mechanicDto);
 
   MechanicDto updateMechanic(Long id, MechanicDto mechanicDto);

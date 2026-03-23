@@ -2,6 +2,9 @@ package com.example.carservice.dto.mapper;
 
 import com.example.carservice.dto.MechanicDto;
 import com.example.carservice.model.Mechanic;
+import com.example.carservice.model.ServiceEntity;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,10 +19,14 @@ public class MechanicMapper {
         .id(entity.getId())
         .firstName(entity.getFirstName())
         .lastName(entity.getLastName())
-        .specialization(entity.getSpecialization())
         .hireDate(entity.getHireDate())
         .phone(entity.getPhone())
-        .salary(entity.getSalary())
+        .serviceIds(entity.getServices() == null ? null : entity.getServices().stream()
+            .map(ServiceEntity::getId)
+            .collect(Collectors.toSet()))
+        .serviceNames(entity.getServices() == null ? null : entity.getServices().stream()
+            .map(ServiceEntity::getName)
+            .collect(Collectors.toSet()))
         .build();
   }
 
@@ -32,10 +39,8 @@ public class MechanicMapper {
         .id(dto.getId())
         .firstName(dto.getFirstName())
         .lastName(dto.getLastName())
-        .specialization(dto.getSpecialization())
         .hireDate(dto.getHireDate())
         .phone(dto.getPhone())
-        .salary(dto.getSalary())
         .build();
   }
 }

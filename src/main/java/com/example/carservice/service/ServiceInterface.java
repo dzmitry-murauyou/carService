@@ -9,5 +9,6 @@ public interface ServiceInterface {
 
   ServiceDto getServiceById(Long id);
 
+
   List<ServiceDto> getServicesByCategory(String category);
 }

@@ -18,7 +18,6 @@ public class ClientMapper {
         .lastName(entity.getLastName())
         .phone(entity.getPhone())
         .email(entity.getEmail())
-        .address(entity.getAddress())
         .registrationDate(entity.getRegistrationDate())
         .build();
   }
@@ -34,7 +33,6 @@ public class ClientMapper {
         .lastName(dto.getLastName())
         .phone(dto.getPhone())
         .email(dto.getEmail())
-        .address(dto.getAddress())
         .registrationDate(dto.getRegistrationDate())
         .build();
   }

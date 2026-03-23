@@ -14,8 +14,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
   List<Order> findByCarId(Long carId);
 
-  List<Order> findByMechanicId(Long mechanicId);
-
   List<Order> findByStatus(String status);
 
   List<Order> findByOrderDateBetween(LocalDateTime start, LocalDateTime end);
@@ -23,7 +21,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
   @Query("SELECT o FROM Order o WHERE o.car.client.id = :clientId")
   List<Order> findByClientId(@Param("clientId") Long clientId);
 
-  @EntityGraph(attributePaths = {"car", "car.client", "mechanic", "services", "spares"})
+  @EntityGraph(attributePaths = {"car", "car.client", "services", "spares"})
   @Override
   List<Order> findAll();
 }

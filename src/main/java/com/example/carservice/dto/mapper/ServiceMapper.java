@@ -17,7 +17,6 @@ public class ServiceMapper {
         .description(entity.getDescription())
         .price(entity.getPrice())
         .duration(formatDuration(entity.getDurationMinutes()))
-        .category(entity.getCategory())
         .build();
   }
 

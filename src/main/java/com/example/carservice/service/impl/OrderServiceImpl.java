@@ -32,11 +32,9 @@ public class OrderServiceImpl implements OrderService {
   private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
   private static final String ORDER_NOT_FOUND = "Order not found with id: ";
   private static final String CAR_NOT_FOUND = "Car not found with id: ";
-  private static final String MECHANIC_NOT_FOUND = "Mechanic not found with id: ";
 
   private final OrderRepository orderRepository;
   private final CarRepository carRepository;
-  private final MechanicRepository mechanicRepository;
   private final ServiceRepository serviceRepository;
   private final SpareRepository spareRepository;
   private final OrderMapper mapper;
@@ -46,11 +44,6 @@ public class OrderServiceImpl implements OrderService {
   private Car findCarById(Long carId) {
     return carRepository.findById(carId)
         .orElseThrow(() -> new OrderNotFoundException(CAR_NOT_FOUND + carId));
-  }
-
-  private Mechanic findMechanicById(Long mechanicId) {
-    return mechanicRepository.findById(mechanicId)
-        .orElseThrow(() -> new OrderNotFoundException(MECHANIC_NOT_FOUND + mechanicId));
   }
 
   private Set<ServiceEntity> getServiceSet(List<Long> serviceIds) {
@@ -67,12 +60,9 @@ public class OrderServiceImpl implements OrderService {
     return new HashSet<>(spareRepository.findAllById(spareIds));
   }
 
-  private void setCarAndMechanic(Order order, OrderDto dto) {
+  private void setCar(Order order, OrderDto dto) {
     if (dto.getCarId() != null) {
       order.setCar(findCarById(dto.getCarId()));
-    }
-    if (dto.getMechanicId() != null) {
-      order.setMechanic(findMechanicById(dto.getMechanicId()));
     }
   }
 
@@ -119,31 +109,6 @@ public class OrderServiceImpl implements OrderService {
         order.getCar().getClient().getLastName();
       }
     }
-  }
-
-  private void executeOrderCreation(OrderDto orderDto, boolean transactional, String errorMessage) {
-    if (transactional) {
-      log.info("=== СОХРАНЕНИЕ С @Transactional ===");
-    } else {
-      log.info("=== СОХРАНЕНИЕ БЕЗ @Transactional ===");
-    }
-
-    Car car = findCarById(orderDto.getCarId());
-    Order order = mapper.toEntity(orderDto);
-    order.setCar(car);
-
-    Order savedOrder = orderRepository.save(order);
-    log.info("1. Заказ сохранён, ID: {}", savedOrder.getId());
-
-    if (orderDto.getServiceIds() != null && !orderDto.getServiceIds().isEmpty()) {
-      Set<ServiceEntity> services = getServiceSet(orderDto.getServiceIds());
-      savedOrder.setServices(services);
-      orderRepository.save(savedOrder);
-      log.info("2. Услуги добавлены");
-    }
-
-    log.info("3. Имитируем ошибку...");
-    throw new OrderNotFoundException(errorMessage);
   }
 
   // ========== ОСНОВНЫЕ МЕТОДЫ ==========
@@ -195,7 +160,7 @@ public class OrderServiceImpl implements OrderService {
   public OrderDto createOrder(OrderDto orderDto) {
     Order order = mapper.toEntity(orderDto);
 
-    setCarAndMechanic(order, orderDto);
+    setCar(order, orderDto);
     setServicesAndSpares(order, orderDto);
     calculateTotalPriceIfNeeded(order, orderDto);
     setDefaultOrderDateAndStatus(order);
@@ -215,7 +180,7 @@ public class OrderServiceImpl implements OrderService {
     existing.setCompletionDate(orderDto.getCompletionDate());
     existing.setStatus(orderDto.getStatus());
 
-    setCarAndMechanic(existing, orderDto);
+    setCar(existing, orderDto);
     setServicesAndSpares(existing, orderDto);
 
     if ("COMPLETED".equals(orderDto.getStatus()) && existing.getCompletionDate() == null) {
@@ -258,13 +223,44 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public void createOrderWithoutTransaction(OrderDto orderDto) {
-    executeOrderCreation(orderDto, false,
-        "Ошибка после частичного сохранения! Заказ остался в БД.");
+    log.info("=== СОХРАНЕНИЕ БЕЗ @Transactional ===");
+
+    Car car = carRepository.findById(orderDto.getCarId())
+        .orElseThrow(() -> new RuntimeException("Car not found"));
+
+    Order order = mapper.toEntity(orderDto);
+    order.setCar(car);
+    order.setServices(new HashSet<>()); // пустой Set, чтобы не было проблем
+
+    Order savedOrder = orderRepository.save(order);
+    log.info("1. Заказ сохранён, ID: {}", savedOrder.getId());
+
+    log.info("3. Имитируем ошибку...");
+    throw new RuntimeException("Ошибка после частичного сохранения! Заказ остался в БД.");
   }
 
   @Override
   @Transactional
   public void createOrderWithTransaction(OrderDto orderDto) {
-    executeOrderCreation(orderDto, true, "Ошибка! Всё должно откатиться.");
+    log.info("=== СОХРАНЕНИЕ С @Transactional ===");
+
+    Car car = carRepository.findById(orderDto.getCarId())
+        .orElseThrow(() -> new RuntimeException("Car not found"));
+
+    Order order = mapper.toEntity(orderDto);
+    order.setCar(car);
+
+    Order savedOrder = orderRepository.save(order);
+    log.info("1. Заказ сохранён, ID: {}", savedOrder.getId());
+
+    if (orderDto.getServiceIds() != null && !orderDto.getServiceIds().isEmpty()) {
+      List<ServiceEntity> services = serviceRepository.findAllById(orderDto.getServiceIds());
+      savedOrder.setServices(new HashSet<>(services));
+      orderRepository.save(savedOrder);
+      log.info("2. Услуги добавлены");
+    }
+
+    log.info("3. Имитируем ошибку...");
+    throw new RuntimeException("Ошибка! Всё должно откатиться.");
   }
 }

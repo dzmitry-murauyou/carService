@@ -9,6 +9,10 @@ public interface ClientService {
 
   ClientDto getClientById(Long id);
 
+  ClientDto getClientByPhone(String phone);
+
+  List<ClientDto> getClientsByLastName(String lastName);  // ← добавить
+
   ClientDto createClient(ClientDto clientDto);
 
   ClientDto updateClient(Long id, ClientDto clientDto);

@@ -1,7 +1,6 @@
 package com.example.carservice.controller;
 
 import com.example.carservice.dto.ClientDto;
-import com.example.carservice.exception.ResourceNotFoundException;
 import com.example.carservice.service.ClientService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("/api/clients")
@@ -24,16 +25,25 @@ public class ClientController {
   private final ClientService clientService;
 
   @GetMapping
-  public ResponseEntity<List<ClientDto>> getAllClients() {
+  public ResponseEntity<List<ClientDto>> getClients(
+      @RequestParam(required = false) String lastName,
+      @RequestParam(required = false) String phone) {
+
+    if (phone != null) {
+      ClientDto client = clientService.getClientByPhone(phone);
+      return ResponseEntity.ok(List.of(client));
+    }
+
+    if (lastName != null) {
+      return ResponseEntity.ok(clientService.getClientsByLastName(lastName));
+    }
+
     return ResponseEntity.ok(clientService.getAllClients());
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<ClientDto> getClientById(@PathVariable Long id) {
     ClientDto client = clientService.getClientById(id);
-    if (client == null) {
-      throw new ResourceNotFoundException("Client not found with id: " + id);
-    }
     return ResponseEntity.ok(client);
   }
 
@@ -47,9 +57,6 @@ public class ClientController {
   public ResponseEntity<ClientDto> updateClient(@PathVariable Long id,
                                                 @RequestBody ClientDto clientDto) {
     ClientDto updated = clientService.updateClient(id, clientDto);
-    if (updated == null) {
-      throw new ResourceNotFoundException("Client not found with id: " + id);
-    }
     return ResponseEntity.ok(updated);
   }
 

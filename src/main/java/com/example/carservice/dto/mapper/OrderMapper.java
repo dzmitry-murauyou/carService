@@ -29,12 +29,6 @@ public class OrderMapper {
           + " (" + entity.getCar().getLicensePlate() + ")");
     }
 
-    if (entity.getMechanic() != null) {
-      builder.mechanicId(entity.getMechanic().getId());
-      builder.mechanicName(entity.getMechanic().getFirstName() + " "
-          + entity.getMechanic().getLastName());
-    }
-
     if (entity.getServices() != null) {
       builder.serviceIds(entity.getServices().stream()
           .map(ServiceEntity::getId)

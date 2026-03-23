@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MechanicRepository extends JpaRepository<Mechanic, Long> {
 
-  List<Mechanic> findBySpecialization(String specialization);
 
   List<Mechanic> findByLastName(String lastName);
 

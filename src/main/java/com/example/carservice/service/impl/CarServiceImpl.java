@@ -3,7 +3,9 @@ package com.example.carservice.service.impl;
 import com.example.carservice.dto.CarDto;
 import com.example.carservice.dto.mapper.CarMapper;
 import com.example.carservice.model.Car;
+import com.example.carservice.model.CarBrandModel;
 import com.example.carservice.model.Client;
+import com.example.carservice.repository.CarBrandModelRepository;
 import com.example.carservice.repository.CarRepository;
 import com.example.carservice.repository.ClientRepository;
 import com.example.carservice.service.CarService;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CarServiceImpl implements CarService {
 
   private final CarRepository carRepository;
+  private final CarBrandModelRepository carBrandModelRepository;
   private final ClientRepository clientRepository;
   private final CarMapper mapper;
 
@@ -44,12 +47,21 @@ public class CarServiceImpl implements CarService {
   @Override
   @Transactional
   public CarDto createCar(CarDto carDto) {
+    CarBrandModel brandModel = carBrandModelRepository
+        .findByBrandAndModel(carDto.getBrand(), carDto.getModel())
+        .orElseGet(() -> carBrandModelRepository.save(
+            CarBrandModel.builder()
+                .brand(carDto.getBrand())
+                .model(carDto.getModel())
+                .build()
+        ));
+
     Car car = mapper.toEntity(carDto);
+    car.setBrandModel(brandModel);
 
     if (carDto.getClientId() != null) {
       Client client = clientRepository.findById(carDto.getClientId())
-          .orElseThrow(() -> new RuntimeException("Client not found with id: "
-              + carDto.getClientId()));
+          .orElseThrow(() -> new RuntimeException("Client not found"));
       car.setClient(client);
     }
 
@@ -61,18 +73,25 @@ public class CarServiceImpl implements CarService {
   @Transactional
   public CarDto updateCar(Long id, CarDto carDto) {
     Car existing = carRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Car not found with id: " + id));
+        .orElseThrow(() -> new RuntimeException("Car not found"));
 
-    existing.setBrand(carDto.getBrand());
-    existing.setModel(carDto.getModel());
-    existing.setYear(carDto.getYear());
+    CarBrandModel brandModel = carBrandModelRepository
+        .findByBrandAndModel(carDto.getBrand(), carDto.getModel())
+        .orElseGet(() -> carBrandModelRepository.save(
+            CarBrandModel.builder()
+                .brand(carDto.getBrand())
+                .model(carDto.getModel())
+                .build()
+        ));
+    existing.setBrandModel(brandModel);
+
     existing.setLicensePlate(carDto.getLicensePlate());
     existing.setVin(carDto.getVin());
+    existing.setYear(carDto.getYear());
 
     if (carDto.getClientId() != null) {
       Client client = clientRepository.findById(carDto.getClientId())
-          .orElseThrow(() -> new RuntimeException("Client not found with id: "
-              + carDto.getClientId()));
+          .orElseThrow(() -> new RuntimeException("Client not found"));
       existing.setClient(client);
     } else {
       existing.setClient(null);

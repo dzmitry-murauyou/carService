@@ -2,11 +2,13 @@ package com.example.carservice.config;
 
 import com.example.carservice.dto.OrderDto;
 import com.example.carservice.model.Car;
+import com.example.carservice.model.CarBrandModel;
 import com.example.carservice.model.Client;
 import com.example.carservice.model.Mechanic;
 import com.example.carservice.model.Order;
 import com.example.carservice.model.ServiceEntity;
 import com.example.carservice.model.Spare;
+import com.example.carservice.repository.CarBrandModelRepository;
 import com.example.carservice.repository.CarRepository;
 import com.example.carservice.repository.ClientRepository;
 import com.example.carservice.repository.MechanicRepository;
@@ -38,17 +40,10 @@ public class DataInitializer implements CommandLineRunner {
   private final SpareRepository spareRepository;
   private final OrderRepository orderRepository;
   private final OrderService orderService;
+  private final CarBrandModelRepository carBrandModelRepository;
 
   @Override
   public void run(String... args) throws Exception {
-
-    log.info("=== Очистка старых данных ===");
-    orderRepository.deleteAll();
-    spareRepository.deleteAll();
-    serviceRepository.deleteAll();
-    mechanicRepository.deleteAll();
-    carRepository.deleteAll();
-    clientRepository.deleteAll();
 
     log.info("=== Создание клиентов ===");
 
@@ -57,7 +52,6 @@ public class DataInitializer implements CommandLineRunner {
         .lastName("Петров")
         .phone("+375(29)123-45-67")
         .email("ivan.petrov@mail.ru")
-        .address("г. Минск, ул. Независимости, д.10, кв.5")
         .registrationDate(LocalDate.now().minusMonths(2))
         .build();
 
@@ -66,7 +60,6 @@ public class DataInitializer implements CommandLineRunner {
         .lastName("Сидорова")
         .phone("+375(33)765-43-21")
         .email("maria.sidorova@tut.by")
-        .address("г. Минск, ул. Победителей, д.15, кв.20")
         .registrationDate(LocalDate.now().minusMonths(1))
         .build();
 
@@ -75,7 +68,6 @@ public class DataInitializer implements CommandLineRunner {
         .lastName("Ковалёв")
         .phone("+375(29)555-55-55")
         .email("alex.kovalev@gmail.com")
-        .address("г. Гомель, ул. Советская, д.5, кв.12")
         .registrationDate(LocalDate.now().minusDays(5))
         .build();
 
@@ -84,7 +76,6 @@ public class DataInitializer implements CommandLineRunner {
         .lastName("Новикова")
         .phone("+375(25)111-22-33")
         .email("elena.novikova@bk.ru")
-        .address("г. Брест, ул. Машерова, д.8, кв.15")
         .registrationDate(LocalDate.now())
         .build();
 
@@ -92,49 +83,74 @@ public class DataInitializer implements CommandLineRunner {
 
     log.info("=== Создание машин ===");
 
-    Car car1 = Car.builder()
+    CarBrandModel vwPassat = CarBrandModel.builder()
         .brand("Volkswagen")
         .model("Passat")
-        .year(2019)
-        .licensePlate("1234 AB-5")
-        .vin("WVWZZZ3CZJE123456")
+        .build();
+    carBrandModelRepository.save(vwPassat);
+
+    CarBrandModel renaultLogan = CarBrandModel.builder()
+        .brand("Renault")
+        .model("Logan")
+        .build();
+    carBrandModelRepository.save(renaultLogan);
+
+    CarBrandModel audiQ5 = CarBrandModel.builder()
+        .brand("Audi")
+        .model("Q5")
+        .build();
+    carBrandModelRepository.save(audiQ5);
+
+    CarBrandModel skodaOctavia = CarBrandModel.builder()
+        .brand("Skoda")
+        .model("Octavia")
+        .build();
+    carBrandModelRepository.save(skodaOctavia);
+
+    CarBrandModel nissanQashqai = CarBrandModel.builder()
+        .brand("Nissan")
+        .model("Qashqai")
+        .build();
+    carBrandModelRepository.save(nissanQashqai);
+
+    Car car1 = Car.builder()
+        .brandModel(vwPassat)
         .client(client1)
+        .licensePlate("1234AB-5")
+        .vin("WVWZZZ3CZJE123456")
+        .year(2019)
         .build();
 
     Car car2 = Car.builder()
-        .brand("Renault")
-        .model("Logan")
-        .year(2020)
-        .licensePlate("5678 CD-6")
-        .vin("VF1LMJ76543123456")
+        .brandModel(renaultLogan)
         .client(client1)
+        .licensePlate("5678CD-6")
+        .vin("VF1LMJ76543123456")
+        .year(2020)
         .build();
 
     Car car3 = Car.builder()
-        .brand("Audi")
-        .model("Q5")
-        .year(2022)
-        .licensePlate("9012 EF-7")
-        .vin("WAUZZZ8R6DA123456")
+        .brandModel(audiQ5)
         .client(client2)
+        .licensePlate("9012EF-7")
+        .vin("WAUZZZ8R6DA123456")
+        .year(2022)
         .build();
 
     Car car4 = Car.builder()
-        .brand("Skoda")
-        .model("Octavia")
-        .year(2021)
-        .licensePlate("3456 GH-8")
-        .vin("TMBJM21Z3K1234567")
+        .brandModel(skodaOctavia)
         .client(client3)
+        .licensePlate("3456GH-8")
+        .vin("TMBJM21Z3K1234567")
+        .year(2021)
         .build();
 
     Car car5 = Car.builder()
-        .brand("Nissan")
-        .model("Qashqai")
-        .year(2023)
-        .licensePlate("7890 IJ-9")
-        .vin("SJNFDAJ11U1234567")
+        .brandModel(nissanQashqai)
         .client(client4)
+        .licensePlate("7890IJ-9")
+        .vin("SJNFDAJ11U1234567")
+        .year(2023)
         .build();
 
     carRepository.saveAll(List.of(car1, car2, car3, car4, car5));
@@ -144,37 +160,29 @@ public class DataInitializer implements CommandLineRunner {
     Mechanic mech1 = Mechanic.builder()
         .firstName("Сергей")
         .lastName("Васильев")
-        .specialization("Двигатели")
         .hireDate(LocalDate.now().minusYears(5))
-        .phone("+375(29)111-22-33")
-        .salary(1800.0)
+        .phone("+375291112233")
         .build();
 
     Mechanic mech2 = Mechanic.builder()
         .firstName("Дмитрий")
         .lastName("Николаев")
-        .specialization("Подвеска")
         .hireDate(LocalDate.now().minusYears(2))
-        .phone("+375(33)444-55-66")
-        .salary(1500.0)
+        .phone("+375334445566")
         .build();
 
     Mechanic mech3 = Mechanic.builder()
         .firstName("Андрей")
         .lastName("Козлов")
-        .specialization("Электрика")
         .hireDate(LocalDate.now().minusYears(3))
-        .phone("+375(29)777-88-99")
-        .salary(1600.0)
+        .phone("+375297778899")
         .build();
 
     Mechanic mech4 = Mechanic.builder()
         .firstName("Павел")
         .lastName("Соколов")
-        .specialization("Кузовной ремонт")
         .hireDate(LocalDate.now().minusYears(1))
-        .phone("+375(25)333-44-55")
-        .salary(1400.0)
+        .phone("+375253334455")
         .build();
 
     mechanicRepository.saveAll(List.of(mech1, mech2, mech3, mech4));
@@ -186,7 +194,6 @@ public class DataInitializer implements CommandLineRunner {
         .description("Замена моторного масла и масляного фильтра")
         .price(120.0)
         .durationMinutes(60)
-        .category("ТО")
         .available(true)
         .build();
 
@@ -195,7 +202,6 @@ public class DataInitializer implements CommandLineRunner {
         .description("Компьютерная диагностика двигателя")
         .price(80.0)
         .durationMinutes(30)
-        .category("Диагностика")
         .available(true)
         .build();
 
@@ -204,7 +210,6 @@ public class DataInitializer implements CommandLineRunner {
         .description("Замена передних/задних тормозных колодок")
         .price(150.0)
         .durationMinutes(90)
-        .category("Ремонт")
         .available(true)
         .build();
 
@@ -213,7 +218,6 @@ public class DataInitializer implements CommandLineRunner {
         .description("Замена амортизаторов и сайлентблоков")
         .price(250.0)
         .durationMinutes(180)
-        .category("Ремонт")
         .available(true)
         .build();
 
@@ -222,11 +226,16 @@ public class DataInitializer implements CommandLineRunner {
         .description("Покраска одной детали кузова")
         .price(300.0)
         .durationMinutes(240)
-        .category("Кузовной ремонт")
         .available(true)
         .build();
 
     serviceRepository.saveAll(List.of(serv1, serv2, serv3, serv4, serv5));
+
+    mech1.setServices(Set.of(serv1, serv2));
+    mech2.setServices(Set.of(serv1, serv3));
+    mech3.setServices(Set.of(serv2, serv4));
+    mech4.setServices(Set.of(serv5));
+    mechanicRepository.saveAll(List.of(mech1, mech2, mech3, mech4));
 
     log.info("=== Создание запчастей ===");
 
@@ -281,7 +290,6 @@ public class DataInitializer implements CommandLineRunner {
         .description("Плановое ТО")
         .completionDate(LocalDateTime.now().minusDays(4))
         .car(car1)
-        .mechanic(mech1)
         .services(Set.of(serv1))
         .spares(Set.of(spare1))
         .build();
@@ -293,7 +301,6 @@ public class DataInitializer implements CommandLineRunner {
         .description("Замена тормозных колодок")
         .completionDate(null)
         .car(car3)
-        .mechanic(mech2)
         .services(Set.of(serv3))
         .spares(Set.of(spare2))
         .build();
@@ -305,7 +312,6 @@ public class DataInitializer implements CommandLineRunner {
         .description("Диагностика и ремонт подвески")
         .completionDate(null)
         .car(car5)
-        .mechanic(mech3)
         .services(Set.of(serv2, serv4))
         .spares(Set.of(spare3))
         .build();
@@ -317,7 +323,6 @@ public class DataInitializer implements CommandLineRunner {
         .description("Клиент отменил запись")
         .completionDate(null)
         .car(car2)
-        .mechanic(null)
         .services(Set.of())
         .spares(Set.of())
         .build();

@@ -37,11 +37,6 @@ public class MechanicController {
     return ResponseEntity.ok(mechanic);
   }
 
-  @GetMapping("/specialization/{specialization}")
-  public ResponseEntity<List<MechanicDto>>
-      getMechanicsBySpecialization(@PathVariable String specialization) {
-    return ResponseEntity.ok(mechanicService.getMechanicsBySpecialization(specialization));
-  }
 
   @PostMapping
   public ResponseEntity<MechanicDto> createMechanic(@RequestBody MechanicDto mechanicDto) {
