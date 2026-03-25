@@ -98,71 +98,62 @@ public class ClientServiceImpl implements ClientService {
 
   @Override
   public void createClientWithNewCarsWithoutTransaction(ClientDto clientDto) {
-    Client client = mapper.toEntity(clientDto);
-    client.setId(null);
-    Client savedClient = clientRepository.save(client);
-    log.info("Клиент сохранен с ID: {}", savedClient.getId());
-
-    if (clientDto.getCars() != null && !clientDto.getCars().isEmpty()) {
-      for (int i = 0; i < clientDto.getCars().size(); i++) {
-        CarDto carDto = clientDto.getCars().get(i);
-
-        if (i == 1) {
-          log.error("Имитация ошибки при сохранении 2-й машины!");
-          throw new TransactionDemoException("Ошибка при сохранении машины #2");
-        }
-
-        Car car = new Car();
-        CarBrandModel brandModel = carBrandModelRepository.findById(carDto.getBrandModelId())
-            .orElseThrow(() -> new TransactionDemoException("CarBrandModel не найден с ID: "
-                + carDto.getBrandModelId()));
-
-        car.setBrandModel(brandModel);
-        car.setLicensePlate(carDto.getLicensePlate());
-        car.setVin(carDto.getVin());
-        car.setYear(carDto.getYear());
-        car.setClient(savedClient);
-
-        Car savedCar = carRepository.save(car);
-        log.info("Машина {} сохранена с ID: {}, госномер: {}", (i + 1), savedCar.getId(),
-            savedCar.getLicensePlate());
-      }
-    }
+    Client savedClient = saveClient(clientDto);
+    processCars(clientDto, savedClient, false);
   }
 
   @Override
   @Transactional
   public void createClientWithNewCarsWithTransaction(ClientDto clientDto) {
+    Client savedClient = saveClient(clientDto);
+    processCars(clientDto, savedClient, true);
+  }
+
+  private Client saveClient(ClientDto clientDto) {
     Client client = mapper.toEntity(clientDto);
     client.setId(null);
     Client savedClient = clientRepository.save(client);
-    log.info("Клиент сохранен с ID: {} (в транзакции)", savedClient.getId());
+    log.info("Клиент сохранен с ID: {}", savedClient.getId());
+    return savedClient;
+  }
 
-    if (clientDto.getCars() != null && !clientDto.getCars().isEmpty()) {
-      for (int i = 0; i < clientDto.getCars().size(); i++) {
-        CarDto carDto = clientDto.getCars().get(i);
-
-        if (i == 1) {
-          log.error("Имитация ошибки! Транзакция будет откачена!");
-          throw new TransactionDemoException("Ошибка при сохранении машины #2 - полный откат!");
-        }
-
-        Car car = new Car();
-
-        CarBrandModel brandModel = carBrandModelRepository.findById(carDto.getBrandModelId())
-            .orElseThrow(() -> new TransactionDemoException("CarBrandModel не найден с ID: "
-                + carDto.getBrandModelId()));
-
-        car.setBrandModel(brandModel);
-        car.setLicensePlate(carDto.getLicensePlate());
-        car.setVin(carDto.getVin());
-        car.setYear(carDto.getYear());
-        car.setClient(savedClient);
-
-        Car savedCar = carRepository.save(car);
-        log.info("Машина {} сохранена с ID: {}, госномер: {} (в транзакции)",
-            (i + 1), savedCar.getId(), savedCar.getLicensePlate());
-      }
+  private void processCars(ClientDto clientDto, Client savedClient, boolean isTransactional) {
+    if (clientDto.getCars() == null || clientDto.getCars().isEmpty()) {
+      return;
     }
+
+    for (int i = 0; i < clientDto.getCars().size(); i++) {
+      CarDto carDto = clientDto.getCars().get(i);
+
+      if (i == 1) {
+        String errorMessage = isTransactional
+            ? "Ошибка при сохранении машины #2 - полный откат!"
+            : "Ошибка при сохранении машины #2";
+        log.error("Имитация ошибки при сохранении 2-й машины!");
+        throw new TransactionDemoException(errorMessage);
+      }
+
+      Car car = buildCar(carDto, savedClient);
+      Car savedCar = carRepository.save(car);
+
+      String transactionSuffix = isTransactional ? " (в транзакции)" : "";
+      log.info("Машина {} сохранена с ID: {}, госномер: {}{}",
+          (i + 1), savedCar.getId(), savedCar.getLicensePlate(), transactionSuffix);
+    }
+  }
+
+  private Car buildCar(CarDto carDto, Client savedClient) {
+    CarBrandModel brandModel = carBrandModelRepository.findById(carDto.getBrandModelId())
+        .orElseThrow(() -> new TransactionDemoException("CarBrandModel не найден с ID: "
+            + carDto.getBrandModelId()));
+
+    Car car = new Car();
+    car.setBrandModel(brandModel);
+    car.setLicensePlate(carDto.getLicensePlate());
+    car.setVin(carDto.getVin());
+    car.setYear(carDto.getYear());
+    car.setClient(savedClient);
+
+    return car;
   }
 }
