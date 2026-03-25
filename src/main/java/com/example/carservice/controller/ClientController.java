@@ -65,4 +65,30 @@ public class ClientController {
     clientService.deleteClient(id);
     return ResponseEntity.noContent().build();
   }
+
+  @PostMapping("/test-without-transaction")
+  public ResponseEntity<String> testWithoutTransaction(@RequestBody ClientDto clientDto) {
+    try {
+      clientService.createClientWithNewCarsWithoutTransaction(clientDto);
+      return ResponseEntity.ok("Клиент и машины созданы");
+    } catch (Exception e) {
+      return ResponseEntity.status(500).body(
+          "Ошибка: " + e.getMessage() + "\n"
+              + "НО клиент и машины УЖЕ в БД! (частичное сохранение)"
+      );
+    }
+  }
+
+  @PostMapping("/test-with-transaction")
+  public ResponseEntity<String> testWithTransaction(@RequestBody ClientDto clientDto) {
+    try {
+      clientService.createClientWithNewCarsWithTransaction(clientDto);
+      return ResponseEntity.ok("Клиент и машины созданы");
+    } catch (Exception e) {
+      return ResponseEntity.status(500).body(
+          "Ошибка: " + e.getMessage() + "\n"
+              + "Клиент и машины НЕ сохранены! (полный откат)"
+      );
+    }
+  }
 }

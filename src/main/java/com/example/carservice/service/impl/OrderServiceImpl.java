@@ -274,4 +274,6 @@ public class OrderServiceImpl implements OrderService {
     log.info("3. Имитируем ошибку...");
     throw new OrderOperationException("Ошибка! Всё должно откатиться.");
   }
+
+
 }

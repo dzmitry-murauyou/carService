@@ -53,7 +53,6 @@ public class ServiceEntity {
   @Column(length = 255)
   private String note;
 
-
   @ManyToMany(mappedBy = "services")
   private List<Order> orders;
 

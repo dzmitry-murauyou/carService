@@ -17,5 +17,9 @@ public interface ClientService {
 
   ClientDto updateClient(Long id, ClientDto clientDto);
 
+  void createClientWithNewCarsWithoutTransaction(ClientDto clientDto);
+
+  void createClientWithNewCarsWithTransaction(ClientDto clientDto);
+
   void deleteClient(Long id);
 }
