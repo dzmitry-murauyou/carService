@@ -4,6 +4,7 @@ import com.example.carservice.dto.CarDto;
 import com.example.carservice.dto.ClientDto;
 import com.example.carservice.dto.mapper.ClientMapper;
 import com.example.carservice.exception.ResourceNotFoundException;
+import com.example.carservice.exception.TransactionDemoException;
 import com.example.carservice.model.Car;
 import com.example.carservice.model.CarBrandModel;
 import com.example.carservice.model.Client;
@@ -13,9 +14,11 @@ import com.example.carservice.repository.ClientRepository;
 import com.example.carservice.service.ClientService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
@@ -98,19 +101,20 @@ public class ClientServiceImpl implements ClientService {
     Client client = mapper.toEntity(clientDto);
     client.setId(null);
     Client savedClient = clientRepository.save(client);
-    System.out.println("Клиент сохранен с ID: " + savedClient.getId());
+    log.info("Клиент сохранен с ID: {}", savedClient.getId());
+
     if (clientDto.getCars() != null && !clientDto.getCars().isEmpty()) {
       for (int i = 0; i < clientDto.getCars().size(); i++) {
         CarDto carDto = clientDto.getCars().get(i);
 
         if (i == 1) {
-          System.out.println(" Имитация ошибки при сохранении 2-й машины!");
-          throw new RuntimeException("Ошибка при сохранении машины #2");
+          log.error("Имитация ошибки при сохранении 2-й машины!");
+          throw new TransactionDemoException("Ошибка при сохранении машины #2");
         }
 
         Car car = new Car();
         CarBrandModel brandModel = carBrandModelRepository.findById(carDto.getBrandModelId())
-            .orElseThrow(() -> new RuntimeException("CarBrandModel не найден с ID: "
+            .orElseThrow(() -> new TransactionDemoException("CarBrandModel не найден с ID: "
                 + carDto.getBrandModelId()));
 
         car.setBrandModel(brandModel);
@@ -120,8 +124,8 @@ public class ClientServiceImpl implements ClientService {
         car.setClient(savedClient);
 
         Car savedCar = carRepository.save(car);
-        System.out.println(" Машина " + (i + 1) + " сохранена с ID: " + savedCar.getId()
-            + ", госномер: " + savedCar.getLicensePlate());
+        log.info("Машина {} сохранена с ID: {}, госномер: {}", (i + 1), savedCar.getId(),
+            savedCar.getLicensePlate());
       }
     }
   }
@@ -132,21 +136,21 @@ public class ClientServiceImpl implements ClientService {
     Client client = mapper.toEntity(clientDto);
     client.setId(null);
     Client savedClient = clientRepository.save(client);
-    System.out.println("✅ Клиент сохранен с ID: " + savedClient.getId() + " (в транзакции)");
+    log.info("Клиент сохранен с ID: {} (в транзакции)", savedClient.getId());
 
     if (clientDto.getCars() != null && !clientDto.getCars().isEmpty()) {
       for (int i = 0; i < clientDto.getCars().size(); i++) {
         CarDto carDto = clientDto.getCars().get(i);
 
         if (i == 1) {
-          System.out.println(" Имитация ошибки! Транзакция будет откачена!");
-          throw new RuntimeException("Ошибка при сохранении машины #2 - полный откат!");
+          log.error("Имитация ошибки! Транзакция будет откачена!");
+          throw new TransactionDemoException("Ошибка при сохранении машины #2 - полный откат!");
         }
 
         Car car = new Car();
 
         CarBrandModel brandModel = carBrandModelRepository.findById(carDto.getBrandModelId())
-            .orElseThrow(() -> new RuntimeException("CarBrandModel не найден с ID: "
+            .orElseThrow(() -> new TransactionDemoException("CarBrandModel не найден с ID: "
                 + carDto.getBrandModelId()));
 
         car.setBrandModel(brandModel);
@@ -156,8 +160,8 @@ public class ClientServiceImpl implements ClientService {
         car.setClient(savedClient);
 
         Car savedCar = carRepository.save(car);
-        System.out.println("Машина " + (i + 1) + " сохранена с ID: " + savedCar.getId()
-            + ", госномер: " + savedCar.getLicensePlate() + " (в транзакции)");
+        log.info("Машина {} сохранена с ID: {}, госномер: {} (в транзакции)",
+            (i + 1), savedCar.getId(), savedCar.getLicensePlate());
       }
     }
   }
