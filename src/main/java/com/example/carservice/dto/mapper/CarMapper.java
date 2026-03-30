@@ -2,56 +2,51 @@ package com.example.carservice.dto.mapper;
 
 import com.example.carservice.dto.CarDto;
 import com.example.carservice.model.Car;
-import com.example.carservice.model.CarBrandModel;
-import com.example.carservice.repository.CarBrandModelRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CarMapper {
 
-  private final CarBrandModelRepository brandModelRepository;
+  public CarDto toDto(Car car) {
+    if (car == null) return null;
 
-  public CarMapper(CarBrandModelRepository brandModelRepository) {
-    this.brandModelRepository = brandModelRepository;
-  }
+    CarDto dto = new CarDto();
+    dto.setId(car.getId());
 
-  public CarDto toDto(Car entity) {
-    if (entity == null) {
-      return null;
+    // Устанавливаем brandModelId
+    if (car.getBrandModel() != null) {
+      dto.setBrandModelId(car.getBrandModel().getId());
+      dto.setBrand(car.getBrandModel().getBrand());    // ← добавляем марку
+      dto.setModel(car.getBrandModel().getModel());    // ← добавляем модель
     }
 
-    return CarDto.builder()
-        .id(entity.getId())
-        .brandModelId(entity.getBrandModel() != null ? entity.getBrandModel().getId() : null)
-        .brand(entity.getBrand())
-        .model(entity.getModel())
-        .licensePlate(entity.getLicensePlate())
-        .vin(entity.getVin())
-        .year(entity.getYear())
-        .clientId(entity.getClient() != null ? entity.getClient().getId() : null)
-        .clientName(entity.getClient() != null
-            ? entity.getClient().getFirstName() + " " + entity.getClient().getLastName()
-            : null)
-        .build();
+    dto.setLicensePlate(car.getLicensePlate());   // ← госномер
+    dto.setVin(car.getVin());
+    dto.setYear(car.getYear());
+
+    // Устанавливаем информацию о клиенте
+    if (car.getClient() != null) {
+      dto.setClientId(car.getClient().getId());
+      dto.setClientName(car.getClient().getFirstName() + " " + car.getClient().getLastName());
+    }
+
+    return dto;
   }
 
   public Car toEntity(CarDto dto) {
-    if (dto == null) {
-      return null;
-    }
+    if (dto == null) return null;
 
-    Car.CarBuilder builder = Car.builder()
-        .id(dto.getId())
-        .licensePlate(dto.getLicensePlate())
-        .vin(dto.getVin())
-        .year(dto.getYear());
+    Car car = new Car();
+    car.setId(dto.getId());
 
-    if (dto.getBrandModelId() != null) {
-      CarBrandModel brandModel = brandModelRepository.findById(dto.getBrandModelId())
-          .orElseThrow(() -> new RuntimeException("BrandModel not found"));
-      builder.brandModel(brandModel);
-    }
+    // brandModel нужно будет установить отдельно через репозиторий
+    // licensePlate
+    car.setLicensePlate(dto.getLicensePlate());
+    car.setVin(dto.getVin());
+    car.setYear(dto.getYear());
 
-    return builder.build();
+    // client нужно будет установить отдельно через репозиторий
+
+    return car;
   }
 }

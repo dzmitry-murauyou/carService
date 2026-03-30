@@ -2,38 +2,49 @@ package com.example.carservice.dto.mapper;
 
 import com.example.carservice.dto.ClientDto;
 import com.example.carservice.model.Client;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ClientMapper {
 
-  public ClientDto toDto(Client entity) {
-    if (entity == null) {
-      return null;
+  private final CarMapper carMapper;  // ← добавляем CarMapper
+
+  public ClientDto toDto(Client client) {
+    if (client == null) return null;
+
+    ClientDto dto = new ClientDto();
+    dto.setId(client.getId());
+    dto.setFirstName(client.getFirstName());
+    dto.setLastName(client.getLastName());
+    dto.setPhone(client.getPhone());
+    dto.setEmail(client.getEmail());
+    dto.setAddress(client.getAddress());              // ← адрес
+    dto.setRegistrationDate(client.getRegistrationDate());
+
+    // Добавляем машины клиента
+    if (client.getCars() != null && !client.getCars().isEmpty()) {
+      dto.setCars(client.getCars().stream()
+          .map(carMapper::toDto)
+          .toList());
     }
 
-    return ClientDto.builder()
-        .id(entity.getId())
-        .firstName(entity.getFirstName())
-        .lastName(entity.getLastName())
-        .phone(entity.getPhone())
-        .email(entity.getEmail())
-        .registrationDate(entity.getRegistrationDate())
-        .build();
+    return dto;
   }
 
   public Client toEntity(ClientDto dto) {
-    if (dto == null) {
-      return null;
-    }
+    if (dto == null) return null;
 
-    return Client.builder()
-        .id(dto.getId())
-        .firstName(dto.getFirstName())
-        .lastName(dto.getLastName())
-        .phone(dto.getPhone())
-        .email(dto.getEmail())
-        .registrationDate(dto.getRegistrationDate())
-        .build();
+    Client client = new Client();
+    client.setId(dto.getId());
+    client.setFirstName(dto.getFirstName());
+    client.setLastName(dto.getLastName());
+    client.setPhone(dto.getPhone());
+    client.setEmail(dto.getEmail());
+    client.setAddress(dto.getAddress());              // ← адрес
+    client.setRegistrationDate(dto.getRegistrationDate());
+
+    return client;
   }
 }

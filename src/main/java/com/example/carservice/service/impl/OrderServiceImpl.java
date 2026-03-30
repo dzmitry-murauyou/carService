@@ -225,7 +225,6 @@ public class OrderServiceImpl implements OrderService {
     log.info("Загружено {} заказов без оптимизации", ordersWithoutOptimization.size());
     processOrders(ordersWithoutOptimization);
     log.info("=== Конец N+1 ===");
-
     log.info("=== С оптимизацией (один запрос) ===");
     List<Order> ordersWithOptimization = orderRepository.findAllWithDetails();
     log.info("Загружено {} заказов с оптимизацией", ordersWithOptimization.size());
@@ -270,7 +269,6 @@ public class OrderServiceImpl implements OrderService {
       orderRepository.save(savedOrder);
       log.info("2. Услуги добавлены");
     }
-
     log.info("3. Имитируем ошибку...");
     throw new OrderOperationException("Ошибка! Всё должно откатиться.");
   }

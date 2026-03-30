@@ -1,16 +1,10 @@
 package com.example.carservice.dto;
 
+import lombok.Data;
 import java.time.LocalDate;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ClientDto {
   private Long id;
   private String firstName;
@@ -19,5 +13,5 @@ public class ClientDto {
   private String email;
   private String address;
   private LocalDate registrationDate;
-  private List<CarDto> cars;
+  private List<CarDto> cars;  // ← список машин клиента
 }
