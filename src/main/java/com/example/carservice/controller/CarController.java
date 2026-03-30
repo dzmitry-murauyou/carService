@@ -5,6 +5,8 @@ import com.example.carservice.exception.ResourceNotFoundException;
 import com.example.carservice.service.CarService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -41,6 +44,34 @@ public class CarController {
   @GetMapping("/client/{clientId}")
   public ResponseEntity<List<CarDto>> getCarsByClient(@PathVariable Long clientId) {
     return ResponseEntity.ok(carService.getCarsByClient(clientId));
+  }
+
+  @GetMapping("/search/jpql")
+  public ResponseEntity<Page<CarDto>> searchCarsJpql(
+      @RequestParam(required = false) String brand,
+      @RequestParam(required = false) String model,
+      @RequestParam(required = false) String clientFirstName,
+      @RequestParam(required = false) String clientLastName,
+      @RequestParam(required = false) Integer year,
+      Pageable pageable
+  ) {
+    return ResponseEntity.ok(
+        carService.searchCarsJpql(brand, model, clientFirstName, clientLastName, year, pageable)
+    );
+  }
+
+  @GetMapping("/search/native")
+  public ResponseEntity<Page<CarDto>> searchCarsNative(
+      @RequestParam(required = false) String brand,
+      @RequestParam(required = false) String model,
+      @RequestParam(required = false) String clientFirstName,
+      @RequestParam(required = false) String clientLastName,
+      @RequestParam(required = false) Integer year,
+      Pageable pageable
+  ) {
+    return ResponseEntity.ok(
+        carService.searchCarsNative(brand, model, clientFirstName, clientLastName, year, pageable)
+    );
   }
 
   @PostMapping
