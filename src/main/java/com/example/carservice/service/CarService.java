@@ -2,6 +2,8 @@ package com.example.carservice.service;
 
 import com.example.carservice.dto.CarDto;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface CarService {
 
@@ -10,6 +12,24 @@ public interface CarService {
   CarDto getCarById(Long id);
 
   List<CarDto> getCarsByClient(Long clientId);
+
+  Page<CarDto> searchCarsJpql(
+      String brand,
+      String model,
+      String clientFirstName,
+      String clientLastName,
+      Integer year,
+      Pageable pageable
+  );
+
+  Page<CarDto> searchCarsNative(
+      String brand,
+      String model,
+      String clientFirstName,
+      String clientLastName,
+      Integer year,
+      Pageable pageable
+  );
 
   CarDto createCar(CarDto carDto);
 
