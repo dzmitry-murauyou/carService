@@ -9,10 +9,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ClientMapper {
 
-  private final CarMapper carMapper;  // ← добавляем CarMapper
+  private final CarMapper carMapper;
 
   public ClientDto toDto(Client client) {
-    if (client == null) return null;
+    if (client == null) {
+      return null;
+    }
 
     ClientDto dto = new ClientDto();
     dto.setId(client.getId());
@@ -20,10 +22,9 @@ public class ClientMapper {
     dto.setLastName(client.getLastName());
     dto.setPhone(client.getPhone());
     dto.setEmail(client.getEmail());
-    dto.setAddress(client.getAddress());              // ← адрес
+    dto.setAddress(client.getAddress());
     dto.setRegistrationDate(client.getRegistrationDate());
 
-    // Добавляем машины клиента
     if (client.getCars() != null && !client.getCars().isEmpty()) {
       dto.setCars(client.getCars().stream()
           .map(carMapper::toDto)
@@ -34,7 +35,9 @@ public class ClientMapper {
   }
 
   public Client toEntity(ClientDto dto) {
-    if (dto == null) return null;
+    if (dto == null) {
+      return null;
+    }
 
     Client client = new Client();
     client.setId(dto.getId());
@@ -42,7 +45,7 @@ public class ClientMapper {
     client.setLastName(dto.getLastName());
     client.setPhone(dto.getPhone());
     client.setEmail(dto.getEmail());
-    client.setAddress(dto.getAddress());              // ← адрес
+    client.setAddress(dto.getAddress());
     client.setRegistrationDate(dto.getRegistrationDate());
 
     return client;

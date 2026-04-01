@@ -1,5 +1,6 @@
 package com.example.carservice.service.impl;
 
+
 import com.example.carservice.dto.CarDto;
 import com.example.carservice.dto.mapper.CarMapper;
 import com.example.carservice.model.Car;
@@ -9,8 +10,14 @@ import com.example.carservice.repository.CarBrandModelRepository;
 import com.example.carservice.repository.CarRepository;
 import com.example.carservice.repository.ClientRepository;
 import com.example.carservice.service.CarService;
+import com.example.carservice.service.impl.cache.CarSearchCacheKey;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +29,9 @@ public class CarServiceImpl implements CarService {
   private final CarBrandModelRepository carBrandModelRepository;
   private final ClientRepository clientRepository;
   private final CarMapper mapper;
+
+  private final Map<CarSearchCacheKey, Page<CarDto>> searchCache =
+      new ConcurrentHashMap<>();
 
   @Override
   public List<CarDto> getAllCars() {
@@ -42,6 +52,100 @@ public class CarServiceImpl implements CarService {
     return carRepository.findByClientId(clientId).stream()
         .map(mapper::toDto)
         .toList();
+  }
+
+  @Override
+  public Page<CarDto> searchCarsJpql(
+      String brand,
+      String model,
+      String clientFirstName,
+      String clientLastName,
+      Integer yearFrom,
+      Integer yearTo,
+      Pageable pageable
+  ) {
+    CarSearchCacheKey key = buildCacheKey(
+        "jpql",
+        brand,
+        model,
+        clientFirstName,
+        clientLastName,
+        yearFrom,
+        yearTo,
+        pageable
+    );
+
+    Page<CarDto> cached = searchCache.get(key);
+    if (cached != null) {
+      return cached;
+    }
+
+    Page<CarDto> result = carRepository.searchCarsJpql(
+            brand,
+            model,
+            clientFirstName,
+            clientLastName,
+            yearFrom,
+            yearTo,
+            pageable
+        )
+        .map(mapper::toDto);
+
+    Page<CarDto> snapshot = new PageImpl<>(
+        List.copyOf(result.getContent()),
+        pageable,
+        result.getTotalElements()
+    );
+
+    searchCache.put(key, snapshot);
+    return snapshot;
+  }
+
+  @Override
+  public Page<CarDto> searchCarsNative(
+      String brand,
+      String model,
+      String clientFirstName,
+      String clientLastName,
+      Integer yearFrom,
+      Integer yearTo,
+      Pageable pageable
+  ) {
+    CarSearchCacheKey key = buildCacheKey(
+        "native",
+        brand,
+        model,
+        clientFirstName,
+        clientLastName,
+        yearFrom,
+        yearTo,
+        pageable
+    );
+
+    Page<CarDto> cached = searchCache.get(key);
+    if (cached != null) {
+      return cached;
+    }
+
+    Page<CarDto> result = carRepository.searchCarsNative(
+            brand,
+            model,
+            clientFirstName,
+            clientLastName,
+            yearFrom,
+            yearTo,
+            pageable
+        )
+        .map(mapper::toDto);
+
+    Page<CarDto> snapshot = new PageImpl<>(
+        List.copyOf(result.getContent()),
+        pageable,
+        result.getTotalElements()
+    );
+
+    searchCache.put(key, snapshot);
+    return snapshot;
   }
 
   @Override
@@ -66,6 +170,7 @@ public class CarServiceImpl implements CarService {
     }
 
     Car saved = carRepository.save(car);
+    invalidateSearchCache();
     return mapper.toDto(saved);
   }
 
@@ -83,8 +188,8 @@ public class CarServiceImpl implements CarService {
                 .model(carDto.getModel())
                 .build()
         ));
-    existing.setBrandModel(brandModel);
 
+    existing.setBrandModel(brandModel);
     existing.setLicensePlate(carDto.getLicensePlate());
     existing.setVin(carDto.getVin());
     existing.setYear(carDto.getYear());
@@ -98,6 +203,7 @@ public class CarServiceImpl implements CarService {
     }
 
     Car updated = carRepository.save(existing);
+    invalidateSearchCache();
     return mapper.toDto(updated);
   }
 
@@ -105,5 +211,34 @@ public class CarServiceImpl implements CarService {
   @Transactional
   public void deleteCar(Long id) {
     carRepository.deleteById(id);
+    invalidateSearchCache();
+  }
+
+  private CarSearchCacheKey buildCacheKey(
+      String searchType,
+      String brand,
+      String model,
+      String clientFirstName,
+      String clientLastName,
+      Integer yearFrom,
+      Integer yearTo,
+      Pageable pageable
+  ) {
+    return new CarSearchCacheKey(
+        searchType,
+        brand,
+        model,
+        clientFirstName,
+        clientLastName,
+        yearFrom,
+        yearTo,
+        pageable.getPageNumber(),
+        pageable.getPageSize(),
+        pageable.getSort().toString()
+    );
+  }
+
+  private void invalidateSearchCache() {
+    searchCache.clear();
   }
 }

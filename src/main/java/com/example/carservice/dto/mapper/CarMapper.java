@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 public class CarMapper {
 
   public CarDto toDto(Car car) {
-    if (car == null) return null;
+    if (car == null) {
+      return null;
+    }
 
     CarDto dto = new CarDto();
     dto.setId(car.getId());
@@ -34,7 +36,9 @@ public class CarMapper {
   }
 
   public Car toEntity(CarDto dto) {
-    if (dto == null) return null;
+    if (dto == null) {
+      return null;
+    }
 
     Car car = new Car();
     car.setId(dto.getId());

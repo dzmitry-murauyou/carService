@@ -5,17 +5,11 @@ import com.example.carservice.exception.ResourceNotFoundException;
 import com.example.carservice.service.CarService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/cars")
@@ -43,6 +37,54 @@ public class CarController {
     return ResponseEntity.ok(carService.getCarsByClient(clientId));
   }
 
+  // ✅ JPQL search
+  @GetMapping("/search/jpql")
+  public ResponseEntity<Page<CarDto>> searchCarsJpql(
+      @RequestParam(required = false) String brand,
+      @RequestParam(required = false) String model,
+      @RequestParam(required = false) String clientFirstName,
+      @RequestParam(required = false) String clientLastName,
+      @RequestParam(required = false) Integer yearFrom,
+      @RequestParam(required = false) Integer yearTo,
+      Pageable pageable
+  ) {
+    return ResponseEntity.ok(
+        carService.searchCarsJpql(
+            brand,
+            model,
+            clientFirstName,
+            clientLastName,
+            yearFrom,
+            yearTo,
+            pageable
+        )
+    );
+  }
+
+  // ✅ Native search
+  @GetMapping("/search/native")
+  public ResponseEntity<Page<CarDto>> searchCarsNative(
+      @RequestParam(required = false) String brand,
+      @RequestParam(required = false) String model,
+      @RequestParam(required = false) String clientFirstName,
+      @RequestParam(required = false) String clientLastName,
+      @RequestParam(required = false) Integer yearFrom,
+      @RequestParam(required = false) Integer yearTo,
+      Pageable pageable
+  ) {
+    return ResponseEntity.ok(
+        carService.searchCarsNative(
+            brand,
+            model,
+            clientFirstName,
+            clientLastName,
+            yearFrom,
+            yearTo,
+            pageable
+        )
+    );
+  }
+
   @PostMapping
   public ResponseEntity<CarDto> createCar(@RequestBody CarDto carDto) {
     CarDto created = carService.createCar(carDto);
@@ -50,7 +92,10 @@ public class CarController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<CarDto> updateCar(@PathVariable Long id, @RequestBody CarDto carDto) {
+  public ResponseEntity<CarDto> updateCar(
+      @PathVariable Long id,
+      @RequestBody CarDto carDto
+  ) {
     CarDto updated = carService.updateCar(id, carDto);
     if (updated == null) {
       throw new ResourceNotFoundException("Car not found with id: " + id);
