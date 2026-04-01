@@ -1,6 +1,5 @@
 package com.example.carservice.service.impl;
 
-
 import com.example.carservice.dto.CarDto;
 import com.example.carservice.dto.mapper.CarMapper;
 import com.example.carservice.model.Car;
@@ -11,9 +10,10 @@ import com.example.carservice.repository.CarRepository;
 import com.example.carservice.repository.ClientRepository;
 import com.example.carservice.service.CarService;
 import com.example.carservice.service.impl.cache.CarSearchCacheKey;
-import java.util.concurrent.ConcurrentHashMap;
+import com.example.carservice.service.impl.cache.CarSearchFilter;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -55,25 +55,8 @@ public class CarServiceImpl implements CarService {
   }
 
   @Override
-  public Page<CarDto> searchCarsJpql(
-      String brand,
-      String model,
-      String clientFirstName,
-      String clientLastName,
-      Integer yearFrom,
-      Integer yearTo,
-      Pageable pageable
-  ) {
-    CarSearchCacheKey key = buildCacheKey(
-        "jpql",
-        brand,
-        model,
-        clientFirstName,
-        clientLastName,
-        yearFrom,
-        yearTo,
-        pageable
-    );
+  public Page<CarDto> searchCarsJpql(CarSearchFilter filter, Pageable pageable) {
+    CarSearchCacheKey key = buildCacheKey("jpql", filter, pageable);
 
     Page<CarDto> cached = searchCache.get(key);
     if (cached != null) {
@@ -81,12 +64,12 @@ public class CarServiceImpl implements CarService {
     }
 
     Page<CarDto> result = carRepository.searchCarsJpql(
-            brand,
-            model,
-            clientFirstName,
-            clientLastName,
-            yearFrom,
-            yearTo,
+            filter.getBrand(),
+            filter.getModel(),
+            filter.getClientFirstName(),
+            filter.getClientLastName(),
+            filter.getYearFrom(),
+            filter.getYearTo(),
             pageable
         )
         .map(mapper::toDto);
@@ -102,25 +85,8 @@ public class CarServiceImpl implements CarService {
   }
 
   @Override
-  public Page<CarDto> searchCarsNative(
-      String brand,
-      String model,
-      String clientFirstName,
-      String clientLastName,
-      Integer yearFrom,
-      Integer yearTo,
-      Pageable pageable
-  ) {
-    CarSearchCacheKey key = buildCacheKey(
-        "native",
-        brand,
-        model,
-        clientFirstName,
-        clientLastName,
-        yearFrom,
-        yearTo,
-        pageable
-    );
+  public Page<CarDto> searchCarsNative(CarSearchFilter filter, Pageable pageable) {
+    CarSearchCacheKey key = buildCacheKey("native", filter, pageable);
 
     Page<CarDto> cached = searchCache.get(key);
     if (cached != null) {
@@ -128,12 +94,12 @@ public class CarServiceImpl implements CarService {
     }
 
     Page<CarDto> result = carRepository.searchCarsNative(
-            brand,
-            model,
-            clientFirstName,
-            clientLastName,
-            yearFrom,
-            yearTo,
+            filter.getBrand(),
+            filter.getModel(),
+            filter.getClientFirstName(),
+            filter.getClientLastName(),
+            filter.getYearFrom(),
+            filter.getYearTo(),
             pageable
         )
         .map(mapper::toDto);
@@ -216,22 +182,12 @@ public class CarServiceImpl implements CarService {
 
   private CarSearchCacheKey buildCacheKey(
       String searchType,
-      String brand,
-      String model,
-      String clientFirstName,
-      String clientLastName,
-      Integer yearFrom,
-      Integer yearTo,
+      CarSearchFilter filter,
       Pageable pageable
   ) {
     return new CarSearchCacheKey(
         searchType,
-        brand,
-        model,
-        clientFirstName,
-        clientLastName,
-        yearFrom,
-        yearTo,
+        filter,
         pageable.getPageNumber(),
         pageable.getPageSize(),
         pageable.getSort().toString()
