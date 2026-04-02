@@ -35,8 +35,12 @@ public class CarSearchFilter {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof CarSearchFilter that)) return false;
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof CarSearchFilter that)) {
+      return false;
+    }
     return Objects.equals(brand, that.brand)
         && Objects.equals(model, that.model)
         && Objects.equals(clientFirstName, that.clientFirstName)

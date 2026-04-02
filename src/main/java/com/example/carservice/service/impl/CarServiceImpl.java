@@ -9,11 +9,10 @@ import com.example.carservice.repository.CarBrandModelRepository;
 import com.example.carservice.repository.CarRepository;
 import com.example.carservice.repository.ClientRepository;
 import com.example.carservice.service.CarService;
+import com.example.carservice.service.impl.cache.CarSearchCache;
 import com.example.carservice.service.impl.cache.CarSearchCacheKey;
 import com.example.carservice.service.impl.cache.CarSearchFilter;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,9 +28,7 @@ public class CarServiceImpl implements CarService {
   private final CarBrandModelRepository carBrandModelRepository;
   private final ClientRepository clientRepository;
   private final CarMapper mapper;
-
-  private final Map<CarSearchCacheKey, Page<CarDto>> searchCache =
-      new ConcurrentHashMap<>();
+  private final CarSearchCache searchCache;
 
   @Override
   public List<CarDto> getAllCars() {
@@ -136,7 +133,7 @@ public class CarServiceImpl implements CarService {
     }
 
     Car saved = carRepository.save(car);
-    invalidateSearchCache();
+    searchCache.invalidateAll();
     return mapper.toDto(saved);
   }
 
@@ -169,7 +166,7 @@ public class CarServiceImpl implements CarService {
     }
 
     Car updated = carRepository.save(existing);
-    invalidateSearchCache();
+    searchCache.invalidateAll();
     return mapper.toDto(updated);
   }
 
@@ -177,7 +174,7 @@ public class CarServiceImpl implements CarService {
   @Transactional
   public void deleteCar(Long id) {
     carRepository.deleteById(id);
-    invalidateSearchCache();
+    searchCache.invalidateAll();
   }
 
   private CarSearchCacheKey buildCacheKey(
@@ -192,9 +189,5 @@ public class CarServiceImpl implements CarService {
         pageable.getPageSize(),
         pageable.getSort().toString()
     );
-  }
-
-  private void invalidateSearchCache() {
-    searchCache.clear();
   }
 }

@@ -12,6 +12,7 @@ import com.example.carservice.repository.CarBrandModelRepository;
 import com.example.carservice.repository.CarRepository;
 import com.example.carservice.repository.ClientRepository;
 import com.example.carservice.service.ClientService;
+import com.example.carservice.service.impl.cache.CarSearchCache;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ public class ClientServiceImpl implements ClientService {
   private final CarRepository carRepository;
   private final CarBrandModelRepository carBrandModelRepository;
   private final ClientMapper mapper;
+  private final CarSearchCache carSearchCache;
 
   @Override
   public List<ClientDto> getAllClients() {
@@ -39,14 +41,16 @@ public class ClientServiceImpl implements ClientService {
   public ClientDto getClientById(Long id) {
     return clientRepository.findById(id)
         .map(mapper::toDto)
-        .orElseThrow(() -> new ResourceNotFoundException("Client not found with id: " + id));
+        .orElseThrow(() -> new ResourceNotFoundException(
+            "Client not found with id: " + id));
   }
 
   @Override
   public ClientDto getClientByPhone(String phone) {
     return clientRepository.findByPhone(phone)
         .map(mapper::toDto)
-        .orElseThrow(() -> new ResourceNotFoundException("Client not found with phone: " + phone));
+        .orElseThrow(() -> new ResourceNotFoundException(
+            "Client not found with phone: " + phone));
   }
 
   @Override
@@ -62,6 +66,7 @@ public class ClientServiceImpl implements ClientService {
     Client client = mapper.toEntity(clientDto);
     client.setId(null);
     Client saved = clientRepository.save(client);
+    carSearchCache.invalidateAll();
     return mapper.toDto(saved);
   }
 
@@ -69,7 +74,8 @@ public class ClientServiceImpl implements ClientService {
   @Transactional
   public ClientDto updateClient(Long id, ClientDto clientDto) {
     Client existing = clientRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Client not found with id: " + id));
+        .orElseThrow(() -> new ResourceNotFoundException(
+            "Client not found with id: " + id));
 
     existing.setFirstName(clientDto.getFirstName());
     existing.setLastName(clientDto.getLastName());
@@ -79,6 +85,7 @@ public class ClientServiceImpl implements ClientService {
     existing.setRegistrationDate(clientDto.getRegistrationDate());
 
     Client updated = clientRepository.save(existing);
+    carSearchCache.invalidateAll();
     return mapper.toDto(updated);
   }
 
@@ -94,6 +101,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     clientRepository.delete(client);
+    carSearchCache.invalidateAll();
   }
 
   @Override
@@ -117,7 +125,11 @@ public class ClientServiceImpl implements ClientService {
     return savedClient;
   }
 
-  private void processCars(ClientDto clientDto, Client savedClient, boolean isTransactional) {
+  private void processCars(
+      ClientDto clientDto,
+      Client savedClient,
+      boolean isTransactional
+  ) {
     if (clientDto.getCars() == null || clientDto.getCars().isEmpty()) {
       return;
     }
@@ -138,14 +150,16 @@ public class ClientServiceImpl implements ClientService {
 
       String transactionSuffix = isTransactional ? " (в транзакции)" : "";
       log.info("Машина {} сохранена с ID: {}, госномер: {}{}",
-          (i + 1), savedCar.getId(), savedCar.getLicensePlate(), transactionSuffix);
+          (i + 1), savedCar.getId(), savedCar.getLicensePlate(),
+          transactionSuffix);
     }
   }
 
   private Car buildCar(CarDto carDto, Client savedClient) {
-    CarBrandModel brandModel = carBrandModelRepository.findById(carDto.getBrandModelId())
-        .orElseThrow(() -> new TransactionDemoException("CarBrandModel не найден с ID: "
-            + carDto.getBrandModelId()));
+    CarBrandModel brandModel = carBrandModelRepository
+        .findById(carDto.getBrandModelId())
+        .orElseThrow(() -> new TransactionDemoException(
+            "CarBrandModel не найден с ID: " + carDto.getBrandModelId()));
 
     Car car = new Car();
     car.setBrandModel(brandModel);
