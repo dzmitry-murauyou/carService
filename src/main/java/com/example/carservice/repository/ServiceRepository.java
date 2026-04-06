@@ -10,18 +10,22 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
 
-  List<ServiceEntity> findByCategory(String category);
+  // Поиск по имени категории
+  List<ServiceEntity> findByCategoryName(String name);
 
   List<ServiceEntity> findByPriceLessThan(Double price);
 
-  List<ServiceEntity> findByCategoryAndAvailable(String category, Boolean available);
+  // Поиск по имени категории и флагу available
+  List<ServiceEntity> findByCategoryNameAndAvailable(String name, Boolean available);
 
-  @Query("SELECT s FROM ServiceEntity s WHERE s.price > :minPrice AND s.category = :category")
+  @Query("SELECT s FROM ServiceEntity s "
+      + "WHERE s.price > :minPrice AND s.category.name = :categoryName")
   List<ServiceEntity> findExpensiveServicesByCategory(
       @Param("minPrice") Double minPrice,
-      @Param("category") String category);
+      @Param("categoryName") String categoryName
+  );
 
-  @Query(value = "SELECT * FROM service_entity WHERE duration_minutes < :maxDuration",
+  @Query(value = "SELECT * FROM services WHERE duration_minutes < :maxDuration",
       nativeQuery = true)
   List<ServiceEntity> findShortServices(@Param("maxDuration") Integer maxDuration);
 }

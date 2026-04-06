@@ -3,6 +3,8 @@ package com.example.carservice.controller;
 import com.example.carservice.dto.OrderDto;
 import com.example.carservice.exception.ResourceNotFoundException;
 import com.example.carservice.service.OrderService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,15 +26,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
+@Tag(name = "Orders", description = "API for managing orders")
 public class OrderController {
 
   private final OrderService orderService;
 
+  @Operation(summary = "Get all orders")
   @GetMapping
   public ResponseEntity<List<OrderDto>> getAllOrders() {
     return ResponseEntity.ok(orderService.getAllOrders());
   }
 
+  @Operation(summary = "Get order by id")
   @GetMapping("/{id}")
   public ResponseEntity<OrderDto> getOrderById(@PathVariable Long id) {
     OrderDto order = orderService.getOrderById(id);
@@ -42,21 +47,25 @@ public class OrderController {
     return ResponseEntity.ok(order);
   }
 
+  @Operation(summary = "Get orders by car id")
   @GetMapping("/car/{carId}")
   public ResponseEntity<List<OrderDto>> getOrdersByCar(@PathVariable Long carId) {
     return ResponseEntity.ok(orderService.getOrdersByCar(carId));
   }
 
+  @Operation(summary = "Get orders by client id")
   @GetMapping("/client/{clientId}")
   public ResponseEntity<List<OrderDto>> getOrdersByClient(@PathVariable Long clientId) {
     return ResponseEntity.ok(orderService.getOrdersByClient(clientId));
   }
 
+  @Operation(summary = "Get orders by status")
   @GetMapping("/status/{status}")
   public ResponseEntity<List<OrderDto>> getOrdersByStatus(@PathVariable String status) {
     return ResponseEntity.ok(orderService.getOrdersByStatus(status));
   }
 
+  @Operation(summary = "Get orders by date range")
   @GetMapping("/date-range")
   public ResponseEntity<List<OrderDto>> getOrdersByDateRange(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
@@ -64,15 +73,19 @@ public class OrderController {
     return ResponseEntity.ok(orderService.getOrdersByDateRange(start, end));
   }
 
+  @Operation(summary = "Create new order")
   @PostMapping
   public ResponseEntity<OrderDto> createOrder(@Valid @RequestBody OrderDto orderDto) {
     OrderDto created = orderService.createOrder(orderDto);
     return ResponseEntity.status(HttpStatus.CREATED).body(created);
   }
 
+  @Operation(summary = "Update order by id")
   @PutMapping("/{id}")
-  public ResponseEntity<OrderDto> updateOrder(@Valid @PathVariable Long id,
-                                              @RequestBody OrderDto orderDto) {
+  public ResponseEntity<OrderDto> updateOrder(
+      @PathVariable Long id,
+      @Valid @RequestBody OrderDto orderDto
+  ) {
     OrderDto updated = orderService.updateOrder(id, orderDto);
     if (updated == null) {
       throw new ResourceNotFoundException("Order not found with id: " + id);
@@ -80,18 +93,21 @@ public class OrderController {
     return ResponseEntity.ok(updated);
   }
 
+  @Operation(summary = "Cancel order")
   @PatchMapping("/{id}/cancel")
-  public ResponseEntity<OrderDto> cancelOrder(@Valid @PathVariable Long id) {
+  public ResponseEntity<OrderDto> cancelOrder(@PathVariable Long id) {
     OrderDto cancelled = orderService.cancelOrder(id);
     return ResponseEntity.ok(cancelled);
   }
 
+  @Operation(summary = "Complete order")
   @PatchMapping("/{id}/complete")
-  public ResponseEntity<OrderDto> completeOrder(@Valid @PathVariable Long id) {
+  public ResponseEntity<OrderDto> completeOrder(@PathVariable Long id) {
     OrderDto completed = orderService.completeOrder(id);
     return ResponseEntity.ok(completed);
   }
 
+  @Operation(summary = "Delete order by id")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
     orderService.deleteOrder(id);

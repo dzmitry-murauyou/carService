@@ -3,6 +3,8 @@ package com.example.carservice.controller;
 import com.example.carservice.dto.MechanicDto;
 import com.example.carservice.exception.ResourceNotFoundException;
 import com.example.carservice.service.MechanicService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +22,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/mechanics")
 @RequiredArgsConstructor
+@Tag(name = "Mechanics", description = "API for managing mechanics")
 public class MechanicController {
 
   private final MechanicService mechanicService;
 
+  @Operation(summary = "Get all mechanics")
   @GetMapping
   public ResponseEntity<List<MechanicDto>> getAllMechanics() {
     return ResponseEntity.ok(mechanicService.getAllMechanics());
   }
 
+  @Operation(summary = "Get mechanic by id")
   @GetMapping("/{id}")
   public ResponseEntity<MechanicDto> getMechanicById(@PathVariable Long id) {
     MechanicDto mechanic = mechanicService.getMechanicById(id);
@@ -38,16 +43,19 @@ public class MechanicController {
     return ResponseEntity.ok(mechanic);
   }
 
-
+  @Operation(summary = "Create new mechanic")
   @PostMapping
   public ResponseEntity<MechanicDto> createMechanic(@Valid @RequestBody MechanicDto mechanicDto) {
     MechanicDto created = mechanicService.createMechanic(mechanicDto);
     return ResponseEntity.status(HttpStatus.CREATED).body(created);
   }
 
+  @Operation(summary = "Update mechanic by id")
   @PutMapping("/{id}")
-  public ResponseEntity<MechanicDto> updateMechanic(@Valid@PathVariable Long id,
-                                                    @RequestBody MechanicDto mechanicDto) {
+  public ResponseEntity<MechanicDto> updateMechanic(
+      @PathVariable Long id,
+      @Valid @RequestBody MechanicDto mechanicDto
+  ) {
     MechanicDto updated = mechanicService.updateMechanic(id, mechanicDto);
     if (updated == null) {
       throw new ResourceNotFoundException("Mechanic not found with id: " + id);
@@ -55,6 +63,7 @@ public class MechanicController {
     return ResponseEntity.ok(updated);
   }
 
+  @Operation(summary = "Delete mechanic by id")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteMechanic(@PathVariable Long id) {
     mechanicService.deleteMechanic(id);

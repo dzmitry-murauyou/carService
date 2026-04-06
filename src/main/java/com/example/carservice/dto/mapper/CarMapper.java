@@ -15,7 +15,6 @@ public class CarMapper {
     CarDto dto = new CarDto();
     dto.setId(car.getId());
 
-    // Устанавливаем brandModelId
     if (car.getBrandModel() != null) {
       dto.setBrandModelId(car.getBrandModel().getId());
       dto.setBrand(car.getBrandModel().getBrand());    // ← добавляем марку
@@ -26,7 +25,6 @@ public class CarMapper {
     dto.setVin(car.getVin());
     dto.setYear(car.getYear());
 
-    // Устанавливаем информацию о клиенте
     if (car.getClient() != null) {
       dto.setClientId(car.getClient().getId());
       dto.setClientName(car.getClient().getFirstName() + " " + car.getClient().getLastName());
@@ -43,13 +41,9 @@ public class CarMapper {
     Car car = new Car();
     car.setId(dto.getId());
 
-    // brandModel нужно будет установить отдельно через репозиторий
-    // licensePlate
     car.setLicensePlate(dto.getLicensePlate());
     car.setVin(dto.getVin());
     car.setYear(dto.getYear());
-
-    // client нужно будет установить отдельно через репозиторий
 
     return car;
   }

@@ -31,7 +31,7 @@ public class ServiceImplementation implements ServiceInterface {
 
   @Override
   public List<ServiceDto> getServicesByCategory(String category) {
-    return repository.findByCategory(category).stream()
+    return repository.findByCategoryName(category).stream()
         .map(mapper::toDto)
         .toList();
   }

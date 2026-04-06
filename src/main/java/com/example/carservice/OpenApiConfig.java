@@ -1,0 +1,19 @@
+package com.example.carservice.config;
+
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class OpenApiConfig {
+
+  @Bean
+  public OpenAPI carServiceOpenApi() {
+    return new OpenAPI()
+        .info(new Info()
+            .title("Car Service API")
+            .description("API for managing cars, clients, orders, mechanics, services and spares")
+            .version("1.0"));
+  }
+}
