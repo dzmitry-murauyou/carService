@@ -3,6 +3,7 @@ package com.example.carservice.controller;
 import com.example.carservice.dto.OrderDto;
 import com.example.carservice.exception.ResourceNotFoundException;
 import com.example.carservice.service.OrderService;
+import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -64,13 +65,13 @@ public class OrderController {
   }
 
   @PostMapping
-  public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
+  public ResponseEntity<OrderDto> createOrder(@Valid @RequestBody OrderDto orderDto) {
     OrderDto created = orderService.createOrder(orderDto);
     return ResponseEntity.status(HttpStatus.CREATED).body(created);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<OrderDto> updateOrder(@PathVariable Long id,
+  public ResponseEntity<OrderDto> updateOrder(@Valid @PathVariable Long id,
                                               @RequestBody OrderDto orderDto) {
     OrderDto updated = orderService.updateOrder(id, orderDto);
     if (updated == null) {
@@ -80,13 +81,13 @@ public class OrderController {
   }
 
   @PatchMapping("/{id}/cancel")
-  public ResponseEntity<OrderDto> cancelOrder(@PathVariable Long id) {
+  public ResponseEntity<OrderDto> cancelOrder(@Valid @PathVariable Long id) {
     OrderDto cancelled = orderService.cancelOrder(id);
     return ResponseEntity.ok(cancelled);
   }
 
   @PatchMapping("/{id}/complete")
-  public ResponseEntity<OrderDto> completeOrder(@PathVariable Long id) {
+  public ResponseEntity<OrderDto> completeOrder(@Valid @PathVariable Long id) {
     OrderDto completed = orderService.completeOrder(id);
     return ResponseEntity.ok(completed);
   }

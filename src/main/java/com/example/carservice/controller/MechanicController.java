@@ -3,6 +3,7 @@ package com.example.carservice.controller;
 import com.example.carservice.dto.MechanicDto;
 import com.example.carservice.exception.ResourceNotFoundException;
 import com.example.carservice.service.MechanicService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,13 +40,13 @@ public class MechanicController {
 
 
   @PostMapping
-  public ResponseEntity<MechanicDto> createMechanic(@RequestBody MechanicDto mechanicDto) {
+  public ResponseEntity<MechanicDto> createMechanic(@Valid @RequestBody MechanicDto mechanicDto) {
     MechanicDto created = mechanicService.createMechanic(mechanicDto);
     return ResponseEntity.status(HttpStatus.CREATED).body(created);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<MechanicDto> updateMechanic(@PathVariable Long id,
+  public ResponseEntity<MechanicDto> updateMechanic(@Valid@PathVariable Long id,
                                                     @RequestBody MechanicDto mechanicDto) {
     MechanicDto updated = mechanicService.updateMechanic(id, mechanicDto);
     if (updated == null) {

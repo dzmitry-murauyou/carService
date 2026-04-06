@@ -3,6 +3,7 @@ package com.example.carservice.controller;
 import com.example.carservice.dto.SpareDto;
 import com.example.carservice.exception.ResourceNotFoundException;
 import com.example.carservice.service.SpareService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -59,13 +60,13 @@ public class SpareController {
   }
 
   @PostMapping
-  public ResponseEntity<SpareDto> createSpare(@RequestBody SpareDto spareDto) {
+  public ResponseEntity<SpareDto> createSpare(@Valid @RequestBody SpareDto spareDto) {
     SpareDto created = spareService.createSpare(spareDto);
     return ResponseEntity.status(HttpStatus.CREATED).body(created);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<SpareDto> updateSpare(@PathVariable Long id,
+  public ResponseEntity<SpareDto> updateSpare(@Valid @PathVariable Long id,
                                               @RequestBody SpareDto spareDto) {
     SpareDto updated = spareService.updateSpare(id, spareDto);
     if (updated == null) {

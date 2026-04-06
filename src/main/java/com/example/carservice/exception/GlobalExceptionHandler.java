@@ -1,7 +1,14 @@
 package com.example.carservice.exception;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -9,13 +16,89 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(ResourceNotFoundException.class)
-  public ResponseEntity<String> handleResourceNotFound(ResourceNotFoundException ex) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+  public ResponseEntity<ApiError> handleResourceNotFound(
+      ResourceNotFoundException ex,
+      HttpServletRequest request
+  ) {
+    ApiError error = ApiError.builder()
+        .timestamp(LocalDateTime.now())
+        .status(HttpStatus.NOT_FOUND.value())
+        .error("Not Found")
+        .message(ex.getMessage())
+        .path(request.getRequestURI())
+        .build();
+
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+  }
+
+  @ExceptionHandler(TransactionDemoException.class)
+  public ResponseEntity<ApiError> handleTransactionDemoException(
+      TransactionDemoException ex,
+      HttpServletRequest request
+  ) {
+    ApiError error = ApiError.builder()
+        .timestamp(LocalDateTime.now())
+        .status(HttpStatus.BAD_REQUEST.value())
+        .error("Transaction Error")
+        .message(ex.getMessage())
+        .path(request.getRequestURI())
+        .build();
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+  }
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ApiError> handleValidationException(
+      MethodArgumentNotValidException ex,
+      HttpServletRequest request
+  ) {
+    Map<String, String> details = new HashMap<>();
+
+    for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+      details.put(fieldError.getField(), fieldError.getDefaultMessage());
+    }
+
+    ApiError error = ApiError.builder()
+        .timestamp(LocalDateTime.now())
+        .status(HttpStatus.BAD_REQUEST.value())
+        .error("Validation Failed")
+        .message("Input validation error")
+        .path(request.getRequestURI())
+        .details(details)
+        .build();
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+  }
+
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<ApiError> handleConstraintViolation(
+      ConstraintViolationException ex,
+      HttpServletRequest request
+  ) {
+    ApiError error = ApiError.builder()
+        .timestamp(LocalDateTime.now())
+        .status(HttpStatus.BAD_REQUEST.value())
+        .error("Constraint Violation")
+        .message(ex.getMessage())
+        .path(request.getRequestURI())
+        .build();
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
   }
 
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<String> handleGenericException(Exception ex) {
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body("Internal server error: " + ex.getMessage());
+  public ResponseEntity<ApiError> handleGenericException(
+      Exception ex,
+      HttpServletRequest request
+  ) {
+    ApiError error = ApiError.builder()
+        .timestamp(LocalDateTime.now())
+        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+        .error("Internal Server Error")
+        .message(ex.getMessage())
+        .path(request.getRequestURI())
+        .build();
+
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
   }
 }

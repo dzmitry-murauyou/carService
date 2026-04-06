@@ -4,6 +4,7 @@ import com.example.carservice.dto.CarDto;
 import com.example.carservice.exception.ResourceNotFoundException;
 import com.example.carservice.service.CarService;
 import com.example.carservice.service.impl.cache.CarSearchFilter;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -57,12 +58,7 @@ public class CarController {
       Pageable pageable
   ) {
     CarSearchFilter filter = new CarSearchFilter(
-        brand,
-        model,
-        clientFirstName,
-        clientLastName,
-        yearFrom,
-        yearTo
+        brand, model, clientFirstName, clientLastName, yearFrom, yearTo
     );
 
     return ResponseEntity.ok(carService.searchCarsJpql(filter, pageable));
@@ -79,19 +75,14 @@ public class CarController {
       Pageable pageable
   ) {
     CarSearchFilter filter = new CarSearchFilter(
-        brand,
-        model,
-        clientFirstName,
-        clientLastName,
-        yearFrom,
-        yearTo
+        brand, model, clientFirstName, clientLastName, yearFrom, yearTo
     );
 
     return ResponseEntity.ok(carService.searchCarsNative(filter, pageable));
   }
 
   @PostMapping
-  public ResponseEntity<CarDto> createCar(@RequestBody CarDto carDto) {
+  public ResponseEntity<CarDto> createCar(@Valid @RequestBody CarDto carDto) {
     CarDto created = carService.createCar(carDto);
     return ResponseEntity.status(HttpStatus.CREATED).body(created);
   }
@@ -99,7 +90,7 @@ public class CarController {
   @PutMapping("/{id}")
   public ResponseEntity<CarDto> updateCar(
       @PathVariable Long id,
-      @RequestBody CarDto carDto
+      @Valid @RequestBody CarDto carDto
   ) {
     CarDto updated = carService.updateCar(id, carDto);
     if (updated == null) {

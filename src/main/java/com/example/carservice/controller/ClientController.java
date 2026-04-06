@@ -2,6 +2,7 @@ package com.example.carservice.controller;
 
 import com.example.carservice.dto.ClientDto;
 import com.example.carservice.service.ClientService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -48,13 +49,13 @@ public class ClientController {
   }
 
   @PostMapping
-  public ResponseEntity<ClientDto> createClient(@RequestBody ClientDto clientDto) {
+  public ResponseEntity<ClientDto> createClient(@Valid @RequestBody ClientDto clientDto) {
     ClientDto created = clientService.createClient(clientDto);
     return ResponseEntity.status(HttpStatus.CREATED).body(created);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<ClientDto> updateClient(@PathVariable Long id,
+  public ResponseEntity<ClientDto> updateClient(@Valid @PathVariable Long id,
                                                 @RequestBody ClientDto clientDto) {
     ClientDto updated = clientService.updateClient(id, clientDto);
     return ResponseEntity.ok(updated);
@@ -67,7 +68,7 @@ public class ClientController {
   }
 
   @PostMapping("/test-without-transaction")
-  public ResponseEntity<String> testWithoutTransaction(@RequestBody ClientDto clientDto) {
+  public ResponseEntity<String> testWithoutTransaction(@Valid @RequestBody ClientDto clientDto) {
     try {
       clientService.createClientWithNewCarsWithoutTransaction(clientDto);
       return ResponseEntity.ok("Клиент и машины созданы");
@@ -80,7 +81,7 @@ public class ClientController {
   }
 
   @PostMapping("/test-with-transaction")
-  public ResponseEntity<String> testWithTransaction(@RequestBody ClientDto clientDto) {
+  public ResponseEntity<String> testWithTransaction(@Valid @RequestBody ClientDto clientDto) {
     try {
       clientService.createClientWithNewCarsWithTransaction(clientDto);
       return ResponseEntity.ok("Клиент и машины созданы");

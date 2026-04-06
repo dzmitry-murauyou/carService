@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ServiceController {
 
-  private final ServiceInterface service;  // ← интерфейс, а не реализация
+  private final ServiceInterface service;
 
   @GetMapping("/all")
   public List<ServiceDto> getAllServices() {
-    return service.getAllServices();     // ← уже DTO
+    return service.getAllServices();
   }
 
   @GetMapping("/{id}")
   public ServiceDto getServiceById(@PathVariable Long id) {
-    return service.getServiceById(id);   // ← уже DTO
+    return service.getServiceById(id);
   }
 
   @GetMapping
