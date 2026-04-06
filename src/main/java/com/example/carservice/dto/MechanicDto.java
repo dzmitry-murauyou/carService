@@ -14,32 +14,32 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Mechanic data transfer object")
+@Schema(description = "DTO with mechanic information")
 public class MechanicDto {
 
-  @Schema(description = "Mechanic id", example = "1")
+  @Schema(description = "Unique mechanic identifier", example = "1")
   private Long id;
 
-  @NotBlank(message = "First name must not be blank")
-  @Size(max = 40, message = "First name must not exceed 40 characters")
-  @Schema(description = "Mechanic first name", example = "Petr")
+  @NotBlank(message = "Mechanic first name is required")
+  @Size(max = 40, message = "Mechanic first name must contain no more than 40 characters")
+  @Schema(description = "First name of mechanic", example = "Petr")
   private String firstName;
 
-  @NotBlank(message = "Last name must not be blank")
-  @Size(max = 40, message = "Last name must not exceed 40 characters")
-  @Schema(description = "Mechanic last name", example = "Petrov")
+  @NotBlank(message = "Mechanic last name is required")
+  @Size(max = 40, message = "Mechanic last name must contain no more than 40 characters")
+  @Schema(description = "Last name of mechanic", example = "Petrov")
   private String lastName;
 
-  @Size(max = 13, message = "Phone must not exceed 13 characters")
-  @Schema(description = "Mechanic phone", example = "+375291234567")
+  @Size(max = 13, message = "Mechanic phone number must contain no more than 13 characters")
+  @Schema(description = "Contact phone number", example = "+375291234567")
   private String phone;
 
-  @Schema(description = "Hire date", example = "2023-01-10")
+  @Schema(description = "Date when mechanic was hired", example = "2023-01-10")
   private LocalDate hireDate;
 
-  @Schema(description = "Ids of services that mechanic can perform")
+  @Schema(description = "Identifiers of assigned services")
   private Set<Long> serviceIds;
 
-  @Schema(description = "Names of services that mechanic can perform")
+  @Schema(description = "Names of assigned services")
   private Set<String> serviceNames;
 }
