@@ -1,6 +1,7 @@
 package com.example.carservice.repository;
 
 import com.example.carservice.model.Car;
+import com.example.carservice.repository.projection.CarNativeSearchProjection;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -19,24 +20,33 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
   Optional<Car> findByVin(String vin);
 
-  @Query("SELECT c FROM Car c JOIN c.brandModel bm"
-      + " WHERE bm.brand = :brand AND bm.model = :model")
+  @Query("SELECT c FROM Car c JOIN c.brandModel bm WHERE bm.brand = :brand AND bm.model = :model")
   List<Car> findByBrandAndModel(@Param("brand") String brand,
                                 @Param("model") String model);
 
   List<Car> findByYear(Integer year);
 
-  @Query(value = "SELECT c FROM Car c"
-      + " JOIN c.client cl"
-      + " JOIN c.brandModel bm"
-      + " WHERE (COALESCE(:brand, '') = '' OR LOWER(bm.brand) = LOWER(:brand))"
-      + " AND (COALESCE(:model, '') = '' OR LOWER(bm.model) = LOWER(:model))"
-      + " AND (COALESCE(:clientFirstName, '') = '' OR "
-      + "LOWER(cl.firstName) = LOWER(:clientFirstName))"
-      + " AND (COALESCE(:clientLastName, '') = '' OR "
-      + "LOWER(cl.lastName) = LOWER(:clientLastName))"
-      + " AND (:yearFrom IS NULL OR c.year >= :yearFrom)"
-      + " AND (:yearTo IS NULL OR c.year <= :yearTo)")
+
+  @Query(
+      value = "SELECT c FROM Car c "
+          + "JOIN FETCH c.client cl "
+          + "JOIN FETCH c.brandModel bm "
+          + "WHERE (COALESCE(:brand, '') = '' OR LOWER(bm.brand) = LOWER(:brand)) "
+          + "AND (COALESCE(:model, '') = '' OR LOWER(bm.model) = LOWER(:model)) "
+          + "AND (COALESCE(:clientFirstName, '') = '' OR LOWER(cl.firstName) = LOWER(:clientFirstName)) "
+          + "AND (COALESCE(:clientLastName, '') = '' OR LOWER(cl.lastName) = LOWER(:clientLastName)) "
+          + "AND (:yearFrom IS NULL OR c.year >= :yearFrom) "
+          + "AND (:yearTo IS NULL OR c.year <= :yearTo)",
+      countQuery = "SELECT COUNT(c) FROM Car c "
+          + "JOIN c.client cl "
+          + "JOIN c.brandModel bm "
+          + "WHERE (COALESCE(:brand, '') = '' OR LOWER(bm.brand) = LOWER(:brand)) "
+          + "AND (COALESCE(:model, '') = '' OR LOWER(bm.model) = LOWER(:model)) "
+          + "AND (COALESCE(:clientFirstName, '') = '' OR LOWER(cl.firstName) = LOWER(:clientFirstName)) "
+          + "AND (COALESCE(:clientLastName, '') = '' OR LOWER(cl.lastName) = LOWER(:clientLastName)) "
+          + "AND (:yearFrom IS NULL OR c.year >= :yearFrom) "
+          + "AND (:yearTo IS NULL OR c.year <= :yearTo)"
+  )
   Page<Car> searchCarsJpql(
       @Param("brand") String brand,
       @Param("model") String model,
@@ -47,28 +57,72 @@ public interface CarRepository extends JpaRepository<Car, Long> {
       Pageable pageable
   );
 
+
+  @Query(
+      value = """
+        SELECT
+          c.id                 AS id,
+          c.brand_model_id     AS "brandModelId",
+          bm.brand             AS brand,
+          bm.model             AS model,
+          c.license_plate      AS "licensePlate",
+          c.vin                AS vin,
+          c.year               AS year,
+          cl.id                AS "clientId",
+          CONCAT(cl.first_name, ' ', cl.last_name) AS "clientName"
+        FROM cars c
+        JOIN clients cl ON c.client_id = cl.id
+        JOIN car_brand_model bm ON c.brand_model_id = bm.id
+        WHERE (COALESCE(:brand, '') = '' OR LOWER(bm.brand) = LOWER(:brand))
+          AND (COALESCE(:model, '') = '' OR LOWER(bm.model) = LOWER(:model))
+          AND (COALESCE(:clientFirstName, '') = '' OR LOWER(cl.first_name) = LOWER(:clientFirstName))
+          AND (COALESCE(:clientLastName, '') = '' OR LOWER(cl.last_name) = LOWER(:clientLastName))
+          AND (:yearFrom IS NULL OR c.year >= :yearFrom)
+          AND (:yearTo IS NULL OR c.year <= :yearTo)
+        """,
+      countQuery = """
+        SELECT COUNT(*)
+        FROM cars c
+        JOIN clients cl ON c.client_id = cl.id
+        JOIN car_brand_model bm ON c.brand_model_id = bm.id
+        WHERE (COALESCE(:brand, '') = '' OR LOWER(bm.brand) = LOWER(:brand))
+          AND (COALESCE(:model, '') = '' OR LOWER(bm.model) = LOWER(:model))
+          AND (COALESCE(:clientFirstName, '') = '' OR LOWER(cl.first_name) = LOWER(:clientFirstName))
+          AND (COALESCE(:clientLastName, '') = '' OR LOWER(cl.last_name) = LOWER(:clientLastName))
+          AND (:yearFrom IS NULL OR c.year >= :yearFrom)
+          AND (:yearTo IS NULL OR c.year <= :yearTo)
+        """,
+      nativeQuery = true
+  )
+  Page<CarNativeSearchProjection> searchCarsNativeProjection(
+      @Param("brand") String brand,
+      @Param("model") String model,
+      @Param("clientFirstName") String clientFirstName,
+      @Param("clientLastName") String clientLastName,
+      @Param("yearFrom") Integer yearFrom,
+      @Param("yearTo") Integer yearTo,
+      Pageable pageable
+  );
+
+
+  @Deprecated
   @Query(
       value = "SELECT c.* FROM cars c"
           + " JOIN clients cl ON c.client_id = cl.id"
           + " JOIN car_brand_model bm ON c.brand_model_id = bm.id"
           + " WHERE (COALESCE(:brand, '') = '' OR LOWER(bm.brand) = LOWER(:brand))"
           + " AND (COALESCE(:model, '') = '' OR LOWER(bm.model) = LOWER(:model))"
-          + " AND (COALESCE(:clientFirstName, '') = '' OR "
-          +  "LOWER(cl.first_name) = LOWER(:clientFirstName))"
-          + " AND (COALESCE(:clientLastName, '') = "
-          + "'' OR LOWER(cl.last_name) = LOWER(:clientLastName))"
+          + " AND (COALESCE(:clientFirstName, '') = '' OR LOWER(cl.first_name) = LOWER(:clientFirstName))"
+          + " AND (COALESCE(:clientLastName, '') = '' OR LOWER(cl.last_name) = LOWER(:clientLastName))"
           + " AND (:yearFrom IS NULL OR c.year >= :yearFrom)"
           + " AND (:yearTo IS NULL OR c.year <= :yearTo)",
       countQuery = "SELECT COUNT(*) FROM cars c"
           + " JOIN clients cl ON c.client_id = cl.id"
           + " JOIN car_brand_model bm ON c.brand_model_id = bm.id"
           + " WHERE (COALESCE(:brand, '') = '' OR LOWER(bm.brand) = LOWER(:brand))"
-          + " AND (COALESCE(:model, '') = '' "
-          + "OR LOWER(bm.model) = LOWER(:model))"
-          + " AND (COALESCE(:clientFirstName, '') = '' "
-          +  "OR LOWER(cl.first_name) = LOWER(:clientFirstName))"
-          + " AND (COALESCE(:clientLastName, '') = '' "
-          +  "OR LOWER(cl.last_name) = LOWER(:clientLastName))"
+          + " AND (COALESCE(:model, '') = '' OR LOWER(bm.model) = LOWER(:model))"
+          + " AND (COALESCE(:clientFirstName, '') = '' OR LOWER(cl.first_name) = LOWER(:clientFirstName))"
+          + " AND (COALESCE(:clientLastName, '') = '' OR LOWER(cl.last_name) = LOWER(:clientLastName))"
           + " AND (:yearFrom IS NULL OR c.year >= :yearFrom)"
           + " AND (:yearTo IS NULL OR c.year <= :yearTo)",
       nativeQuery = true

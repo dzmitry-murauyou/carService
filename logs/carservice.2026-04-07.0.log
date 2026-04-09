@@ -1,0 +1,400 @@
+2026-04-07 00:24:30 [HikariPool-5:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=26m55s106ms906µs300ns).
+2026-04-07 01:20:37 [HikariPool-5:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=51m7s34ms732µs).
+2026-04-07 03:26:28 [HikariPool-5:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=2h5m50s485ms539µs600ns).
+2026-04-07 03:55:51 [HikariPool-5:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=52s695ms505µs400ns).
+2026-04-07 04:09:08 [HikariPool-5:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=13m16s797ms581µs500ns).
+2026-04-07 04:14:11 [HikariPool-5:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=4m3s647ms786µs300ns).
+2026-04-07 04:14:48 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-07 04:14:48 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-07 04:14:48 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-04-07 04:14:48 [http-nio-8080-exec-1] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsJpql(..) executed in 59 ms
+2026-04-07 04:14:48 [http-nio-8080-exec-1] WARN  o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-04-07 04:14:54 [http-nio-8080-exec-3] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsNative(..) executed in 68 ms
+2026-04-07 04:15:09 [http-nio-8080-exec-7] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsNative(..) executed in 16 ms
+2026-04-07 04:15:32 [http-nio-8080-exec-9] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsNative(..) executed in 8 ms
+2026-04-07 04:15:50 [http-nio-8080-exec-6] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsNative(..) executed in 14 ms
+2026-04-07 04:15:58 [http-nio-8080-exec-4] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsNative(..) executed in 1 ms
+2026-04-07 04:31:23 [HikariPool-5:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=2m40s892ms138µs600ns).
+2026-04-07 15:07:37 [HikariPool-5:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=7m42s660ms920µs700ns).
+2026-04-07 15:58:26 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-07 15:58:26 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-07 15:58:26 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-07 15:58:26 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown initiated...
+2026-04-07 15:58:26 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown completed.
+2026-04-07 15:58:30 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.3.Final
+2026-04-07 15:58:30 [restartedMain] INFO  c.e.carservice.CarServiceApplication - Starting CarServiceApplication using Java 25.0.2 with PID 33668 (D:\Java\carService\target\classes started by Dzmitry in D:\Java\carService)
+2026-04-07 15:58:30 [restartedMain] DEBUG c.e.carservice.CarServiceApplication - Running with Spring Boot v3.5.6, Spring v6.2.11
+2026-04-07 15:58:30 [restartedMain] INFO  c.e.carservice.CarServiceApplication - The following 1 profile is active: "local"
+2026-04-07 15:58:30 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-07 15:58:30 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-07 15:58:31 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-07 15:58:31 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 53 ms. Found 7 JPA repository interfaces.
+2026-04-07 15:58:32 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-07 15:58:32 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-04-07 15:58:32 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-07 15:58:32 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-04-07 15:58:32 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-04-07 15:58:32 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1411 ms
+2026-04-07 15:58:32 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-07 15:58:32 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.29.Final
+2026-04-07 15:58:32 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-04-07 15:58:32 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-07 15:58:32 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-07 15:58:33 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@11cc0eb9
+2026-04-07 15:58:33 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-07 15:58:33 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 18.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-07 15:58:34 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-07 15:58:34 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-07 15:58:34 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-07 15:58:35 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-07 15:58:36 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-04-07 15:58:36 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-04-07 15:58:36 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.carservice.CarServiceApplication - Started CarServiceApplication in 5.945 seconds (process running for 6.785)
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание клиентов ===
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание машин ===
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание механиков ===
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание услуг ===
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание запчастей ===
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание заказов ===
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.config.DataInitializer - Клиентов: 4
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.config.DataInitializer - Машин: 5
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.config.DataInitializer - Механиков: 4
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.config.DataInitializer - Услуг: 5
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.config.DataInitializer - Запчастей: 5
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.config.DataInitializer - Заказов: 4
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === Без оптимизации (N+1) ===
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - Загружено 4 заказов без оптимизации
+2026-04-07 15:58:36 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 1: client Петров
+2026-04-07 15:58:36 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 2: client Сидорова
+2026-04-07 15:58:36 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 3: client Новикова
+2026-04-07 15:58:36 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 4: client Петров
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === Конец N+1 ===
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === С оптимизацией (один запрос) ===
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - Загружено 4 заказов с оптимизацией
+2026-04-07 15:58:36 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 1: client Петров
+2026-04-07 15:58:36 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 2: client Сидорова
+2026-04-07 15:58:36 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 3: client Новикова
+2026-04-07 15:58:36 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 4: client Петров
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === Конец оптимизации ===
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.aspect.ServiceLoggingAspect - Method OrderServiceImpl.demonstrateNplus1Problem() executed in 55 ms
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.config.DataInitializer - === Используем машину с ID: 1 ===
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.config.DataInitializer - 
+=== ТЕСТ 1: Без @Transactional ===
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === СОХРАНЕНИЕ БЕЗ @Transactional ===
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 1. Заказ сохранён, ID: 5
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 2. Имитируем ошибку...
+2026-04-07 15:58:36 [restartedMain] ERROR c.e.c.config.DataInitializer - Ошибка: Ошибка после частичного сохранения! Заказ остался в БД.
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.config.DataInitializer - 
+=== ТЕСТ 2: С @Transactional ===
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === СОХРАНЕНИЕ С @Transactional ===
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 1. Заказ сохранён, ID: 6
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 2. Услуги добавлены
+2026-04-07 15:58:36 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 3. Имитируем ошибку...
+2026-04-07 15:58:36 [restartedMain] ERROR c.e.c.config.DataInitializer - Ошибка: Ошибка! Всё должно откатиться.
+2026-04-07 15:58:47 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-07 15:58:47 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-07 15:58:47 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-04-07 15:58:47 [http-nio-8080-exec-1] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'POST' is not supported]
+2026-04-07 15:58:54 [http-nio-8080-exec-8] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsJpql(..) executed in 27 ms
+2026-04-07 15:58:54 [http-nio-8080-exec-8] WARN  o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-04-07 15:59:10 [http-nio-8080-exec-9] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsJpql(..) executed in 0 ms
+2026-04-07 15:59:38 [http-nio-8080-exec-7] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity<com.example.carservice.dto.CarDto> com.example.carservice.controller.CarController.createCar(com.example.carservice.dto.CarDto) with 6 errors: [Field error in object 'carDto' on field 'licensePlate': rejected value []; codes [Size.carDto.licensePlate,Size.licensePlate,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [carDto.licensePlate,licensePlate]; arguments []; default message [licensePlate],10,4]; default message [License plate length must be between 4 and 10]] [Field error in object 'carDto' on field 'vin': rejected value [123]; codes [Size.carDto.vin,Size.vin,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [carDto.vin,vin]; arguments []; default message [vin],17,17]; default message [VIN must contain exactly 17 characters]] [Field error in object 'carDto' on field 'model': rejected value []; codes [NotBlank.carDto.model,NotBlank.model,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [carDto.model,model]; arguments []; default message [model]]; default message [Model must not be blank]] [Field error in object 'carDto' on field 'brand': rejected value []; codes [NotBlank.carDto.brand,NotBlank.brand,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [carDto.brand,brand]; arguments []; default message [brand]]; default message [Brand must not be blank]] [Field error in object 'carDto' on field 'year': rejected value [1000]; codes [Min.carDto.year,Min.year,Min.java.lang.Integer,Min]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [carDto.year,year]; arguments []; default message [year],1900]; default message [Year must be greater than or equal to 1900]] [Field error in object 'carDto' on field 'licensePlate': rejected value []; codes [NotBlank.carDto.licensePlate,NotBlank.licensePlate,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [carDto.licensePlate,licensePlate]; arguments []; default message [licensePlate]]; default message [License plate must not be blank]] ]
+2026-04-07 15:59:59 [http-nio-8080-exec-10] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity<com.example.carservice.dto.CarDto> com.example.carservice.controller.CarController.createCar(com.example.carservice.dto.CarDto): [Field error in object 'carDto' on field 'vin': rejected value [TEST12345678]; codes [Size.carDto.vin,Size.vin,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [carDto.vin,vin]; arguments []; default message [vin],17,17]; default message [VIN must contain exactly 17 characters]] ]
+2026-04-07 16:00:15 [http-nio-8080-exec-3] INFO  c.e.c.s.impl.cache.CarSearchCache - Car search cache invalidated. Evicted 1 entries.
+2026-04-07 16:00:15 [http-nio-8080-exec-3] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.createCar(..) executed in 12 ms
+2026-04-07 16:00:24 [http-nio-8080-exec-2] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsJpql(..) executed in 4 ms
+2026-04-07 16:27:42 [http-nio-8080-exec-8] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsJpql(..) executed in 0 ms
+2026-04-07 16:28:53 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-07 16:28:53 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-07 16:28:53 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-07 16:28:53 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-04-07 16:28:53 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-04-07 16:28:57 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.3.Final
+2026-04-07 16:28:57 [restartedMain] INFO  c.e.carservice.CarServiceApplication - Starting CarServiceApplication using Java 25.0.2 with PID 19728 (D:\Java\carService\target\classes started by Dzmitry in D:\Java\carService)
+2026-04-07 16:28:57 [restartedMain] DEBUG c.e.carservice.CarServiceApplication - Running with Spring Boot v3.5.6, Spring v6.2.11
+2026-04-07 16:28:57 [restartedMain] INFO  c.e.carservice.CarServiceApplication - The following 1 profile is active: "local"
+2026-04-07 16:28:57 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-07 16:28:57 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-07 16:28:57 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-07 16:28:57 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 54 ms. Found 7 JPA repository interfaces.
+2026-04-07 16:28:58 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-07 16:28:58 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-04-07 16:28:58 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-07 16:28:58 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-04-07 16:28:58 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-04-07 16:28:58 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1135 ms
+2026-04-07 16:28:58 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-07 16:28:58 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.29.Final
+2026-04-07 16:28:58 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-04-07 16:28:58 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-07 16:28:58 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-07 16:28:58 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@11cc0eb9
+2026-04-07 16:28:58 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-07 16:28:58 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 18.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-07 16:28:59 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-07 16:28:59 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-07 16:29:00 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-07 16:29:01 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-07 16:29:01 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-04-07 16:29:01 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-04-07 16:29:01 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.carservice.CarServiceApplication - Started CarServiceApplication in 4.804 seconds (process running for 5.405)
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание клиентов ===
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание машин ===
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание механиков ===
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание услуг ===
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание запчастей ===
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание заказов ===
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.config.DataInitializer - Клиентов: 4
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.config.DataInitializer - Машин: 5
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.config.DataInitializer - Механиков: 4
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.config.DataInitializer - Услуг: 5
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.config.DataInitializer - Запчастей: 5
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.config.DataInitializer - Заказов: 4
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === Без оптимизации (N+1) ===
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - Загружено 4 заказов без оптимизации
+2026-04-07 16:29:01 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 1: client Петров
+2026-04-07 16:29:01 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 2: client Сидорова
+2026-04-07 16:29:01 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 3: client Новикова
+2026-04-07 16:29:01 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 4: client Петров
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === Конец N+1 ===
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === С оптимизацией (один запрос) ===
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - Загружено 4 заказов с оптимизацией
+2026-04-07 16:29:01 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 1: client Петров
+2026-04-07 16:29:01 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 2: client Сидорова
+2026-04-07 16:29:01 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 3: client Новикова
+2026-04-07 16:29:01 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 4: client Петров
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === Конец оптимизации ===
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.aspect.ServiceLoggingAspect - Method OrderServiceImpl.demonstrateNplus1Problem() executed in 46 ms
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.config.DataInitializer - === Используем машину с ID: 1 ===
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.config.DataInitializer - 
+=== ТЕСТ 1: Без @Transactional ===
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === СОХРАНЕНИЕ БЕЗ @Transactional ===
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 1. Заказ сохранён, ID: 5
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 2. Имитируем ошибку...
+2026-04-07 16:29:01 [restartedMain] ERROR c.e.c.config.DataInitializer - Ошибка: Ошибка после частичного сохранения! Заказ остался в БД.
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.config.DataInitializer - 
+=== ТЕСТ 2: С @Transactional ===
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === СОХРАНЕНИЕ С @Transactional ===
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 1. Заказ сохранён, ID: 6
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 2. Услуги добавлены
+2026-04-07 16:29:01 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 3. Имитируем ошибку...
+2026-04-07 16:29:01 [restartedMain] ERROR c.e.c.config.DataInitializer - Ошибка: Ошибка! Всё должно откатиться.
+2026-04-07 16:29:08 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-07 16:29:08 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-07 16:29:08 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-04-07 16:29:08 [http-nio-8080-exec-1] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsJpql(..) executed in 31 ms
+2026-04-07 16:29:08 [http-nio-8080-exec-1] WARN  o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-04-07 16:29:18 [http-nio-8080-exec-9] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsJpql(..) executed in 0 ms
+2026-04-07 16:29:29 [http-nio-8080-exec-4] INFO  c.e.c.s.impl.cache.CarSearchCache - Car search cache invalidated. Evicted 1 entries.
+2026-04-07 16:29:29 [http-nio-8080-exec-4] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.createCar(..) executed in 9 ms
+2026-04-07 16:29:43 [http-nio-8080-exec-5] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsJpql(..) executed in 8 ms
+2026-04-07 16:31:51 [http-nio-8080-exec-8] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsJpql(..) executed in 0 ms
+2026-04-07 16:31:57 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-07 16:31:57 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-07 16:31:57 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-07 16:31:57 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-04-07 16:31:57 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-04-07 16:31:59 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.3.Final
+2026-04-07 16:31:59 [restartedMain] INFO  c.e.carservice.CarServiceApplication - Starting CarServiceApplication using Java 25.0.2 with PID 27640 (D:\Java\carService\target\classes started by Dzmitry in D:\Java\carService)
+2026-04-07 16:31:59 [restartedMain] DEBUG c.e.carservice.CarServiceApplication - Running with Spring Boot v3.5.6, Spring v6.2.11
+2026-04-07 16:31:59 [restartedMain] INFO  c.e.carservice.CarServiceApplication - The following 1 profile is active: "local"
+2026-04-07 16:31:59 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-07 16:31:59 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-07 16:32:00 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-07 16:32:00 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 60 ms. Found 7 JPA repository interfaces.
+2026-04-07 16:32:01 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-07 16:32:01 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-04-07 16:32:01 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-07 16:32:01 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-04-07 16:32:01 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-04-07 16:32:01 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1160 ms
+2026-04-07 16:32:01 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-07 16:32:01 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.29.Final
+2026-04-07 16:32:01 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-04-07 16:32:01 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-07 16:32:01 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-07 16:32:01 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3abf28ae
+2026-04-07 16:32:01 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-07 16:32:01 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 18.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-07 16:32:02 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-07 16:32:02 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-07 16:32:02 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-07 16:32:03 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-07 16:32:04 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-04-07 16:32:04 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-04-07 16:32:04 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.carservice.CarServiceApplication - Started CarServiceApplication in 4.81 seconds (process running for 5.421)
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание клиентов ===
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание машин ===
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание механиков ===
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание услуг ===
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание запчастей ===
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание заказов ===
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.config.DataInitializer - Клиентов: 4
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.config.DataInitializer - Машин: 5
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.config.DataInitializer - Механиков: 4
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.config.DataInitializer - Услуг: 5
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.config.DataInitializer - Запчастей: 5
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.config.DataInitializer - Заказов: 4
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === Без оптимизации (N+1) ===
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - Загружено 4 заказов без оптимизации
+2026-04-07 16:32:04 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 1: client Петров
+2026-04-07 16:32:04 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 2: client Сидорова
+2026-04-07 16:32:04 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 3: client Новикова
+2026-04-07 16:32:04 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 4: client Петров
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === Конец N+1 ===
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === С оптимизацией (один запрос) ===
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - Загружено 4 заказов с оптимизацией
+2026-04-07 16:32:04 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 1: client Петров
+2026-04-07 16:32:04 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 2: client Сидорова
+2026-04-07 16:32:04 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 3: client Новикова
+2026-04-07 16:32:04 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 4: client Петров
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === Конец оптимизации ===
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.aspect.ServiceLoggingAspect - Method OrderServiceImpl.demonstrateNplus1Problem() executed in 45 ms
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.config.DataInitializer - === Используем машину с ID: 1 ===
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.config.DataInitializer - 
+=== ТЕСТ 1: Без @Transactional ===
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === СОХРАНЕНИЕ БЕЗ @Transactional ===
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 1. Заказ сохранён, ID: 5
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 2. Имитируем ошибку...
+2026-04-07 16:32:04 [restartedMain] ERROR c.e.c.config.DataInitializer - Ошибка: Ошибка после частичного сохранения! Заказ остался в БД.
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.config.DataInitializer - 
+=== ТЕСТ 2: С @Transactional ===
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === СОХРАНЕНИЕ С @Transactional ===
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 1. Заказ сохранён, ID: 6
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 2. Услуги добавлены
+2026-04-07 16:32:04 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 3. Имитируем ошибку...
+2026-04-07 16:32:04 [restartedMain] ERROR c.e.c.config.DataInitializer - Ошибка: Ошибка! Всё должно откатиться.
+2026-04-07 16:32:07 [http-nio-8080-exec-3] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-07 16:32:07 [http-nio-8080-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-07 16:32:07 [http-nio-8080-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-04-07 16:32:07 [http-nio-8080-exec-3] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsJpql(..) executed in 27 ms
+2026-04-07 16:32:07 [http-nio-8080-exec-3] WARN  o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-04-07 16:41:52 [http-nio-8080-exec-5] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsNative(..) executed in 73 ms
+2026-04-07 16:44:46 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-07 16:44:46 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-07 16:44:46 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-07 16:44:46 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-04-07 16:44:46 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-04-07 16:44:51 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.3.Final
+2026-04-07 16:44:51 [restartedMain] INFO  c.e.carservice.CarServiceApplication - Starting CarServiceApplication using Java 25.0.2 with PID 35268 (D:\Java\carService\target\classes started by Dzmitry in D:\Java\carService)
+2026-04-07 16:44:51 [restartedMain] DEBUG c.e.carservice.CarServiceApplication - Running with Spring Boot v3.5.6, Spring v6.2.11
+2026-04-07 16:44:51 [restartedMain] INFO  c.e.carservice.CarServiceApplication - The following 1 profile is active: "local"
+2026-04-07 16:44:51 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-07 16:44:51 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-07 16:44:51 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-07 16:44:51 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 55 ms. Found 7 JPA repository interfaces.
+2026-04-07 16:44:52 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-07 16:44:52 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-04-07 16:44:52 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-07 16:44:52 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-04-07 16:44:52 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-04-07 16:44:52 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1213 ms
+2026-04-07 16:44:52 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-07 16:44:52 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.29.Final
+2026-04-07 16:44:52 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-04-07 16:44:52 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-07 16:44:52 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-07 16:44:53 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@11cc0eb9
+2026-04-07 16:44:53 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-07 16:44:53 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 18.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-07 16:44:54 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-07 16:44:54 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-07 16:44:54 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-07 16:44:55 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-07 16:44:55 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-04-07 16:44:55 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-04-07 16:44:56 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.carservice.CarServiceApplication - Started CarServiceApplication in 5.341 seconds (process running for 5.882)
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание клиентов ===
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание машин ===
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание механиков ===
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание услуг ===
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание запчастей ===
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.config.DataInitializer - === Создание заказов ===
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.config.DataInitializer - Клиентов: 4
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.config.DataInitializer - Машин: 5
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.config.DataInitializer - Механиков: 4
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.config.DataInitializer - Услуг: 5
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.config.DataInitializer - Запчастей: 5
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.config.DataInitializer - Заказов: 4
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === Без оптимизации (N+1) ===
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - Загружено 4 заказов без оптимизации
+2026-04-07 16:44:56 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 1: client Петров
+2026-04-07 16:44:56 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 2: client Сидорова
+2026-04-07 16:44:56 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 3: client Новикова
+2026-04-07 16:44:56 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 4: client Петров
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === Конец N+1 ===
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === С оптимизацией (один запрос) ===
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - Загружено 4 заказов с оптимизацией
+2026-04-07 16:44:56 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 1: client Петров
+2026-04-07 16:44:56 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 2: client Сидорова
+2026-04-07 16:44:56 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 3: client Новикова
+2026-04-07 16:44:56 [restartedMain] DEBUG c.e.c.service.impl.OrderServiceImpl - Order 4: client Петров
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === Конец оптимизации ===
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.aspect.ServiceLoggingAspect - Method OrderServiceImpl.demonstrateNplus1Problem() executed in 47 ms
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.config.DataInitializer - === Используем машину с ID: 1 ===
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.config.DataInitializer - 
+=== ТЕСТ 1: Без @Transactional ===
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === СОХРАНЕНИЕ БЕЗ @Transactional ===
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 1. Заказ сохранён, ID: 5
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 2. Имитируем ошибку...
+2026-04-07 16:44:56 [restartedMain] ERROR c.e.c.config.DataInitializer - Ошибка: Ошибка после частичного сохранения! Заказ остался в БД.
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.config.DataInitializer - 
+=== ТЕСТ 2: С @Transactional ===
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - === СОХРАНЕНИЕ С @Transactional ===
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 1. Заказ сохранён, ID: 6
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 2. Услуги добавлены
+2026-04-07 16:44:56 [restartedMain] INFO  c.e.c.service.impl.OrderServiceImpl - 3. Имитируем ошибку...
+2026-04-07 16:44:56 [restartedMain] ERROR c.e.c.config.DataInitializer - Ошибка: Ошибка! Всё должно откатиться.
+2026-04-07 16:45:01 [http-nio-8080-exec-5] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-07 16:45:01 [http-nio-8080-exec-5] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-07 16:45:01 [http-nio-8080-exec-5] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-04-07 16:45:01 [http-nio-8080-exec-5] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsNative(..) executed in 48 ms
+2026-04-07 16:45:01 [http-nio-8080-exec-5] WARN  o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-04-07 16:46:43 [http-nio-8080-exec-6] INFO  c.e.c.aspect.ServiceLoggingAspect - Method CarServiceImpl.searchCarsJpql(..) executed in 28 ms

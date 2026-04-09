@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Service
 @RequiredArgsConstructor
 public class CarServiceImpl implements CarService {
@@ -90,7 +91,7 @@ public class CarServiceImpl implements CarService {
       return cached;
     }
 
-    Page<CarDto> result = carRepository.searchCarsNative(
+    Page<CarDto> result = carRepository.searchCarsNativeProjection(
             filter.getBrand(),
             filter.getModel(),
             filter.getClientFirstName(),
@@ -99,7 +100,17 @@ public class CarServiceImpl implements CarService {
             filter.getYearTo(),
             pageable
         )
-        .map(mapper::toDto);
+        .map(p -> new CarDto(
+            p.getId(),
+            p.getBrandModelId(),
+            p.getBrand(),
+            p.getModel(),
+            p.getLicensePlate(),
+            p.getVin(),
+            p.getYear(),
+            p.getClientId(),
+            p.getClientName()
+        ));
 
     Page<CarDto> snapshot = new PageImpl<>(
         List.copyOf(result.getContent()),
