@@ -1,9 +1,14 @@
 package com.example.carservice.controller;
 
 import com.example.carservice.dto.OrderDto;
+import com.example.carservice.exception.ApiError;
 import com.example.carservice.exception.ResourceNotFoundException;
 import com.example.carservice.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
@@ -32,12 +37,36 @@ public class OrderController {
   private final OrderService orderService;
 
   @Operation(summary = "Get all orders")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @GetMapping
   public ResponseEntity<List<OrderDto>> getAllOrders() {
     return ResponseEntity.ok(orderService.getAllOrders());
   }
 
   @Operation(summary = "Get order by id")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Order not found",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @GetMapping("/{id}")
   public ResponseEntity<OrderDto> getOrderById(@PathVariable Long id) {
     OrderDto order = orderService.getOrderById(id);
@@ -48,24 +77,72 @@ public class OrderController {
   }
 
   @Operation(summary = "Get orders by car id")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @GetMapping("/car/{carId}")
   public ResponseEntity<List<OrderDto>> getOrdersByCar(@PathVariable Long carId) {
     return ResponseEntity.ok(orderService.getOrdersByCar(carId));
   }
 
   @Operation(summary = "Get orders by client id")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @GetMapping("/client/{clientId}")
   public ResponseEntity<List<OrderDto>> getOrdersByClient(@PathVariable Long clientId) {
     return ResponseEntity.ok(orderService.getOrdersByClient(clientId));
   }
 
   @Operation(summary = "Get orders by status")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "400",
+          description = "Invalid status value",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @GetMapping("/status/{status}")
   public ResponseEntity<List<OrderDto>> getOrdersByStatus(@PathVariable String status) {
     return ResponseEntity.ok(orderService.getOrdersByStatus(status));
   }
 
   @Operation(summary = "Get orders by date range")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "400",
+          description = "Invalid date range (start after end or invalid format)",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @GetMapping("/date-range")
   public ResponseEntity<List<OrderDto>> getOrdersByDateRange(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
@@ -74,6 +151,27 @@ public class OrderController {
   }
 
   @Operation(summary = "Create new order")
+  @ApiResponses({
+      @ApiResponse(responseCode = "201", description = "Created"),
+      @ApiResponse(
+          responseCode = "400",
+          description = "Validation error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "409",
+          description = "Conflict (duplicate order or other unique constraint)",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @PostMapping
   public ResponseEntity<OrderDto> createOrder(@Valid @RequestBody OrderDto orderDto) {
     OrderDto created = orderService.createOrder(orderDto);
@@ -81,6 +179,33 @@ public class OrderController {
   }
 
   @Operation(summary = "Update order by id")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "400",
+          description = "Validation error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Order not found",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "409",
+          description = "Conflict (duplicate or data inconsistency)",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @PutMapping("/{id}")
   public ResponseEntity<OrderDto> updateOrder(
       @PathVariable Long id,
@@ -94,6 +219,27 @@ public class OrderController {
   }
 
   @Operation(summary = "Cancel order")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Order not found",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "409",
+          description = "Conflict (order cannot be cancelled due to its current status)",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @PatchMapping("/{id}/cancel")
   public ResponseEntity<OrderDto> cancelOrder(@PathVariable Long id) {
     OrderDto cancelled = orderService.cancelOrder(id);
@@ -101,6 +247,27 @@ public class OrderController {
   }
 
   @Operation(summary = "Complete order")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Order not found",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "409",
+          description = "Conflict (order cannot be completed due to its current status)",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @PatchMapping("/{id}/complete")
   public ResponseEntity<OrderDto> completeOrder(@PathVariable Long id) {
     OrderDto completed = orderService.completeOrder(id);
@@ -108,6 +275,27 @@ public class OrderController {
   }
 
   @Operation(summary = "Delete order by id")
+  @ApiResponses({
+      @ApiResponse(responseCode = "204", description = "No Content"),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Order not found",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "409",
+          description = "Conflict (data integrity / foreign key constraint)",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
     orderService.deleteOrder(id);

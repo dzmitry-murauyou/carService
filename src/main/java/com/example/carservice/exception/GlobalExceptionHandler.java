@@ -5,6 +5,7 @@ import jakarta.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -12,40 +13,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-  @ExceptionHandler(ResourceNotFoundException.class)
-  public ResponseEntity<ApiError> handleResourceNotFound(
-      ResourceNotFoundException ex,
-      HttpServletRequest request
-  ) {
-    ApiError error = ApiError.builder()
-        .timestamp(LocalDateTime.now())
-        .status(HttpStatus.NOT_FOUND.value())
-        .error("Not Found")
-        .message(ex.getMessage())
-        .path(request.getRequestURI())
-        .build();
-
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-  }
-
-  @ExceptionHandler(TransactionDemoException.class)
-  public ResponseEntity<ApiError> handleTransactionDemoException(
-      TransactionDemoException ex,
-      HttpServletRequest request
-  ) {
-    ApiError error = ApiError.builder()
-        .timestamp(LocalDateTime.now())
-        .status(HttpStatus.BAD_REQUEST.value())
-        .error("Transaction Error")
-        .message(ex.getMessage())
-        .path(request.getRequestURI())
-        .build();
-
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-  }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ApiError> handleValidationException(
@@ -53,7 +23,6 @@ public class GlobalExceptionHandler {
       HttpServletRequest request
   ) {
     Map<String, String> details = new HashMap<>();
-
     for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
       details.put(fieldError.getField(), fieldError.getDefaultMessage());
     }
@@ -84,6 +53,54 @@ public class GlobalExceptionHandler {
         .build();
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+  }
+
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  public ResponseEntity<ApiError> handleDataIntegrityViolation(
+      DataIntegrityViolationException ex,
+      HttpServletRequest request
+  ) {
+    String message = "Data integrity violation (possible duplicate unique field)";
+
+    Throwable root = ex.getMostSpecificCause();
+    if (root != null && root.getMessage() != null) {
+      String m = root.getMessage();
+      // Customize to your constraints if you want:
+      if (m.contains("cars_license_plate_key")) {
+        message = "Car with this licensePlate already exists";
+      } else if (m.contains("cars_vin_key")) {
+        message = "Car with this VIN already exists";
+      } else if (m.contains("clients_phone_key")) {
+        message = "Client with this phone already exists";
+      }
+    }
+
+    ApiError error = ApiError.builder()
+        .timestamp(LocalDateTime.now())
+        .status(HttpStatus.CONFLICT.value())
+        .error("Conflict")
+        .message(message)
+        .path(request.getRequestURI())
+        .build();
+
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+  }
+
+
+  @ExceptionHandler(ResourceNotFoundException.class)
+  public ResponseEntity<ApiError> handleResourceNotFound(
+      ResourceNotFoundException ex,
+      HttpServletRequest request
+  ) {
+    ApiError error = ApiError.builder()
+        .timestamp(LocalDateTime.now())
+        .status(HttpStatus.NOT_FOUND.value())
+        .error("Not Found")
+        .message(ex.getMessage())
+        .path(request.getRequestURI())
+        .build();
+
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
   }
 
   @ExceptionHandler(Exception.class)

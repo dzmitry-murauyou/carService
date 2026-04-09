@@ -32,8 +32,10 @@ public interface CarRepository extends JpaRepository<Car, Long> {
           + "JOIN FETCH c.brandModel bm "
           + "WHERE (COALESCE(:brand, '') = '' OR LOWER(bm.brand) = LOWER(:brand)) "
           + "AND (COALESCE(:model, '') = '' OR LOWER(bm.model) = LOWER(:model)) "
-          + "AND (COALESCE(:clientFirstName, '') = '' OR LOWER(cl.firstName) = LOWER(:clientFirstName)) "
-          + "AND (COALESCE(:clientLastName, '') = '' OR LOWER(cl.lastName) = LOWER(:clientLastName)) "
+          + "AND (COALESCE(:clientFirstName, '') = '' OR LOWER(cl.firstName) "
+          + "= LOWER(:clientFirstName)) "
+          + "AND (COALESCE(:clientLastName, '') = '' OR LOWER(cl.lastName) "
+          + "= LOWER(:clientLastName)) "
           + "AND (:yearFrom IS NULL OR c.year >= :yearFrom) "
           + "AND (:yearTo IS NULL OR c.year <= :yearTo)",
       countQuery = "SELECT COUNT(c) FROM Car c "
@@ -41,8 +43,10 @@ public interface CarRepository extends JpaRepository<Car, Long> {
           + "JOIN c.brandModel bm "
           + "WHERE (COALESCE(:brand, '') = '' OR LOWER(bm.brand) = LOWER(:brand)) "
           + "AND (COALESCE(:model, '') = '' OR LOWER(bm.model) = LOWER(:model)) "
-          + "AND (COALESCE(:clientFirstName, '') = '' OR LOWER(cl.firstName) = LOWER(:clientFirstName)) "
-          + "AND (COALESCE(:clientLastName, '') = '' OR LOWER(cl.lastName) = LOWER(:clientLastName)) "
+          + "AND (COALESCE(:clientFirstName, '') = '' OR LOWER(cl.firstName) "
+          + "= LOWER(:clientFirstName)) "
+          + "AND (COALESCE(:clientLastName, '') = '' OR LOWER(cl.lastName) "
+          + "= LOWER(:clientLastName)) "
           + "AND (:yearFrom IS NULL OR c.year >= :yearFrom) "
           + "AND (:yearTo IS NULL OR c.year <= :yearTo)"
   )
@@ -73,7 +77,8 @@ public interface CarRepository extends JpaRepository<Car, Long> {
         JOIN car_brand_model bm ON c.brand_model_id = bm.id
         WHERE (COALESCE(:brand, '') = '' OR LOWER(bm.brand) = LOWER(:brand))
           AND (COALESCE(:model, '') = '' OR LOWER(bm.model) = LOWER(:model))
-          AND (COALESCE(:clientFirstName, '') = '' OR LOWER(cl.first_name) = LOWER(:clientFirstName))
+          AND (COALESCE(:clientFirstName, '') = '' OR LOWER(cl.first_name)
+                   = LOWER(:clientFirstName))
           AND (COALESCE(:clientLastName, '') = '' OR LOWER(cl.last_name) = LOWER(:clientLastName))
           AND (:yearFrom IS NULL OR c.year >= :yearFrom)
           AND (:yearTo IS NULL OR c.year <= :yearTo)
@@ -85,8 +90,10 @@ public interface CarRepository extends JpaRepository<Car, Long> {
         JOIN car_brand_model bm ON c.brand_model_id = bm.id
         WHERE (COALESCE(:brand, '') = '' OR LOWER(bm.brand) = LOWER(:brand))
           AND (COALESCE(:model, '') = '' OR LOWER(bm.model) = LOWER(:model))
-          AND (COALESCE(:clientFirstName, '') = '' OR LOWER(cl.first_name) = LOWER(:clientFirstName))
-          AND (COALESCE(:clientLastName, '') = '' OR LOWER(cl.last_name) = LOWER(:clientLastName))
+          AND (COALESCE(:clientFirstName, '') = '' OR 
+                       LOWER(cl.first_name) = LOWER(:clientFirstName))
+          AND (COALESCE(:clientLastName, '') = '' OR 
+                       LOWER(cl.last_name) = LOWER(:clientLastName))
           AND (:yearFrom IS NULL OR c.year >= :yearFrom)
           AND (:yearTo IS NULL OR c.year <= :yearTo)
         """,

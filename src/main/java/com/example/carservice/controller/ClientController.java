@@ -1,8 +1,13 @@
 package com.example.carservice.controller;
 
 import com.example.carservice.dto.ClientDto;
+import com.example.carservice.exception.ApiError;
 import com.example.carservice.service.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -28,10 +33,26 @@ public class ClientController {
   private final ClientService clientService;
 
   @Operation(summary = "Get all clients or filter by last name / phone")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Client not found (when searching by phone)",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @GetMapping
   public ResponseEntity<List<ClientDto>> getClients(
       @RequestParam(required = false) String lastName,
-      @RequestParam(required = false) String phone) {
+      @RequestParam(required = false) String phone
+  ) {
 
     if (phone != null) {
       ClientDto client = clientService.getClientByPhone(phone);
@@ -46,13 +67,49 @@ public class ClientController {
   }
 
   @Operation(summary = "Get client by id")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Client not found",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @GetMapping("/{id}")
   public ResponseEntity<ClientDto> getClientById(@PathVariable Long id) {
-    ClientDto client = clientService.getClientById(id);
+    ClientDto client = clientService.getClientById(id); // у вас там throw ResourceNotFoundException
     return ResponseEntity.ok(client);
   }
 
   @Operation(summary = "Create new client")
+  @ApiResponses({
+      @ApiResponse(responseCode = "201", description = "Created"),
+      @ApiResponse(
+          responseCode = "400",
+          description = "Validation error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "409",
+          description = "Conflict (duplicate phone/email or other unique constraint)",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @PostMapping
   public ResponseEntity<ClientDto> createClient(@Valid @RequestBody ClientDto clientDto) {
     ClientDto created = clientService.createClient(clientDto);
@@ -60,6 +117,33 @@ public class ClientController {
   }
 
   @Operation(summary = "Update client by id")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "400",
+          description = "Validation error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Client not found",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "409",
+          description = "Conflict (duplicate phone/email or other unique constraint)",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @PutMapping("/{id}")
   public ResponseEntity<ClientDto> updateClient(
       @PathVariable Long id,
@@ -70,6 +154,27 @@ public class ClientController {
   }
 
   @Operation(summary = "Delete client by id")
+  @ApiResponses({
+      @ApiResponse(responseCode = "204", description = "No Content"),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Client not found",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "409",
+          description = "Conflict (data integrity / foreign key / etc.)",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
     clientService.deleteClient(id);
@@ -77,30 +182,58 @@ public class ClientController {
   }
 
   @Operation(summary = "Transaction demo without @Transactional")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "400",
+          description = "Validation/transaction demo error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "409",
+          description = "Conflict (duplicate phone or other unique constraint)",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @PostMapping("/test-without-transaction")
   public ResponseEntity<String> testWithoutTransaction(@Valid @RequestBody ClientDto clientDto) {
-    try {
-      clientService.createClientWithNewCarsWithoutTransaction(clientDto);
-      return ResponseEntity.ok("Клиент и машины созданы");
-    } catch (Exception e) {
-      return ResponseEntity.status(500).body(
-          "Ошибка: " + e.getMessage() + "\n"
-              + "НО клиент и машины УЖЕ в БД! (частичное сохранение)"
-      );
-    }
+    clientService.createClientWithNewCarsWithoutTransaction(clientDto);
+    return ResponseEntity.ok("Client and cars created (without @Transactional)");
   }
 
   @Operation(summary = "Transaction demo with @Transactional")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "400",
+          description = "Validation/transaction demo error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "409",
+          description = "Conflict (duplicate phone or other unique constraint)",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
   @PostMapping("/test-with-transaction")
   public ResponseEntity<String> testWithTransaction(@Valid @RequestBody ClientDto clientDto) {
-    try {
-      clientService.createClientWithNewCarsWithTransaction(clientDto);
-      return ResponseEntity.ok("Клиент и машины созданы");
-    } catch (Exception e) {
-      return ResponseEntity.status(500).body(
-          "Ошибка: " + e.getMessage() + "\n"
-              + "Клиент и машины НЕ сохранены! (полный откат)"
-      );
-    }
+    clientService.createClientWithNewCarsWithTransaction(clientDto);
+    return ResponseEntity.ok("Client and cars created (with @Transactional)");
   }
 }
