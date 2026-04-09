@@ -26,7 +26,6 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
   List<Car> findByYear(Integer year);
 
-
   @Query(
       value = "SELECT c FROM Car c "
           + "JOIN FETCH c.client cl "
@@ -56,7 +55,6 @@ public interface CarRepository extends JpaRepository<Car, Long> {
       @Param("yearTo") Integer yearTo,
       Pageable pageable
   );
-
 
   @Query(
       value = """
@@ -95,39 +93,6 @@ public interface CarRepository extends JpaRepository<Car, Long> {
       nativeQuery = true
   )
   Page<CarNativeSearchProjection> searchCarsNativeProjection(
-      @Param("brand") String brand,
-      @Param("model") String model,
-      @Param("clientFirstName") String clientFirstName,
-      @Param("clientLastName") String clientLastName,
-      @Param("yearFrom") Integer yearFrom,
-      @Param("yearTo") Integer yearTo,
-      Pageable pageable
-  );
-
-
-  @Deprecated
-  @Query(
-      value = "SELECT c.* FROM cars c"
-          + " JOIN clients cl ON c.client_id = cl.id"
-          + " JOIN car_brand_model bm ON c.brand_model_id = bm.id"
-          + " WHERE (COALESCE(:brand, '') = '' OR LOWER(bm.brand) = LOWER(:brand))"
-          + " AND (COALESCE(:model, '') = '' OR LOWER(bm.model) = LOWER(:model))"
-          + " AND (COALESCE(:clientFirstName, '') = '' OR LOWER(cl.first_name) = LOWER(:clientFirstName))"
-          + " AND (COALESCE(:clientLastName, '') = '' OR LOWER(cl.last_name) = LOWER(:clientLastName))"
-          + " AND (:yearFrom IS NULL OR c.year >= :yearFrom)"
-          + " AND (:yearTo IS NULL OR c.year <= :yearTo)",
-      countQuery = "SELECT COUNT(*) FROM cars c"
-          + " JOIN clients cl ON c.client_id = cl.id"
-          + " JOIN car_brand_model bm ON c.brand_model_id = bm.id"
-          + " WHERE (COALESCE(:brand, '') = '' OR LOWER(bm.brand) = LOWER(:brand))"
-          + " AND (COALESCE(:model, '') = '' OR LOWER(bm.model) = LOWER(:model))"
-          + " AND (COALESCE(:clientFirstName, '') = '' OR LOWER(cl.first_name) = LOWER(:clientFirstName))"
-          + " AND (COALESCE(:clientLastName, '') = '' OR LOWER(cl.last_name) = LOWER(:clientLastName))"
-          + " AND (:yearFrom IS NULL OR c.year >= :yearFrom)"
-          + " AND (:yearTo IS NULL OR c.year <= :yearTo)",
-      nativeQuery = true
-  )
-  Page<Car> searchCarsNative(
       @Param("brand") String brand,
       @Param("model") String model,
       @Param("clientFirstName") String clientFirstName,
