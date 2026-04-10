@@ -38,3 +38,17 @@ application-dev.properties
 application-secret.properties
 *.key
 *.p12
+
+# Logs
+*.log
+logs/
+log/
+*.log.gz
+*.log.zip
+*.log.*
+
+# Игнорировать файл аспекта
+ServiceLoggingAspect.java
+**/ServiceLoggingAspect.java
+com/example/carservice/aspect/ServiceLoggingAspect.java
+src/main/java/com/example/carservice/aspect/ServiceLoggingAspect.java

@@ -14,15 +14,18 @@ public class ServiceLoggingAspect {
   @Around("execution(* com.example.carservice.service.impl.*.*(..))")
   public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
     long start = System.currentTimeMillis();
+    String methodName = joinPoint.getSignature().toShortString();
 
-    Object result = joinPoint.proceed();
-
-    long executionTime = System.currentTimeMillis() - start;
-
-    log.info("Method {} executed in {} ms",
-        joinPoint.getSignature().toShortString(),
-        executionTime);
-
-    return result;
+    try {
+      Object result = joinPoint.proceed();
+      long executionTime = System.currentTimeMillis() - start;
+      log.info("Method {} executed successfully in {} ms", methodName, executionTime);
+      return result;
+    } catch (Throwable throwable) {
+      long executionTime = System.currentTimeMillis() - start;
+      log.error("Method {} failed after {} ms with exception: {}",
+          methodName, executionTime, throwable.getMessage(), throwable);
+      throw throwable;
+    }
   }
 }
