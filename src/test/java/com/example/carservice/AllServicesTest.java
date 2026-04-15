@@ -1706,16 +1706,12 @@ class AllServicesTest {
     final CarSearchFilter filter4 = new CarSearchFilter(
         "  TOYOTA  ", "  CAMRY  ", "  IVAN  ", "  PETROV  ", 2020, 2025);
 
-    assertTrue(filter1.equals(filter1));
-
-    assertFalse(filter1.equals(null));
-    assertFalse(filter1.equals("string"));
-
+    assertEquals(filter1, filter1);
+    assertNotEquals(filter1, null);
+    assertNotEquals(filter1, "string");
     assertEquals(filter1, filter2);
     assertNotEquals(filter1, filter3);
     assertEquals(filter1, filter4);
-    assertNotEquals(filter1, null);
-    assertNotEquals(filter1, "string");
     assertEquals(filter1.hashCode(), filter2.hashCode());
 
     CarSearchFilter filterDiffBrand = new CarSearchFilter(
@@ -1749,7 +1745,6 @@ class AllServicesTest {
     assertEquals(filterNullYears, filterNullYears2);
     assertNotEquals(filterNullYears, filter1);
 
-    // Проверка hashCode для null значений
     CarSearchFilter filterNullBrand = new CarSearchFilter(
         null, "Camry", "Ivan", "Petrov", 2020, 2025);
     CarSearchFilter filterNullBrand2 = new CarSearchFilter(
