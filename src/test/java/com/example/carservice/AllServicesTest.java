@@ -1707,8 +1707,8 @@ class AllServicesTest {
         "  TOYOTA  ", "  CAMRY  ", "  IVAN  ", "  PETROV  ", 2020, 2025);
 
     assertEquals(filter1, filter1);
-    assertNotEquals(filter1, null);
-    assertNotEquals(filter1, "string");
+    assertNotEquals(null, filter1);
+    assertNotEquals("string", filter1);
     assertEquals(filter1, filter2);
     assertNotEquals(filter1, filter3);
     assertEquals(filter1, filter4);
@@ -1769,8 +1769,8 @@ class AllServicesTest {
     final CarSearchCacheKey key2 = new CarSearchCacheKey("jpql", filter, 5, 20, "id,desc");
 
     assertEquals(key1, key1);
-    assertNotEquals(key1, null);
-    assertNotEquals(key1, "string");
+    assertNotEquals(null, key1);
+    assertNotEquals("string", key1);
     assertNotEquals(key1, filter);
     assertEquals(key1, key2);
 
