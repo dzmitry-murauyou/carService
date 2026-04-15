@@ -1773,52 +1773,53 @@ class AllServicesTest {
     final CarSearchCacheKey key1 = new CarSearchCacheKey("jpql", filter, 5, 20, "id,desc");
     final CarSearchCacheKey key2 = new CarSearchCacheKey("jpql", filter, 5, 20, "id,desc");
 
-    assertTrue(key1.equals(key1));
-    assertFalse(key1.equals(null));
-    assertFalse(key1.equals("string"));
-    assertFalse(key1.equals(filter));
-    assertTrue(key1.equals(key2));
+    assertEquals(key1, key1);
+    assertNotEquals(key1, null);
+    assertNotEquals(key1, "string");
+    assertNotEquals(key1, filter);
+    assertEquals(key1, key2);
 
     CarSearchCacheKey diffSearchType = new CarSearchCacheKey("native", filter, 5, 20, "id,desc");
-    assertFalse(key1.equals(diffSearchType));
+    assertNotEquals(key1, diffSearchType);
 
     CarSearchFilter diffFilter = new CarSearchFilter("BMW", "X5", null, null, null, null);
     CarSearchCacheKey diffFilterKey = new CarSearchCacheKey("jpql", diffFilter, 5, 20, "id,desc");
-    assertFalse(key1.equals(diffFilterKey));
+    assertNotEquals(key1, diffFilterKey);
 
     CarSearchCacheKey nullFilterKey = new CarSearchCacheKey("jpql", null, 5, 20, "id,desc");
     CarSearchCacheKey notNullFilterKey = new CarSearchCacheKey("jpql", filter, 5, 20, "id,desc");
-    assertFalse(nullFilterKey.equals(notNullFilterKey));
-    assertFalse(notNullFilterKey.equals(nullFilterKey));
-    assertTrue(nullFilterKey.equals(new CarSearchCacheKey("jpql", null, 5, 20, "id,desc")));
+    assertNotEquals(nullFilterKey, notNullFilterKey);
+    assertNotEquals(notNullFilterKey, nullFilterKey);
+    assertEquals(nullFilterKey, new CarSearchCacheKey("jpql", null, 5, 20, "id,desc"));
 
     CarSearchCacheKey diffPage = new CarSearchCacheKey("jpql", filter, 10, 20, "id,desc");
-    assertFalse(key1.equals(diffPage));
+    assertNotEquals(key1, diffPage);
 
     CarSearchCacheKey diffSize = new CarSearchCacheKey("jpql", filter, 5, 50, "id,desc");
-    assertFalse(key1.equals(diffSize));
+    assertNotEquals(key1, diffSize);
 
     CarSearchCacheKey diffSort = new CarSearchCacheKey("jpql", filter, 5, 20, "name,asc");
-    assertFalse(key1.equals(diffSort));
+    assertNotEquals(key1, diffSort);
 
     CarSearchCacheKey nullSortKey = new CarSearchCacheKey("jpql", filter, 5, 20, null);
     CarSearchCacheKey notNullSortKey = new CarSearchCacheKey("jpql", filter, 5, 20, "id,desc");
-    assertFalse(nullSortKey.equals(notNullSortKey));
-    assertFalse(notNullSortKey.equals(nullSortKey));
-    assertTrue(nullSortKey.equals(new CarSearchCacheKey("jpql", filter, 5, 20, null)));
+    assertNotEquals(nullSortKey, notNullSortKey);
+    assertNotEquals(notNullSortKey, nullSortKey);
+    assertEquals(nullSortKey, new CarSearchCacheKey("jpql", filter, 5, 20, null));
 
     CarSearchCacheKey nullSearchTypeKey = new CarSearchCacheKey(null, filter, 5, 20, "id,desc");
     CarSearchCacheKey notNullSearchTypeKey = new CarSearchCacheKey("jpql",
         filter, 5, 20, "id,desc");
-    assertFalse(nullSearchTypeKey.equals(notNullSearchTypeKey));
-    assertFalse(notNullSearchTypeKey.equals(nullSearchTypeKey));
-    assertTrue(nullSearchTypeKey.equals(new CarSearchCacheKey(null, filter, 5, 20, "id,desc")));
+    assertNotEquals(nullSearchTypeKey, notNullSearchTypeKey);
+    assertNotEquals(notNullSearchTypeKey, nullSearchTypeKey);
+    assertEquals(nullSearchTypeKey, new CarSearchCacheKey(null, filter, 5,
+        20, "id,desc"));
 
-    assertTrue(nullFilterKey.hashCode() == new CarSearchCacheKey("jpql", null, 5,
-        20, "id,desc").hashCode());
-    assertTrue(nullSortKey.hashCode() == new CarSearchCacheKey("jpql",
+    assertEquals(nullFilterKey.hashCode(), new CarSearchCacheKey("jpql",
+        null, 5, 20, "id,desc").hashCode());
+    assertEquals(nullSortKey.hashCode(), new CarSearchCacheKey("jpql",
         filter, 5, 20, null).hashCode());
-    assertTrue(nullSearchTypeKey.hashCode() == new CarSearchCacheKey(null, filter,
-        5, 20, "id,desc").hashCode());
+    assertEquals(nullSearchTypeKey.hashCode(), new CarSearchCacheKey(null,
+        filter, 5, 20, "id,desc").hashCode());
   }
 }
