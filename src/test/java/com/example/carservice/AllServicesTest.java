@@ -1808,13 +1808,17 @@ class AllServicesTest {
     assertTrue(nullSortKey.equals(new CarSearchCacheKey("jpql", filter, 5, 20, null)));
 
     CarSearchCacheKey nullSearchTypeKey = new CarSearchCacheKey(null, filter, 5, 20, "id,desc");
-    CarSearchCacheKey notNullSearchTypeKey = new CarSearchCacheKey("jpql", filter, 5, 20, "id,desc");
+    CarSearchCacheKey notNullSearchTypeKey = new CarSearchCacheKey("jpql",
+        filter, 5, 20, "id,desc");
     assertFalse(nullSearchTypeKey.equals(notNullSearchTypeKey));
     assertFalse(notNullSearchTypeKey.equals(nullSearchTypeKey));
     assertTrue(nullSearchTypeKey.equals(new CarSearchCacheKey(null, filter, 5, 20, "id,desc")));
 
-    assertEquals(nullFilterKey.hashCode(), new CarSearchCacheKey("jpql", null, 5, 20, "id,desc").hashCode());
-    assertEquals(nullSortKey.hashCode(), new CarSearchCacheKey("jpql", filter, 5, 20, null).hashCode());
-    assertEquals(nullSearchTypeKey.hashCode(), new CarSearchCacheKey(null, filter, 5, 20, "id,desc").hashCode());
+    assertTrue(nullFilterKey.hashCode() == new CarSearchCacheKey("jpql", null, 5,
+        20, "id,desc").hashCode());
+    assertTrue(nullSortKey.hashCode() == new CarSearchCacheKey("jpql",
+        filter, 5, 20, null).hashCode());
+    assertTrue(nullSearchTypeKey.hashCode() == new CarSearchCacheKey(null, filter,
+        5, 20, "id,desc").hashCode());
   }
 }
