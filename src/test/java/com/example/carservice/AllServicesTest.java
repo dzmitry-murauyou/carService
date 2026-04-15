@@ -1694,38 +1694,6 @@ class AllServicesTest {
         () -> orderService.createOrderWithTransaction(dto));
   }
 
-  @Test
-  @DisplayName("CarSearchCacheKey - полное покрытие")
-  void carSearchCacheKey_FullCoverage() {
-    final CarSearchFilter filter = new CarSearchFilter(
-        "Toyota", "Camry", "Ivan", "Petrov", 2020, 2025);
-    final CarSearchCacheKey key1 = new CarSearchCacheKey("jpql", filter, 5, 20, "id,desc");
-    final CarSearchCacheKey key2 = new CarSearchCacheKey("jpql", filter, 5, 20, "id,desc");
-    final CarSearchCacheKey key3 = new CarSearchCacheKey("native", filter, 5, 20, "id,desc");
-    final CarSearchCacheKey key4 = new CarSearchCacheKey("jpql", filter, 10, 20, "id,desc");
-    final CarSearchCacheKey key5 = new CarSearchCacheKey("jpql", filter, 5, 50, "id,desc");
-    final CarSearchCacheKey key6 = new CarSearchCacheKey("jpql", filter, 5, 20, "name,asc");
-
-    assertEquals(key1, key1);
-    assertEquals(key1, key2);
-    assertNotEquals(key1, key3);
-    assertNotEquals(key1, key4);
-    assertNotEquals(key1, key5);
-    assertNotEquals(key1, key6);
-    assertNotEquals(key1, null);
-    assertNotEquals(key1, "string");
-    assertEquals(key1.hashCode(), key2.hashCode());
-    assertNotEquals(key1.hashCode(), key3.hashCode());
-    assertEquals("jpql", key1.getSearchType());
-    assertEquals(filter, key1.getFilter());
-    assertEquals(5, key1.getPage());
-    assertEquals(20, key1.getSize());
-    assertEquals("id,desc", key1.getSort());
-
-    final CarSearchCacheKey key7 = new CarSearchCacheKey(null, filter, 0, 10, null);
-    assertEquals("", key7.getSearchType());
-    assertEquals("", key7.getSort());
-  }
 
   @Test
   @DisplayName("CarSearchFilter - equals и hashCode")
@@ -1794,5 +1762,59 @@ class AllServicesTest {
     CarSearchFilter filterEmptyValues2 = new CarSearchFilter(
         "", "", "", "", null, null);
     assertEquals(filterEmptyValues, filterEmptyValues2);
+  }
+
+  @Test
+  @DisplayName("CarSearchCacheKey - equals все ветки")
+  void carSearchCacheKey_EqualsAllBranches() {
+    final CarSearchFilter filter = new CarSearchFilter(
+        "Toyota", "Camry", "Ivan", "Petrov", 2020, 2025);
+
+    final CarSearchCacheKey key1 = new CarSearchCacheKey("jpql", filter, 5, 20, "id,desc");
+    final CarSearchCacheKey key2 = new CarSearchCacheKey("jpql", filter, 5, 20, "id,desc");
+
+    assertTrue(key1.equals(key1));
+    assertFalse(key1.equals(null));
+    assertFalse(key1.equals("string"));
+    assertFalse(key1.equals(filter));
+    assertTrue(key1.equals(key2));
+
+    CarSearchCacheKey diffSearchType = new CarSearchCacheKey("native", filter, 5, 20, "id,desc");
+    assertFalse(key1.equals(diffSearchType));
+
+    CarSearchFilter diffFilter = new CarSearchFilter("BMW", "X5", null, null, null, null);
+    CarSearchCacheKey diffFilterKey = new CarSearchCacheKey("jpql", diffFilter, 5, 20, "id,desc");
+    assertFalse(key1.equals(diffFilterKey));
+
+    CarSearchCacheKey nullFilterKey = new CarSearchCacheKey("jpql", null, 5, 20, "id,desc");
+    CarSearchCacheKey notNullFilterKey = new CarSearchCacheKey("jpql", filter, 5, 20, "id,desc");
+    assertFalse(nullFilterKey.equals(notNullFilterKey));
+    assertFalse(notNullFilterKey.equals(nullFilterKey));
+    assertTrue(nullFilterKey.equals(new CarSearchCacheKey("jpql", null, 5, 20, "id,desc")));
+
+    CarSearchCacheKey diffPage = new CarSearchCacheKey("jpql", filter, 10, 20, "id,desc");
+    assertFalse(key1.equals(diffPage));
+
+    CarSearchCacheKey diffSize = new CarSearchCacheKey("jpql", filter, 5, 50, "id,desc");
+    assertFalse(key1.equals(diffSize));
+
+    CarSearchCacheKey diffSort = new CarSearchCacheKey("jpql", filter, 5, 20, "name,asc");
+    assertFalse(key1.equals(diffSort));
+
+    CarSearchCacheKey nullSortKey = new CarSearchCacheKey("jpql", filter, 5, 20, null);
+    CarSearchCacheKey notNullSortKey = new CarSearchCacheKey("jpql", filter, 5, 20, "id,desc");
+    assertFalse(nullSortKey.equals(notNullSortKey));
+    assertFalse(notNullSortKey.equals(nullSortKey));
+    assertTrue(nullSortKey.equals(new CarSearchCacheKey("jpql", filter, 5, 20, null)));
+
+    CarSearchCacheKey nullSearchTypeKey = new CarSearchCacheKey(null, filter, 5, 20, "id,desc");
+    CarSearchCacheKey notNullSearchTypeKey = new CarSearchCacheKey("jpql", filter, 5, 20, "id,desc");
+    assertFalse(nullSearchTypeKey.equals(notNullSearchTypeKey));
+    assertFalse(notNullSearchTypeKey.equals(nullSearchTypeKey));
+    assertTrue(nullSearchTypeKey.equals(new CarSearchCacheKey(null, filter, 5, 20, "id,desc")));
+
+    assertEquals(nullFilterKey.hashCode(), new CarSearchCacheKey("jpql", null, 5, 20, "id,desc").hashCode());
+    assertEquals(nullSortKey.hashCode(), new CarSearchCacheKey("jpql", filter, 5, 20, null).hashCode());
+    assertEquals(nullSearchTypeKey.hashCode(), new CarSearchCacheKey(null, filter, 5, 20, "id,desc").hashCode());
   }
 }
