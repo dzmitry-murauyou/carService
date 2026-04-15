@@ -2,6 +2,7 @@ package com.example.carservice;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -1432,48 +1433,6 @@ class AllServicesTest {
   }
 
   @Test
-  @DisplayName("CarSearchFilter - equals и hashCode")
-  void carSearchFilter_EqualsAndHashCode() {
-    final CarSearchFilter filter1 = new CarSearchFilter(
-        "Toyota", "Camry", "Ivan", "Petrov", 2020, 2025);
-    final CarSearchFilter filter2 = new CarSearchFilter(
-        "Toyota", "Camry", "Ivan", "Petrov", 2020, 2025);
-    final CarSearchFilter filter3 = new CarSearchFilter("BMW", "X5", null, null, null, null);
-    final CarSearchFilter filter4 = new CarSearchFilter(
-        "  TOYOTA  ", "  CAMRY  ", "  IVAN  ", "  PETROV  ", 2020, 2025);
-
-    assertEquals(filter1, filter2);
-    assertNotEquals(filter1, filter3);
-    assertNotEquals(filter1, null);
-    assertNotEquals(filter1, "string");
-    assertEquals(filter1.hashCode(), filter2.hashCode());
-    assertEquals(filter1, filter4);
-
-    final CarSearchFilter filterNullYear = new CarSearchFilter(
-        "Toyota", "Camry", "Ivan", "Petrov", null, null);
-    final CarSearchFilter filterNullYear2 = new CarSearchFilter(
-        "Toyota", "Camry", "Ivan", "Petrov", null, null);
-    assertEquals(filterNullYear, filterNullYear2);
-    assertNotEquals(filterNullYear, filter1);
-
-    final CarSearchFilter filterDiffBrand = new CarSearchFilter(
-        "Honda", "Camry", "Ivan", "Petrov", 2020, 2025);
-    assertNotEquals(filter1, filterDiffBrand);
-
-    final CarSearchFilter filterDiffModel = new CarSearchFilter(
-        "Toyota", "Accord", "Ivan", "Petrov", 2020, 2025);
-    assertNotEquals(filter1, filterDiffModel);
-
-    final CarSearchFilter filterDiffFirstName = new CarSearchFilter(
-        "Toyota", "Camry", "Peter", "Petrov", 2020, 2025);
-    assertNotEquals(filter1, filterDiffFirstName);
-
-    final CarSearchFilter filterDiffLastName = new CarSearchFilter(
-        "Toyota", "Camry", "Ivan", "Ivanov", 2020, 2025);
-    assertNotEquals(filter1, filterDiffLastName);
-  }
-
-  @Test
   @DisplayName("OrderService - updateOrder с COMPLETED статусом (устанавливается completionDate)")
   void orderService_updateOrder_CompletedWithNullCompletionDate() {
     testOrder.setCompletionDate(null);
@@ -1752,9 +1711,12 @@ class AllServicesTest {
     assertNotEquals(key1, key4);
     assertNotEquals(key1, key5);
     assertNotEquals(key1, key6);
-    assertNotEquals(key1, null);
-    assertNotEquals(key1, "string");
-    assertEquals(key1, key1);
+
+    assertTrue(key1.equals(key1));
+    assertNotNull(key1);
+    assertFalse(key1.equals(null));
+    assertFalse(key1.equals("string"));
+
     assertEquals(key1.hashCode(), key2.hashCode());
     assertNotEquals(key1.hashCode(), key3.hashCode());
     assertEquals("jpql", key1.getSearchType());
@@ -1766,5 +1728,74 @@ class AllServicesTest {
     final CarSearchCacheKey key7 = new CarSearchCacheKey(null, filter, 0, 10, null);
     assertEquals("", key7.getSearchType());
     assertEquals("", key7.getSort());
+  }
+
+  @Test
+  @DisplayName("CarSearchFilter - equals и hashCode")
+  void carSearchFilter_EqualsAndHashCode() {
+    final CarSearchFilter filter1 = new CarSearchFilter(
+        "Toyota", "Camry", "Ivan", "Petrov", 2020, 2025);
+    final CarSearchFilter filter2 = new CarSearchFilter(
+        "Toyota", "Camry", "Ivan", "Petrov", 2020, 2025);
+    final CarSearchFilter filter3 = new CarSearchFilter("BMW", "X5", null, null, null, null);
+    final CarSearchFilter filter4 = new CarSearchFilter(
+        "  TOYOTA  ", "  CAMRY  ", "  IVAN  ", "  PETROV  ", 2020, 2025);
+
+    assertTrue(filter1.equals(filter1));
+
+    assertFalse(filter1.equals(null));
+    assertFalse(filter1.equals("string"));
+
+    assertEquals(filter1, filter2);
+    assertNotEquals(filter1, filter3);
+    assertEquals(filter1, filter4);
+    assertNotEquals(filter1, null);
+    assertNotEquals(filter1, "string");
+    assertEquals(filter1.hashCode(), filter2.hashCode());
+
+    CarSearchFilter filterDiffBrand = new CarSearchFilter(
+        "Honda", "Camry", "Ivan", "Petrov", 2020, 2025);
+    assertNotEquals(filter1, filterDiffBrand);
+
+    CarSearchFilter filterDiffModel = new CarSearchFilter(
+        "Toyota", "Accord", "Ivan", "Petrov", 2020, 2025);
+    assertNotEquals(filter1, filterDiffModel);
+
+    CarSearchFilter filterDiffFirstName = new CarSearchFilter(
+        "Toyota", "Camry", "Peter", "Petrov", 2020, 2025);
+    assertNotEquals(filter1, filterDiffFirstName);
+
+    CarSearchFilter filterDiffLastName = new CarSearchFilter(
+        "Toyota", "Camry", "Ivan", "Ivanov", 2020, 2025);
+    assertNotEquals(filter1, filterDiffLastName);
+
+    CarSearchFilter filterDiffYearFrom = new CarSearchFilter(
+        "Toyota", "Camry", "Ivan", "Petrov", 2021, 2025);
+    assertNotEquals(filter1, filterDiffYearFrom);
+
+    CarSearchFilter filterDiffYearTo = new CarSearchFilter(
+        "Toyota", "Camry", "Ivan", "Petrov", 2020, 2024);
+    assertNotEquals(filter1, filterDiffYearTo);
+
+    CarSearchFilter filterNullYears = new CarSearchFilter(
+        "Toyota", "Camry", "Ivan", "Petrov", null, null);
+    CarSearchFilter filterNullYears2 = new CarSearchFilter(
+        "Toyota", "Camry", "Ivan", "Petrov", null, null);
+    assertEquals(filterNullYears, filterNullYears2);
+    assertNotEquals(filterNullYears, filter1);
+
+    // Проверка hashCode для null значений
+    CarSearchFilter filterNullBrand = new CarSearchFilter(
+        null, "Camry", "Ivan", "Petrov", 2020, 2025);
+    CarSearchFilter filterNullBrand2 = new CarSearchFilter(
+        null, "Camry", "Ivan", "Petrov", 2020, 2025);
+    assertEquals(filterNullBrand, filterNullBrand2);
+    assertEquals(filterNullBrand.hashCode(), filterNullBrand2.hashCode());
+
+    CarSearchFilter filterEmptyValues = new CarSearchFilter(
+        "", "", "", "", null, null);
+    CarSearchFilter filterEmptyValues2 = new CarSearchFilter(
+        "", "", "", "", null, null);
+    assertEquals(filterEmptyValues, filterEmptyValues2);
   }
 }

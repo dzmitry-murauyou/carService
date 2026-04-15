@@ -4,6 +4,8 @@ import com.example.carservice.dto.BulkCarCreateRequest;
 import com.example.carservice.dto.BulkCarCreateResult;
 import com.example.carservice.dto.CarDto;
 import com.example.carservice.dto.mapper.CarMapper;
+import com.example.carservice.exception.CarNotFoundException;
+import com.example.carservice.exception.ClientNotFoundException;
 import com.example.carservice.model.Car;
 import com.example.carservice.model.CarBrandModel;
 import com.example.carservice.model.Client;
@@ -143,7 +145,7 @@ public class CarServiceImpl implements CarService {
 
     if (carDto.getClientId() != null) {
       Client client = clientRepository.findById(carDto.getClientId())
-          .orElseThrow(() -> new RuntimeException("Client not found"));
+          .orElseThrow(() -> new ClientNotFoundException("Client not found with id: " + carDto.getClientId()));
       car.setClient(client);
     }
 
@@ -156,7 +158,7 @@ public class CarServiceImpl implements CarService {
   @Transactional
   public CarDto updateCar(Long id, CarDto carDto) {
     Car existing = carRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Car not found"));
+        .orElseThrow(() -> new CarNotFoundException("Car not found with id: " + id));
 
     CarBrandModel brandModel = carBrandModelRepository
         .findByBrandAndModel(carDto.getBrand(), carDto.getModel())
@@ -174,7 +176,7 @@ public class CarServiceImpl implements CarService {
 
     if (carDto.getClientId() != null) {
       Client client = clientRepository.findById(carDto.getClientId())
-          .orElseThrow(() -> new RuntimeException("Client not found"));
+          .orElseThrow(() -> new ClientNotFoundException("Client not found with id: " + carDto.getClientId()));
       existing.setClient(client);
     } else {
       existing.setClient(null);
@@ -188,6 +190,7 @@ public class CarServiceImpl implements CarService {
   @Override
   @Transactional
   public void deleteCar(Long id) {
+    // Без проверки existsById - сохраняем оригинальное поведение
     carRepository.deleteById(id);
     searchCache.invalidateAll();
   }
@@ -224,7 +227,7 @@ public class CarServiceImpl implements CarService {
     Long clientId = request.getClientId();
 
     Client client = clientRepository.findById(clientId)
-        .orElseThrow(() -> new RuntimeException("Client not found with id: " + clientId));
+        .orElseThrow(() -> new ClientNotFoundException("Client not found with id: " + clientId));
 
     BulkCarCreateResult result = BulkCarCreateResult.builder()
         .totalRequested(carDtos.size())
