@@ -1,5 +1,7 @@
 package com.example.carservice.service.impl;
 
+import com.example.carservice.dto.BulkCarCreateRequest;
+import com.example.carservice.dto.BulkCarCreateResult;
 import com.example.carservice.dto.CarDto;
 import com.example.carservice.dto.mapper.CarMapper;
 import com.example.carservice.model.Car;
@@ -14,13 +16,14 @@ import com.example.carservice.service.impl.cache.CarSearchCacheKey;
 import com.example.carservice.service.impl.cache.CarSearchFilter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CarServiceImpl implements CarService {
@@ -100,17 +103,18 @@ public class CarServiceImpl implements CarService {
             filter.getYearTo(),
             pageable
         )
-        .map(p -> new CarDto(
-            p.getId(),
-            p.getBrandModelId(),
-            p.getBrand(),
-            p.getModel(),
-            p.getLicensePlate(),
-            p.getVin(),
-            p.getYear(),
-            p.getClientId(),
-            p.getClientName()
-        ));
+        .map(p -> {
+          CarDto dto = new CarDto();
+          dto.setId(p.getId());
+          dto.setBrand(p.getBrand());
+          dto.setModel(p.getModel());
+          dto.setLicensePlate(p.getLicensePlate());
+          dto.setVin(p.getVin());
+          dto.setYear(p.getYear());
+          dto.setClientId(p.getClientId());
+          dto.setClientName(p.getClientName());
+          return dto;
+        });
 
     Page<CarDto> snapshot = new PageImpl<>(
         List.copyOf(result.getContent()),
@@ -200,5 +204,83 @@ public class CarServiceImpl implements CarService {
         pageable.getPageSize(),
         pageable.getSort().toString()
     );
+  }
+
+  @Override
+  @Transactional
+  public BulkCarCreateResult bulkCreateCarsSafe(BulkCarCreateRequest request) {
+    log.info("=== BULK CREATE SAFE (с @Transactional) ===");
+    return processBulkCreate(request, true);
+  }
+
+  @Override
+  public BulkCarCreateResult bulkCreateCarsUnsafe(BulkCarCreateRequest request) {
+    log.info("=== BULK CREATE UNSAFE (без @Transactional) ===");
+    return processBulkCreate(request, false);
+  }
+
+  private BulkCarCreateResult processBulkCreate(BulkCarCreateRequest request, boolean isSafe) {
+    List<CarDto> carDtos = request.getCars();
+    Long clientId = request.getClientId();
+
+    Client client = clientRepository.findById(clientId)
+        .orElseThrow(() -> new RuntimeException("Client not found with id: " + clientId));
+
+    BulkCarCreateResult result = BulkCarCreateResult.builder()
+        .totalRequested(carDtos.size())
+        .successfullyCreated(0)
+        .failed(0)
+        .build();
+
+    for (int i = 0; i < carDtos.size(); i++) {
+      CarDto carDto = carDtos.get(i);
+
+      try {
+        if (i == 9) {
+          throw new RuntimeException("Демо-ошибка на 10-й машине! (индекс " + i + ")");
+        }
+
+        CarBrandModel brandModel = carBrandModelRepository
+            .findByBrandAndModel(carDto.getBrand(), carDto.getModel())
+            .orElseGet(() -> {
+              CarBrandModel newModel = CarBrandModel.builder()
+                  .brand(carDto.getBrand())
+                  .model(carDto.getModel())
+                  .build();
+              return carBrandModelRepository.save(newModel);
+            });
+
+        Car car = mapper.toEntity(carDto);
+        car.setBrandModel(brandModel);
+        car.setClient(client);
+
+        Car saved = carRepository.save(car);
+        CarDto savedDto = mapper.toDto(saved);
+
+        result.addCreatedCar(savedDto);
+        log.info("Машина {} сохранена: {} {} (госномер: {})",
+            i + 1, carDto.getBrand(), carDto.getModel(), carDto.getLicensePlate());
+
+      } catch (Exception e) {
+        log.error("Ошибка при сохранении машины {}: {}", i + 1, e.getMessage());
+        result.addError(i, e.getMessage());
+
+        if (isSafe) {
+          throw new RuntimeException("SAFE mode: bulk operation failed at car " + (i + 1)
+              + ". Transaction rolled back. No cars were saved.", e);
+        }
+      }
+    }
+
+    if (result.getFailed() == 0) {
+      searchCache.invalidateAll();
+      log.info("All cars saved successfully! Cache invalidated.");
+    }
+
+    String mode = isSafe ? "SAFE" : "UNSAFE";
+    log.info("Bulk create [{}] completed. Success: {}, Failed: {}",
+        mode, result.getSuccessfullyCreated(), result.getFailed());
+
+    return result;
   }
 }

@@ -1,5 +1,7 @@
 package com.example.carservice.service;
 
+import com.example.carservice.dto.BulkCarCreateRequest;
+import com.example.carservice.dto.BulkCarCreateResult;
 import com.example.carservice.dto.CarDto;
 import com.example.carservice.service.impl.cache.CarSearchFilter;
 import java.util.List;
@@ -23,4 +25,8 @@ public interface CarService {
   CarDto updateCar(Long id, CarDto carDto);
 
   void deleteCar(Long id);
+
+  BulkCarCreateResult bulkCreateCarsSafe(BulkCarCreateRequest request);      // с @Transactional
+
+  BulkCarCreateResult bulkCreateCarsUnsafe(BulkCarCreateRequest request);    // без @Transactional
 }

@@ -1,5 +1,7 @@
 package com.example.carservice.controller;
 
+import com.example.carservice.dto.BulkCarCreateRequest;
+import com.example.carservice.dto.BulkCarCreateResult;
 import com.example.carservice.dto.CarDto;
 import com.example.carservice.exception.ApiError;
 import com.example.carservice.exception.ResourceNotFoundException;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("/api/cars")
@@ -244,4 +247,35 @@ public class CarController {
     carService.deleteCar(id);
     return ResponseEntity.noContent().build();
   }
+
+  @Operation(summary = "Bulk create cars SAFE (with @Transactional - all or nothing)")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(responseCode = "400", description = "Validation error"),
+      @ApiResponse(responseCode = "404", description = "Client not found"),
+      @ApiResponse(responseCode = "500", description = "Internal server error")
+  })
+  @PostMapping("/bulk/safe")
+  public ResponseEntity<BulkCarCreateResult> bulkCreateCarsSafe(
+      @Valid @RequestBody BulkCarCreateRequest request
+  ) {
+    BulkCarCreateResult result = carService.bulkCreateCarsSafe(request);
+    return ResponseEntity.ok(result);
+  }
+
+  @Operation(summary = "Bulk create cars UNSAFE (without @Transactional - partial save on error)")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK (even with partial success)"),
+      @ApiResponse(responseCode = "400", description = "Validation error"),
+      @ApiResponse(responseCode = "404", description = "Client not found"),
+      @ApiResponse(responseCode = "500", description = "Internal server error")
+  })
+  @PostMapping("/bulk/unsafe")
+  public ResponseEntity<BulkCarCreateResult> bulkCreateCarsUnsafe(
+      @Valid @RequestBody BulkCarCreateRequest request
+  ) {
+    BulkCarCreateResult result = carService.bulkCreateCarsUnsafe(request);
+    return ResponseEntity.ok(result);
+  }
+
 }

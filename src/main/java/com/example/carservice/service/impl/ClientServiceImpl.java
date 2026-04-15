@@ -157,9 +157,10 @@ public class ClientServiceImpl implements ClientService {
 
   private Car buildCar(CarDto carDto, Client savedClient) {
     CarBrandModel brandModel = carBrandModelRepository
-        .findById(carDto.getBrandModelId())
+        .findByBrandAndModel(carDto.getBrand(), carDto.getModel())
         .orElseThrow(() -> new TransactionDemoException(
-            "CarBrandModel не найден с ID: " + carDto.getBrandModelId()));
+            "CarBrandModel не найден для бренда: " + carDto.getBrand()
+            + " и модели: " + carDto.getModel()));
 
     Car car = new Car();
     car.setBrandModel(brandModel);
@@ -170,4 +171,5 @@ public class ClientServiceImpl implements ClientService {
 
     return car;
   }
+
 }

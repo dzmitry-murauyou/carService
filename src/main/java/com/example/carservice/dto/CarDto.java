@@ -6,10 +6,12 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Car data transfer object")
@@ -18,8 +20,6 @@ public class CarDto {
   @Schema(description = "Car id", example = "1")
   private Long id;
 
-  @Schema(description = "Brand model id", example = "2")
-  private Long brandModelId;
 
   @NotBlank(message = "Brand must not be blank")
   @Schema(description = "Car brand", example = "Toyota")
