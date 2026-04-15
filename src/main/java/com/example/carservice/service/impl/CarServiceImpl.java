@@ -4,6 +4,7 @@ import com.example.carservice.dto.BulkCarCreateRequest;
 import com.example.carservice.dto.BulkCarCreateResult;
 import com.example.carservice.dto.CarDto;
 import com.example.carservice.dto.mapper.CarMapper;
+import com.example.carservice.exception.BulkCreateException;
 import com.example.carservice.exception.CarNotFoundException;
 import com.example.carservice.exception.ClientNotFoundException;
 import com.example.carservice.model.Car;
@@ -29,6 +30,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CarServiceImpl implements CarService {
+
+  private static final String CLIENT_NOT_FOUND_MSG = "Client not found with id: ";
+  private static final String CAR_NOT_FOUND_MSG = "Car not found with id: ";
 
   private final CarRepository carRepository;
   private final CarBrandModelRepository carBrandModelRepository;
@@ -145,7 +149,8 @@ public class CarServiceImpl implements CarService {
 
     if (carDto.getClientId() != null) {
       Client client = clientRepository.findById(carDto.getClientId())
-          .orElseThrow(() -> new ClientNotFoundException("Client not found with id: " + carDto.getClientId()));
+          .orElseThrow(() -> new ClientNotFoundException(CLIENT_NOT_FOUND_MSG
+              + carDto.getClientId()));
       car.setClient(client);
     }
 
@@ -158,7 +163,7 @@ public class CarServiceImpl implements CarService {
   @Transactional
   public CarDto updateCar(Long id, CarDto carDto) {
     Car existing = carRepository.findById(id)
-        .orElseThrow(() -> new CarNotFoundException("Car not found with id: " + id));
+        .orElseThrow(() -> new CarNotFoundException(CAR_NOT_FOUND_MSG + id));
 
     CarBrandModel brandModel = carBrandModelRepository
         .findByBrandAndModel(carDto.getBrand(), carDto.getModel())
@@ -176,7 +181,8 @@ public class CarServiceImpl implements CarService {
 
     if (carDto.getClientId() != null) {
       Client client = clientRepository.findById(carDto.getClientId())
-          .orElseThrow(() -> new ClientNotFoundException("Client not found with id: " + carDto.getClientId()));
+          .orElseThrow(() -> new ClientNotFoundException(CLIENT_NOT_FOUND_MSG
+              + carDto.getClientId()));
       existing.setClient(client);
     } else {
       existing.setClient(null);
@@ -190,7 +196,6 @@ public class CarServiceImpl implements CarService {
   @Override
   @Transactional
   public void deleteCar(Long id) {
-    // Без проверки existsById - сохраняем оригинальное поведение
     carRepository.deleteById(id);
     searchCache.invalidateAll();
   }
@@ -227,7 +232,7 @@ public class CarServiceImpl implements CarService {
     Long clientId = request.getClientId();
 
     Client client = clientRepository.findById(clientId)
-        .orElseThrow(() -> new ClientNotFoundException("Client not found with id: " + clientId));
+        .orElseThrow(() -> new ClientNotFoundException(CLIENT_NOT_FOUND_MSG + clientId));
 
     BulkCarCreateResult result = BulkCarCreateResult.builder()
         .totalRequested(carDtos.size())
@@ -240,7 +245,7 @@ public class CarServiceImpl implements CarService {
 
       try {
         if (i == 9) {
-          throw new RuntimeException("Демо-ошибка на 10-й машине! (индекс " + i + ")");
+          throw new BulkCreateException("Демо-ошибка на 10-й машине! (индекс " + i + ")");
         }
 
         CarBrandModel brandModel = carBrandModelRepository
@@ -269,7 +274,7 @@ public class CarServiceImpl implements CarService {
         result.addError(i, e.getMessage());
 
         if (isSafe) {
-          throw new RuntimeException("SAFE mode: bulk operation failed at car " + (i + 1)
+          throw new BulkCreateException("SAFE mode: bulk operation failed at car " + (i + 1)
               + ". Transaction rolled back. No cars were saved.", e);
         }
       }

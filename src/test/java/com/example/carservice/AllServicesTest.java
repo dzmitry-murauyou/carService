@@ -1706,17 +1706,14 @@ class AllServicesTest {
     final CarSearchCacheKey key5 = new CarSearchCacheKey("jpql", filter, 5, 50, "id,desc");
     final CarSearchCacheKey key6 = new CarSearchCacheKey("jpql", filter, 5, 20, "name,asc");
 
+    assertEquals(key1, key1);
     assertEquals(key1, key2);
     assertNotEquals(key1, key3);
     assertNotEquals(key1, key4);
     assertNotEquals(key1, key5);
     assertNotEquals(key1, key6);
-
-    assertTrue(key1.equals(key1));
-    assertNotNull(key1);
-    assertFalse(key1.equals(null));
-    assertFalse(key1.equals("string"));
-
+    assertNotEquals(key1, null);
+    assertNotEquals(key1, "string");
     assertEquals(key1.hashCode(), key2.hashCode());
     assertNotEquals(key1.hashCode(), key3.hashCode());
     assertEquals("jpql", key1.getSearchType());
