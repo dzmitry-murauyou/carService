@@ -13,7 +13,7 @@ public class CarMapper {
     }
 
     CarDto dto = new CarDto();
-
+    dto.setId(car.getId());
     if (car.getBrandModel() != null) {
       dto.setBrand(car.getBrandModel().getBrand());    // ← добавляем марку
       dto.setModel(car.getBrandModel().getModel());    // ← добавляем модель
