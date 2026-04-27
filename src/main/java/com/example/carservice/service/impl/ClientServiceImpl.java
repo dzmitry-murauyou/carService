@@ -2,6 +2,7 @@ package com.example.carservice.service.impl;
 
 import com.example.carservice.dto.CarDto;
 import com.example.carservice.dto.ClientDto;
+import com.example.carservice.dto.ClientPatchDto;
 import com.example.carservice.dto.mapper.ClientMapper;
 import com.example.carservice.exception.ResourceNotFoundException;
 import com.example.carservice.exception.TransactionDemoException;
@@ -83,6 +84,34 @@ public class ClientServiceImpl implements ClientService {
     existing.setEmail(clientDto.getEmail());
     existing.setAddress(clientDto.getAddress());
     existing.setRegistrationDate(clientDto.getRegistrationDate());
+
+    Client updated = clientRepository.save(existing);
+    carSearchCache.invalidateAll();
+    return mapper.toDto(updated);
+  }
+
+  @Override
+  @Transactional
+  public ClientDto patchClient(Long id, ClientPatchDto patchDto) {
+    Client existing = clientRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException(
+            "Client not found with id: " + id));
+
+    if (patchDto.getFirstName() != null) {
+      existing.setFirstName(patchDto.getFirstName());
+    }
+    if (patchDto.getLastName() != null) {
+      existing.setLastName(patchDto.getLastName());
+    }
+    if (patchDto.getPhone() != null) {
+      existing.setPhone(patchDto.getPhone());
+    }
+    if (patchDto.getEmail() != null) {
+      existing.setEmail(patchDto.getEmail());
+    }
+    if (patchDto.getAddress() != null) {
+      existing.setAddress(patchDto.getAddress());
+    }
 
     Client updated = clientRepository.save(existing);
     carSearchCache.invalidateAll();

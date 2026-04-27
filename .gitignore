@@ -52,3 +52,7 @@ ServiceLoggingAspect.java
 **/ServiceLoggingAspect.java
 com/example/carservice/aspect/ServiceLoggingAspect.java
 src/main/java/com/example/carservice/aspect/ServiceLoggingAspect.java
+
+# Local performance artifacts
+tools/
+perf/results/

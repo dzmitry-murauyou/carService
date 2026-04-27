@@ -1,6 +1,7 @@
 package com.example.carservice.controller;
 
 import com.example.carservice.dto.ClientDto;
+import com.example.carservice.dto.ClientPatchDto;
 import com.example.carservice.exception.ApiError;
 import com.example.carservice.service.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -151,6 +153,43 @@ public class ClientController {
   ) {
     ClientDto updated = clientService.updateClient(id, clientDto);
     return ResponseEntity.ok(updated);
+  }
+
+  @Operation(summary = "Partially update client by id")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "400",
+          description = "Validation error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Client not found",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "409",
+          description = "Conflict (duplicate phone/email or other unique constraint)",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
+  @PatchMapping("/{id}")
+  public ResponseEntity<ClientDto> patchClient(
+      @PathVariable Long id,
+      @Valid @RequestBody ClientPatchDto patchDto
+  ) {
+    ClientDto patched = clientService.patchClient(id, patchDto);
+    return ResponseEntity.ok(patched);
   }
 
   @Operation(summary = "Delete client by id")

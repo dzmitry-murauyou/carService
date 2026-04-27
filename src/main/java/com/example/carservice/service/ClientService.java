@@ -1,6 +1,7 @@
 package com.example.carservice.service;
 
 import com.example.carservice.dto.ClientDto;
+import com.example.carservice.dto.ClientPatchDto;
 import java.util.List;
 
 public interface ClientService {
@@ -16,6 +17,8 @@ public interface ClientService {
   ClientDto createClient(ClientDto clientDto);
 
   ClientDto updateClient(Long id, ClientDto clientDto);
+
+  ClientDto patchClient(Long id, ClientPatchDto patchDto);
 
   void createClientWithNewCarsWithoutTransaction(ClientDto clientDto);
 
