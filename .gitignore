@@ -56,3 +56,12 @@ src/main/java/com/example/carservice/aspect/ServiceLoggingAspect.java
 # Local performance artifacts
 tools/
 perf/results/
+
+# env files
+.env
+.env.*
+!.env.example
+
+# frontend deps/cache
+frontend/node_modules/
+frontend/.vite/
