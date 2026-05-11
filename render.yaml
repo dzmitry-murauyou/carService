@@ -1,0 +1,32 @@
+services:
+  # Backend Spring приложение
+  - type: web
+    name: carservice-api
+    runtime: image
+    repo: https://github.com/ВАШ_АККАУНТ/carService
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: carservice-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: carservice-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: carservice-db
+          property: password
+      - key: SERVER_PORT
+        value: 8080
+
+databases:
+  # PostgreSQL база данных
+  - name: carservice-db
+    plan: free
+    databaseName: carservice
+    user: carservice_user
