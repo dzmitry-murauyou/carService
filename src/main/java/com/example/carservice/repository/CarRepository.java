@@ -24,8 +24,6 @@ public interface CarRepository extends JpaRepository<Car, Long> {
   List<Car> findByBrandAndModel(@Param("brand") String brand,
                                 @Param("model") String model);
 
-  List<Car> findByYear(Integer year);
-
   @Query(
       value = "SELECT c FROM Car c "
           + "JOIN FETCH c.client cl "

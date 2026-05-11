@@ -4,6 +4,7 @@ import com.example.carservice.dto.OrderDto;
 import com.example.carservice.model.Order;
 import com.example.carservice.model.ServiceEntity;
 import com.example.carservice.model.Spare;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,11 @@ public class OrderMapper {
       builder.carId(entity.getCar().getId());
       builder.carInfo(entity.getCar().getBrand() + " " + entity.getCar().getModel()
           + " (" + entity.getCar().getLicensePlate() + ")");
+
+      if (entity.getCar().getClient() != null) {
+        builder.clientName(entity.getCar().getClient().getLastName() + " "
+            + entity.getCar().getClient().getFirstName());
+      }
     }
 
     if (entity.getServices() != null) {
@@ -55,7 +61,7 @@ public class OrderMapper {
       return null;
     }
 
-    return Order.builder()
+    Order order = Order.builder()
         .id(dto.getId())
         .orderDate(dto.getOrderDate())
         .status(dto.getStatus())
@@ -63,5 +69,10 @@ public class OrderMapper {
         .description(dto.getDescription())
         .completionDate(dto.getCompletionDate())
         .build();
+    
+    order.setServices(new HashSet<>());
+    order.setSpares(new HashSet<>());
+
+    return order;
   }
 }

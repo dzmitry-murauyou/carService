@@ -9,6 +9,11 @@ public interface ServiceInterface {
 
   ServiceDto getServiceById(Long id);
 
-
   List<ServiceDto> getServicesByCategory(String category);
+
+  ServiceDto createService(ServiceDto dto);
+
+  ServiceDto updateService(Long id, ServiceDto dto);
+
+  void deleteService(Long id);
 }

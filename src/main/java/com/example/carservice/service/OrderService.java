@@ -26,6 +26,8 @@ public interface OrderService {
 
   OrderDto completeOrder(Long id);
 
+  OrderDto updateOrderStatus(Long id, String status);
+
   void demonstrateNplus1Problem();
 
   void createOrderWithoutTransaction(OrderDto orderDto);
@@ -33,4 +35,5 @@ public interface OrderService {
   void createOrderWithTransaction(OrderDto orderDto);
 
   void deleteOrder(Long id);
+
 }

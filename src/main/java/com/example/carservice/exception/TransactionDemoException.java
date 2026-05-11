@@ -6,7 +6,4 @@ public class TransactionDemoException extends RuntimeException {
     super(message);
   }
 
-  public TransactionDemoException(String message, Throwable cause) {
-    super(message, cause);
-  }
 }

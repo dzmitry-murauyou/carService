@@ -54,6 +54,8 @@ public class OrderDto {
   @Schema(description = "Selected service names")
   private List<String> serviceNames;
 
+  private String clientName;
+
   @Schema(description = "Selected spare part names")
   private List<String> spareNames;
 }

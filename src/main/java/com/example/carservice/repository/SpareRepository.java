@@ -11,8 +11,6 @@ public interface SpareRepository extends JpaRepository<Spare, Long> {
 
   Optional<Spare> findByPartNumber(String partNumber);
 
-  List<Spare> findByNameContainingIgnoreCase(String name);
-
   List<Spare> findByManufacturer(String manufacturer);
 
   List<Spare> findByQuantityInStockLessThan(Integer minQuantity);

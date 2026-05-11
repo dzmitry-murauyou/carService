@@ -4,8 +4,6 @@ public interface CarNativeSearchProjection {
 
   Long getId();
 
-  Long getBrandModelId();
-
   String getBrand();
 
   String getModel();

@@ -48,10 +48,6 @@ public class Car {
   @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Order> orders = new ArrayList<>();
 
-  public String getFullName() {
-    return brandModel != null ? brandModel.getFullName() : null;
-  }
-
   public String getBrand() {
     return brandModel != null ? brandModel.getBrand() : null;
   }

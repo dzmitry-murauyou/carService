@@ -101,6 +101,11 @@ public class OrderServiceImpl implements OrderService {
     return orderRepository.save(order);
   }
 
+  @Override
+  public OrderDto updateOrderStatus(Long id, String status) {
+    return null;
+  }
+
   private void processOrders(List<Order> orders) {
     for (Order order : orders) {
       if (order.getCar() != null && order.getCar().getClient() != null) {
@@ -215,7 +220,6 @@ public class OrderServiceImpl implements OrderService {
   public OrderDto completeOrder(Long id) {
     return mapper.toDto(updateOrderStatus(id, "COMPLETED", true));
   }
-
 
   @Override
   @Transactional(readOnly = true)

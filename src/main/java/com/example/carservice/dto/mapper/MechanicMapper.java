@@ -3,7 +3,6 @@ package com.example.carservice.dto.mapper;
 import com.example.carservice.dto.MechanicDto;
 import com.example.carservice.model.Mechanic;
 import com.example.carservice.model.ServiceEntity;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 

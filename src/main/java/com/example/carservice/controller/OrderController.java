@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -300,5 +301,37 @@ public class OrderController {
   public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
     orderService.deleteOrder(id);
     return ResponseEntity.noContent().build();
+  }
+
+  @Operation(summary = "Update order status")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(
+          responseCode = "404",
+          description = "Order not found",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "400",
+          description = "Invalid status value",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "Internal server error",
+          content = @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ApiError.class))
+      )
+  })
+  @PatchMapping("/{id}/status")
+  public ResponseEntity<OrderDto> updateOrderStatus(
+      @PathVariable Long id,
+      @RequestBody Map<String, String> request
+  ) {
+    String status = request.get("status");
+    OrderDto updated = orderService.updateOrderStatus(id, status);
+    return ResponseEntity.ok(updated);
   }
 }

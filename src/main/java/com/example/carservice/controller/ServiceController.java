@@ -1,95 +1,73 @@
 package com.example.carservice.controller;
 
 import com.example.carservice.dto.ServiceDto;
-import com.example.carservice.exception.ApiError;
-import com.example.carservice.exception.ResourceNotFoundException;
 import com.example.carservice.service.ServiceInterface;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/services")
 @RequiredArgsConstructor
-@Tag(name = "Services", description = "API for managing service catalog")
+@CrossOrigin(origins = "*")
 public class ServiceController {
 
   private final ServiceInterface service;
 
-  @Operation(summary = "Get all services")
-  @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "OK"),
-      @ApiResponse(
-          responseCode = "500",
-          description = "Internal server error",
-          content = @Content(mediaType = "application/json",
-              schema = @Schema(implementation = ApiError.class))
-      )
-  })
-  @GetMapping("/all")
-  public ResponseEntity<List<ServiceDto>> getAllServices() {
-    return ResponseEntity.ok(service.getAllServices());
-  }
-
-  @Operation(summary = "Get service by id")
-  @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "OK"),
-      @ApiResponse(
-          responseCode = "404",
-          description = "Service not found",
-          content = @Content(mediaType = "application/json",
-              schema = @Schema(implementation = ApiError.class))
-      ),
-      @ApiResponse(
-          responseCode = "500",
-          description = "Internal server error",
-          content = @Content(mediaType = "application/json",
-              schema = @Schema(implementation = ApiError.class))
-      )
-  })
-  @GetMapping("/{id}")
-  public ResponseEntity<ServiceDto> getServiceById(@PathVariable Long id) {
-    ServiceDto serviceDto = service.getServiceById(id);
-    if (serviceDto == null) {
-      throw new ResourceNotFoundException("Service not found with id: " + id);
-    }
-    return ResponseEntity.ok(serviceDto);
-  }
-
-  @Operation(summary = "Get services by category")
-  @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "OK"),
-      @ApiResponse(
-          responseCode = "400",
-          description = "Invalid category parameter",
-          content = @Content(mediaType = "application/json",
-              schema = @Schema(implementation = ApiError.class))
-      ),
-      @ApiResponse(
-          responseCode = "500",
-          description = "Internal server error",
-          content = @Content(mediaType = "application/json",
-              schema = @Schema(implementation = ApiError.class))
-      )
-  })
   @GetMapping
-  public ResponseEntity<List<ServiceDto>> getServicesByParams(
-      @RequestParam(required = false) String category) {
-
-    if (category != null) {
-      return ResponseEntity.ok(service.getServicesByCategory(category));
-    }
+  public ResponseEntity<List<ServiceDto>> getAll() {
     return ResponseEntity.ok(service.getAllServices());
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<ServiceDto> getById(@PathVariable Long id) {
+    ServiceDto dto = service.getServiceById(id);
+    return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+  }
+
+  @GetMapping("/category/{category}")
+  public ResponseEntity<List<ServiceDto>> getByCategory(@PathVariable String category) {
+    return ResponseEntity.ok(service.getServicesByCategory(category));
+  }
+
+  @PostMapping
+  public ResponseEntity<ServiceDto> create(@RequestBody ServiceDto dto) {
+    log.info("POST /api/services - Creating: {}", dto.getName());
+    ServiceDto created = service.createService(dto);
+    return ResponseEntity.status(HttpStatus.CREATED).body(created);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<ServiceDto> update(@PathVariable Long id, @RequestBody ServiceDto dto) {
+    log.info("PUT /api/services/{} - Updating", id);
+    try {
+      ServiceDto updated = service.updateService(id, dto);
+      return ResponseEntity.ok(updated);
+    } catch (RuntimeException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+    log.info("DELETE /api/services/{}", id);
+    try {
+      service.deleteService(id);
+      return ResponseEntity.noContent().build();
+    } catch (RuntimeException e) {
+      return ResponseEntity.notFound().build();
+    }
   }
 }

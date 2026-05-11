@@ -12,6 +12,6 @@ public class TaskStartRequest {
   private String payload;
 
   @Min(value = 200, message = "delayMs must be >= 200")
-  @Max(value = 10000, message = "delayMs must be <= 10000")
+  @Max(value = 100000, message = "delayMs must be <= 10000")
   private long delayMs = 1500;
 }

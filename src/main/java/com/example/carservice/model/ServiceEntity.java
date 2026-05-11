@@ -15,11 +15,14 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "services")
 @Data
+@EqualsAndHashCode(exclude = {"category", "orders", "mechanics"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,6 +46,7 @@ public class ServiceEntity {
 
   @ManyToOne
   @JoinColumn(name = "category_id")
+  @ToString.Exclude
   private ServiceCategory category;
 
   private Boolean available;
@@ -54,9 +58,11 @@ public class ServiceEntity {
   private String note;
 
   @ManyToMany(mappedBy = "services")
+  @ToString.Exclude
   private List<Order> orders;
 
   @ManyToMany(mappedBy = "services")
   @Builder.Default
+  @ToString.Exclude
   private Set<Mechanic> mechanics = new HashSet<>();
 }

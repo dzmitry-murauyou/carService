@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Service catalog DTO")
 public class ServiceDto {
 
+  private Long id;
+
   @NotBlank(message = "Name must not be blank")
   @Size(max = 140, message = "Name must not exceed 140 characters")
   @Schema(description = "Service name", example = "Oil change")
@@ -32,7 +34,7 @@ public class ServiceDto {
   private Double price;
 
   @Size(max = 50, message = "Duration must not exceed 50 characters")
-  @Schema(description = "Duration", example = "60 min")
+  @Schema(description = "Duration", example = "60 мин")
   private String duration;
 
   @Size(max = 100, message = "Category must not exceed 100 characters")
@@ -40,7 +42,7 @@ public class ServiceDto {
   private String category;
 
   @Size(max = 50, message = "Status must not exceed 50 characters")
-  @Schema(description = "Service status", example = "AVAILABLE")
+  @Schema(description = "Service status", example = "ACTIVE")
   private String status;
 
   @Size(max = 80, message = "Master name must not exceed 80 characters")

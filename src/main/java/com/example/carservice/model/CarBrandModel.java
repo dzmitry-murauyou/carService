@@ -34,7 +34,4 @@ public class CarBrandModel {
   @OneToMany(mappedBy = "brandModel")
   private List<Car> cars;
 
-  public String getFullName() {
-    return brand + " " + model;
-  }
 }

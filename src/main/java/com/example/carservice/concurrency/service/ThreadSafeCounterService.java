@@ -1,26 +1,26 @@
 package com.example.carservice.concurrency.service;
 
-import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ThreadSafeCounterService {
 
-  private final AtomicLong counter = new AtomicLong(0);
+  private long counter = 0;
 
-  public long incrementAndGet() {
-    return counter.incrementAndGet();
+  public synchronized void incrementAndGet() {
+    ++counter;
   }
 
-  public long addAndGet(long delta) {
-    return counter.addAndGet(delta);
+  public synchronized long addAndGet(long delta) {
+    counter += delta;
+    return counter;
   }
 
   public long getValue() {
-    return counter.get();
+    return counter;
   }
 
-  public void reset() {
-    counter.set(0);
+  public synchronized void reset() {
+    counter = 0;
   }
 }
