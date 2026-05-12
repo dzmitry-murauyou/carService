@@ -30,6 +30,12 @@ public class ServiceController {
     return ResponseEntity.ok(service.getAllServices());
   }
 
+  @GetMapping("/all")
+  public ResponseEntity<List<ServiceDto>> getAllServices() {
+    log.info("GET /api/services/all - Getting all services");
+    return ResponseEntity.ok(service.getAllServices());
+  }
+
   @GetMapping("/{id}")
   public ResponseEntity<ServiceDto> getById(@PathVariable Long id) {
     ServiceDto dto = service.getServiceById(id);
