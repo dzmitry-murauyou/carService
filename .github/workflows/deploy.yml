@@ -132,8 +132,6 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/carservice:latest
             ${{ secrets.DOCKER_USERNAME }}/carservice:${{ github.sha }}
-          cache-from: type=registry
-          cache-to: type=inline
 
   deploy:
     name: Deploy to Render
