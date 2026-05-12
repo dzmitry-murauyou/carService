@@ -35,13 +35,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+          cache: 'maven'
 
       - name: Run tests
         run: mvn test
@@ -65,13 +59,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+          cache: 'maven'
 
       - name: Build with Maven
         run: mvn clean package -DskipTests
@@ -83,7 +71,17 @@ jobs:
           path: target/*.jar
           retention-days: 7
 
+      - name: Check if frontend exists
+        id: check-frontend
+        run: |
+          if [ -d "frontend/dist" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Upload frontend artifact
+        if: steps.check-frontend.outputs.exists == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: frontend-dist
@@ -112,11 +110,19 @@ jobs:
           name: app-jar
           path: target/
 
-      - name: Download frontend artifact
+      - name: Download frontend artifact (if exists)
+        continue-on-error: true
         uses: actions/download-artifact@v4
         with:
           name: frontend-dist
           path: frontend/dist/
+
+      - name: List files for debugging
+        run: |
+          echo "=== Target directory ==="
+          ls -lah target/
+          echo "=== Frontend directory ==="
+          ls -lah frontend/ || echo "No frontend directory"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
