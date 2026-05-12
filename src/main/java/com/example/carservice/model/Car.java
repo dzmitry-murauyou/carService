@@ -1,5 +1,6 @@
 package com.example.carservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,6 +44,7 @@ public class Car {
 
   @ManyToOne
   @JoinColumn(name = "client_id")
+  @JsonIgnore
   private Client client;
 
   @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)

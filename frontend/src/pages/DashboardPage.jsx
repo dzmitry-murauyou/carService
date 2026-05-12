@@ -44,16 +44,36 @@ export default function DashboardPage() {
 
   async function loadStats() {
     try {
-      const result = await Promise.all([
-        api.clients.list(),
-        api.cars.list(),
-        api.orders.list(),
-        api.mechanics.list(),
-        api.services.all(),
-        api.spares.list()
-      ]);
+      // Загружаем каждый эндпоинт отдельно с обработкой ошибок
+      const clients = await api.clients.list().catch(e => {
+        console.warn("Clients error:", e);
+        return [];
+      });
 
-      const [clients, cars, orders, mechanics, services, spares] = result;
+      const cars = await api.cars.list().catch(e => {
+        console.warn("Cars error:", e);
+        return [];
+      });
+
+      const orders = await api.orders.list().catch(e => {
+        console.warn("Orders error:", e);
+        return [];
+      });
+
+      const mechanics = await api.mechanics.list().catch(e => {
+        console.warn("Mechanics error:", e);
+        return [];
+      });
+
+      const services = await api.services.all().catch(e => {
+        console.warn("Services error:", e);
+        return [];
+      });
+
+      const spares = await api.spares.list().catch(e => {
+        console.warn("Spares error:", e);
+        return [];
+      });
 
       setAllStats({
         clients: clients?.length || 0,
@@ -76,11 +96,11 @@ export default function DashboardPage() {
   }, []);
 
   const sortedStats = useMemo(() => {
-    return Object.entries(allStats);
+    return Object.entries(allStats).filter(([_, value]) => value !== undefined);
   }, [allStats]);
 
   const totalRecords = useMemo(() => {
-    return Object.values(allStats).reduce((sum, val) => sum + val, 0);
+    return Object.values(allStats).reduce((sum, val) => sum + (val || 0), 0);
   }, [allStats]);
 
   function getWord(count) {

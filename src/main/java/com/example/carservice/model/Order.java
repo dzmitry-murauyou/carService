@@ -1,5 +1,6 @@
 package com.example.carservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -45,8 +46,8 @@ public class Order {
 
   @ManyToOne
   @JoinColumn(name = "car_id")
+  @JsonIgnore
   private Car car;
-
 
   @ManyToMany
   @JoinTable(
@@ -54,6 +55,7 @@ public class Order {
       joinColumns = @JoinColumn(name = "order_id"),
       inverseJoinColumns = @JoinColumn(name = "service_id")
   )
+  @JsonIgnore
   private Set<ServiceEntity> services = new HashSet<>();
 
   @ManyToMany
@@ -62,5 +64,6 @@ public class Order {
       joinColumns = @JoinColumn(name = "order_id"),
       inverseJoinColumns = @JoinColumn(name = "spare_id")
   )
+  @JsonIgnore
   private Set<Spare> spares = new HashSet<>();
 }

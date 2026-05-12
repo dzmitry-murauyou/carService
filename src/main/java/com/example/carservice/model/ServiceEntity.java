@@ -1,5 +1,6 @@
 package com.example.carservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -47,6 +48,7 @@ public class ServiceEntity {
   @ManyToOne
   @JoinColumn(name = "category_id")
   @ToString.Exclude
+  @JsonIgnore
   private ServiceCategory category;
 
   private Boolean available;
@@ -59,10 +61,12 @@ public class ServiceEntity {
 
   @ManyToMany(mappedBy = "services")
   @ToString.Exclude
+  @JsonIgnore
   private List<Order> orders;
 
   @ManyToMany(mappedBy = "services")
   @Builder.Default
   @ToString.Exclude
+  @JsonIgnore
   private Set<Mechanic> mechanics = new HashSet<>();
 }

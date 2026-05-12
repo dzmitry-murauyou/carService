@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/services")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class ServiceController {
 
   private final ServiceInterface service;
