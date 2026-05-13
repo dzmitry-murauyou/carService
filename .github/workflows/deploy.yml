@@ -16,8 +16,8 @@ jobs:
         image: postgres:16-alpine
         env:
           POSTGRES_DB: carservice_test
-          POSTGRES_USER: test
-          POSTGRES_PASSWORD: test
+          POSTGRES_USER: ${{ secrets.TEST_DB_USERNAME }}
+          POSTGRES_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
         ports:
           - 5432:5432
         options: >-
@@ -41,8 +41,8 @@ jobs:
         run: mvn test
         env:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/carservice_test
-          SPRING_DATASOURCE_USERNAME: test
-          SPRING_DATASOURCE_PASSWORD: test
+          POSTGRES_USER: ${{ secrets.TEST_DB_USERNAME }}
+          POSTGRES_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
 
   build:
     name: Build and Package
@@ -169,7 +169,7 @@ jobs:
             echo "Attempt $((RETRY_COUNT+1))/$MAX_RETRIES: HTTP $HTTP_CODE"
           
             if [ $HTTP_CODE -eq 200 ]; then
-              echo "✅ Health check passed!"
+              echo "Health check passed!"
               exit 0
             fi
           
@@ -178,7 +178,7 @@ jobs:
             sleep 10
           done
           
-          echo "❌ Health check failed after $MAX_RETRIES attempts"
+          echo "Health check failed after $MAX_RETRIES attempts"
           exit 1
 
       - name: API smoke test
@@ -191,4 +191,4 @@ jobs:
           # Test cars endpoint  
           curl -s https://carservice-mgoc.onrender.com/api/cars | grep -q "\[\]" || echo "Cars endpoint OK"
           
-          echo "✅ API smoke tests passed"
+          echo "API smoke tests passed"
