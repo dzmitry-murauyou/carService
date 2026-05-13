@@ -1,21 +1,23 @@
-version: '3.9'
 services:
     db:
         image: postgres:16-alpine
         container_name: carservice-db
         environment:
-            POSTGRES_DB: ${POSTGRES_DB:-carservice}
-            POSTGRES_USER: ${POSTGRES_USER:-postgres}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
         ports:
             - "${POSTGRES_PORT:-5432}:5432"
         volumes:
             - postgres_data:/var/lib/postgresql/data
         healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-carservice}"]
+            test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
             interval: 10s
             timeout: 5s
             retries: 10
+        networks:
+            - backend
+        restart: unless-stopped
 
     app:
         build:
@@ -26,17 +28,24 @@ services:
             db:
                 condition: service_healthy
         environment:
-            SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-carservice}
-            SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
-            SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+            SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
+            SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+            SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
             SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-docker}
         ports:
-            - "${APP_PORT:-8080}:8080"
+            - "${APP_PORT:-8087}:8087"
         healthcheck:
-            test: ["CMD", "curl", "-fsS", "http://localhost:8080/actuator/health"]
+            test: ["CMD", "curl", "-f", "http://localhost:8087/actuator/health"]
             interval: 15s
             timeout: 5s
             retries: 10
+        networks:
+            - backend
+        restart: unless-stopped
 
 volumes:
     postgres_data:
+
+networks:
+    backend:
+        driver: bridge

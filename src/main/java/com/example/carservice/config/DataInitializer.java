@@ -31,17 +31,7 @@ public class DataInitializer implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
 
-    log.info("=== ПРОВЕРКА ПОДКЛЮЧЕНИЯ К БАЗЕ ДАННЫХ ===");
-    log.info("База данных подключена успешно!");
-    log.info("Клиентов в БД: {}", clientRepository.count());
-    log.info("Машин в БД: {}", carRepository.count());
-    log.info("Механиков в БД: {}", mechanicRepository.count());
-    log.info("Услуг в БД: {}", serviceRepository.count());
-    log.info("Запчастей в БД: {}", spareRepository.count());
-    log.info("Заказов в БД: {}", orderRepository.count());
-    log.info("Марок/моделей в БД: {}", carBrandModelRepository.count());
-    log.info("=== БАЗА ДАННЫХ ГОТОВА К РАБОТЕ ===");
-    log.info("НИКАКИЕ ДАННЫЕ НЕ БЫЛИ СОЗДАНЫ АВТОМАТИЧЕСКИ");
-    log.info("Используйте интерфейс приложения для добавления данных");
+    log.info("ПРОВЕРКА ПОДКЛЮЧЕНИЯ К БАЗЕ ДАННЫХ");
+    log.info("success!");
   }
 }
